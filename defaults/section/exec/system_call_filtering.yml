@@ -1,0 +1,191 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# System Call Filtering
+###############################################################################
+# Allow specific system calls.
+#
+# All system calls executed by unit except for listed will result in immediate
+# process termination with SIGSYS signal.
+#
+# Allow system calls (rather than deny-listing) is the safer mode of operation.
+# Recommend allow lists for all long-running system services. Safe basic choice
+# for system services system_call_fitler_allow: ['@system-service'],
+# system_call_error_number: ['EPERM'].
+#
+# Uses seccomp filtering to enforce minimal sandboxing environment. execve,
+# exit, exit_group, getrlimit, rt_sigreturn, sigreturn, time queries, and
+# sleep system calls are implicitly allowed.
+#
+# Strict system call filters may impact execution and error handling code paths
+# of service invocation. execve system call is required for execution of
+# service binary — if it is blocked service invocation will fail. If execution
+# of service binary fails for some reason (e.g. missing service executable),
+# error handling logic might require access to additional set of system calls
+# in order to process and log this failure correctly. It might be necessary to
+# temporarily disable system call filters in order to simplify debugging of
+# such failures.
+#
+# Recommend disabling alternative service ABIs to prevent circumvention,
+# combine with system_call_architectures: native or similar.
+#
+# Use system_call_error_number to change default action.
+#
+# Values:
+#    {SET}: special case system call set, use systemd-analyze syscall-filter to
+#           generate list of current sets.
+#   {CALL}: system call to allow
+#       '': no system call filtering
+#   {OMIT}: '' (default)
+#
+# system_call_filter_allow: ['@system-service']
+#
+# Variable: system_call_filter_allow | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#SystemCallFilter=
+
+# Deny specific system calls.
+#
+# All system calls listed will result in immediate process termination with
+# SIGSYS signal.
+#
+# Recommend disabling alternative service ABIs to prevent circumvention,
+# combine with system_call_architectures: native or similar.
+#
+# Use system_call_error_number to change default action.
+#
+# Values:
+#   - set: str - special case system call set, use
+#          systemd-analyze syscall-filter to generate list of current sets.
+#     error: int or str - error to return for specific system call set
+#            Values:
+#               0-4095: error number
+#              {ERRNO}: error name
+#                 kill: explicitly kill
+#   {OMIT}: no system call filtering (default)
+#
+# system_call_filter_deny:
+#   - set: '@system-service'
+#     error: 'kill'
+#
+# Variable: system_call_filter_deny | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man3/errno.3.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#SystemCallFilter=
+
+# Default system call error number.
+#
+# Values:
+#    0-4095: error number
+#   {ERRNO}: error name
+#      kill: explicitly kill
+#        '': kill
+#    {OMIT}: kill (default)
+#
+# Variable: system_call_error_number | int or str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man3/errno.3.html
+
+
+# List of architecture identifiers to include in system call filters.
+#
+# Processes only permitted to call native system calls, and system calls of
+# specified architectures.
+#
+# Recommend limiting permitted system call architectures so secondary ABIs may
+# not be used to circumvent ABI restrictions, use
+# system_call_architectures: native.
+#
+# Values:
+#          {ARCH}: architecture identifier to include in system call filter.
+#                  Use 'systemd-analyze' for a complete list of accepted known
+#                  values.
+#             x32: x32 architecture is treated as including x86-64 system calls
+#      mips64-n32: 64bit, 32bit, big endian MIPS
+#   mips64-le-n32: 64bit, 32bit, little endian MIPS
+#          native: use native architecture to system manager
+#              '': no filtering (default)
+#          {OMIT}: '' (default)
+#
+# Variable: system_call_architectures | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html
+
+# Log all specified system calls.
+#
+# Values:
+#   {CALL}: system call to log
+#       '': no system call filtering
+#   {OMIT}: '' (default)
+#
+# Variable: system_call_log_match | list of str
+#
+# Default: omit (system default).
+
+# Log all non-excluded system calls.
+#
+# May affect system_call_log_match.
+#
+# Values:
+#   {CALL}: system call to exclude from logging
+#       '': no system call filtering
+#   {OMIT}: '' (default)
+#
+# Variable: system_call_log_exclusions | list of str
+#
+# Default: omit (system default).

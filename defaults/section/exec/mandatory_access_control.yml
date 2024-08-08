@@ -1,0 +1,99 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# Mandatory Access Control
+###############################################################################
+# Set SELinux security context.
+#
+# Directive is ignored if SELinux is disabled.
+#
+# Only available for system services.
+#
+# Values:
+#    {CONTEXT}: security context, overrides automated domain transition; policy
+#               still needs to authorize transition.
+#   -{CONTEXT}: security context, overrides automated domain transition; policy
+#               still needs to authorize transition. Ignore errors.
+#       {OMIT}: no security context set (default)
+#
+# Variable: se_linux_context | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * http://linux.die.net/man/3/setexeccon
+
+# Use apparmor profile for service.
+#
+# Directive is ignored if AppArmor is disabled.
+#
+# Only available for system services.
+#
+# Values:
+#    {NAME}: app armor profile name to use
+#   -{NAME}: app armor profile name to use, ignore errors
+#       {OMIT}: no security context set (default)
+#
+# Variable: app_armor_profile | str
+#
+# Default: omit (system default).
+
+# Run service under SMACK process label.
+#
+# SMACK determines if service is run. Ignored if SMACK is disabled.
+#
+# Only available for system services.
+#
+# Values:
+#    {LABEL}: use SMACK64 security label, transition to SMACK64EXEC label if
+#             executable has one.
+#   -{LABEL}: use SMACK64 security label, transition to SMACK64EXEC label if
+#             executable has one. Ignore errors.
+#    {OMIT}: use systemd SMACK label (default)
+#
+# Variable: smack_process_label | str
+#
+# Default: omit (system default).

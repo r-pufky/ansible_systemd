@@ -1,0 +1,151 @@
+{# [Service] section heading #}
+{% if 'service' in systemd %}
+[Service]
+{% if 'type' in systemd.service %}
+Type={{ systemd.service.type | lower }}
+{% endif %}
+{% if 'exit_type' in systemd.service %}
+ExitType={{ systemd.service.exit_type | lower }}
+{% endif %}
+{% if 'remain_after_exit' in systemd.service %}
+RemainAfterExit={{ systemd.service.remain_after_exit | string | lower }}
+{% endif %}
+{% if 'guess_main_pid' in systemd.service %}
+GuessMainPID={{ systemd.service.guess_main_pid | string | lower }}
+{% endif %}
+{% if 'pid_file' in systemd.service %}
+PIDFile={{ systemd.service.pid_file }}
+{% endif %}
+{% if 'bus_name' in systemd.service %}
+BusName={{ systemd.service.bus_name }}
+{% endif %}
+{% if 'exec_start' in systemd.service %}
+{% for command in systemd.service.exec_start %}
+ExecStart={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'exec_start_pre' in systemd.service %}
+{% for command in systemd.service.exec_start_pre %}
+ExecStartPre={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'exec_start_post' in systemd.service %}
+{% for command in systemd.service.exec_start_post %}
+ExecStartPost={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'exec_condition' in systemd.service %}
+{% for command in systemd.service.exec_condition %}
+ExecCondition={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'exec_reload' in systemd.service %}
+{% for command in systemd.service.exec_reload %}
+ExecReload={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'exec_stop' in systemd.service %}
+{% for command in systemd.service.exec_stop %}
+ExecStop={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'exec_stop_post' in systemd.service %}
+{% for command in systemd.service.exec_stop_post %}
+ExecStopPost={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'restart_sec' in systemd.service %}
+RestartSec={{ systemd.service.restart_sec }}
+{% endif %}
+{% if 'restart_steps' in systemd.service %}
+RestartSteps={{ systemd.service.restart_steps | int }}
+{% endif %}
+{% if 'restart_max_delay_sec' in systemd.service %}
+RestartMaxDelaySec={{ systemd.service.restart_max_delay_sec }}
+{% endif %}
+{% if 'timeout_start_sec' in systemd.service %}
+TimeoutStartSec={{ systemd.service.timeout_start_sec }}
+{% endif %}
+{% if 'timeout_stop_sec' in systemd.service %}
+TimeoutStopSec={{ systemd.service.timeout_stop_sec }}
+{% endif %}
+{% if 'timeout_abort_sec' in systemd.service %}
+TimeoutAbortSec={{ systemd.service.timeout_abort_sec }}
+{% endif %}
+{% if 'timeout_sec' in systemd.service %}
+TimeoutSec={{ systemd.service.timeout_sec }}
+{% endif %}
+{% if 'timeout_start_failure_mode' in systemd.service %}
+TimeoutStartFailureMode={{ systemd.service.timeout_start_failure_mode }}
+{% endif %}
+{% if 'timeout_stop_failure_mode' in systemd.service %}
+TimeoutStopFailureMode={{ systemd.service.timeout_stop_failure_mode }}
+{% endif %}
+{% if 'runtime_max_sec' in systemd.service %}
+RuntimeMaxSec={{ systemd.service.runtime_max_sec }}
+{% endif %}
+{% if 'runtime_randomized_extra_sec' in systemd.service %}
+RuntimeRandomizedExtraSec={{ systemd.service.runtime_randomized_extra_sec | int }}
+{% endif %}
+{% if 'watchdog_sec' in systemd.service %}
+WatchdogSec={{ systemd.service.watchdog_sec | int }}
+{% endif %}
+{% if 'restart' in systemd.service %}
+Restart={{ systemd.service.restart | lower }}
+{% endif %}
+{% if 'restart_mode' in systemd.service %}
+RestartMode={{ systemd.service.restart_mode | lower }}
+{% endif %}
+{% if 'success_exit_status' in systemd.service %}
+{% for command in systemd.service.success_exit_status %}
+SuccessExitStatus={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'restart_prevent_exit_status' in systemd.service %}
+{% for command in systemd.service.restart_prevent_exit_status %}
+RestartPreventExitStatus={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'restart_force_exit_status' in systemd.service %}
+{% for command in systemd.service.restart_force_exit_status %}
+RestartForceExitStatus={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'root_directory_start_only' in systemd.service %}
+RootDirectoryStartOnly={{ systemd.service.root_directory_start_only | string | lower }}
+{% endif %}
+{% if 'non_blocking' in systemd.service %}
+NonBlocking={{ systemd.service.non_blocking | string | lower }}
+{% endif %}
+{% if 'notify_access' in systemd.service %}
+NotifyAccess={{ systemd.service.notify_access | lower }}
+{% endif %}
+{% if 'sockets' in systemd.service %}
+{% for socket in systemd.service.sockets %}
+Sockets={{ socket }}
+{% endfor %}
+{% endif %}
+{% if 'file_descriptor_store_max' in systemd.service %}
+FileDescriptorStoreMax={{ systemd.service.file_descriptor_store_max | int }}
+{% endif %}
+{% if 'file_descriptor_store_preserve' in systemd.service %}
+FileDescriptorStorePreserve={{ systemd.service.file_descriptor_store_preserve | string | lower }}
+{% endif %}
+{% if 'usb_function_descriptors' in systemd.service %}
+USBFunctionDescriptors={{ systemd.service.usb_function_descriptors }}
+{% endif %}
+{% if 'usb_function_strings' in systemd.service %}
+USBFunctionStrings={{ systemd.service.usb_function_strings }}
+{% endif %}
+{% if 'oom_policy' in systemd.service %}
+OOMPolicy={{ systemd.service.oom_policy | lower }}
+{% endif %}
+{% if 'open_file' in systemd.service %}
+{% for file in systemd.service.open_file %}
+OpenFile={{ file.path }}{% if file.fd_name | length > 0%}:{{ file.fd_name }}{% endif +%}{% if file.options | length > 0%}:{{ file.options | join(',') }}{% endif +%}
+{% endfor %}
+{% endif %}
+{% if 'reload_signal' in systemd.service %}
+ReloadSignal={{ systemd.service.reload_signal | upper }}
+{% endif %}
+{% endif %}

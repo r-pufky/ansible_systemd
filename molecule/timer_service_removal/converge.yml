@@ -1,0 +1,44 @@
+---
+# Role variable returned variables are scoped to the current play only (e.g.
+# converge.yml) and must be tested between each application of the role. Test
+# these values while converging versus verify.yml (where scoping will prevent)
+# testing these values.
+#
+# Create a real timer service (e.g. a cronjob).
+
+- name: 'Timer service removal | converge'
+  hosts: all
+  gather_facts: true
+  tags: 'molecule-idempotence-notest'
+  tasks:
+    - name: 'Timer service removal | converge | create'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.systemd'
+      vars:
+        systemd_testing_enable: false
+        systemd_services:
+          - name: 'test'
+            state: 'present'
+            unit:
+              description: 'test timer service'
+              requires: ['test.timer']
+            service:
+              type: 'simple'
+              exec_start: ['echo "this is a test service"']
+            exec:
+              user: 'root'
+              group: 'root'
+          - name: 'test'
+            state: 'absent'
+        systemd_timers:
+          - name: 'test'
+            state: 'present'
+            unit:
+              description: 'test timer'
+            timer:
+              unit: 'test.service'
+              on_boot_sec: '1year'
+            install:
+              wanted_by: ['timers.target']
+          - name: 'test'
+            state: 'absent'

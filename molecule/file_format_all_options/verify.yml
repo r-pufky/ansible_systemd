@@ -1,0 +1,44 @@
+---
+# yamllint disable rule:line-length
+- name: 'File format all options | verify | service file format'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'File format all options | verify | service file format | query file'
+      ansible.builtin.copy:
+        src: 'files/reboot.service'
+        dest: '/etc/systemd/system/reboot.service'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_systemd_service_all_options
+
+    - name: 'File format all options | verify | service file format | assert expected file'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_service_all_options.changed
+        fail_msg: '/etc/systemd/system/reboot.service is not in expected format: {{ _test_systemd_service_all_options.diff }}.'
+
+
+- name: 'File format all options | verify | timer file format'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'File format all options | verify | timer file format | query file'
+      ansible.builtin.copy:
+        src: 'files/reboot.timer'
+        dest: '/etc/systemd/system/reboot.timer'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_systemd_timer_all_options
+
+    - name: 'File format all options | verify | timer file format | assert expected file'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_timer_all_options.changed
+        fail_msg: '/etc/systemd/system/reboot.timer is not in expected format: {{ _test_systemd_timer_all_options.diff }}.'

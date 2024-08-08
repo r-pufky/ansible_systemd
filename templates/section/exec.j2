@@ -1,0 +1,554 @@
+{# exec section heading #}
+{% if 'exec' in systemd %}
+{# paths #}
+{% if 'exec_search_path' in systemd.exec %}
+{% for path in systemd.exec.exec_search_path %}
+ExecSearchPath={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'working_directory' in systemd.exec %}
+WorkingDirectory={{ systemd.exec.working_directory }}
+{% endif %}
+{% if 'root_directory' in systemd.exec %}
+RootDirectory={{ systemd.exec.root_directory }}
+{% endif %}
+{% if 'root_image' in systemd.exec %}
+RootImage={{ systemd.exec.root_image }}
+{% endif %}
+{% if 'root_image_options' in systemd.exec %}
+RootImageOptions={% for options in systemd.exec.root_image_options %}{{ options.name }}:{{ options.options | join(',') }}{% if not loop.last %},{% endif %} {%- endfor +%}
+{% endif %}
+{% if 'root_ephemeral' in systemd.exec %}
+RootEphemeral={{ systemd.exec.root_ephemeral | string | lower }}
+{% endif %}
+{% if 'root_hash' in systemd.exec %}
+RootHash={{ systemd.exec.root_hash }}
+{% endif %}
+{% if 'root_hash_signature' in systemd.exec %}
+RootHashSignature={{ systemd.exec.root_hash_signature }}
+{% endif %}
+{% if 'root_verity' in systemd.exec %}
+RootVerity={{ systemd.exec.root_verity }}
+{% endif %}
+{% if 'root_image_policy' in systemd.exec %}
+RootImagePolicy={{ systemd.exec.root_image_policy }}
+{% endif %}
+{% if 'mount_image_policy' in systemd.exec %}
+MountImagePolicy={{ systemd.exec.mount_image_policy }}
+{% endif %}
+{% if 'extension_image_policy' in systemd.exec %}
+ExtensionImagePolicy={{ systemd.exec.extension_image_policy }}
+{% endif %}
+{% if 'mount_api_vfs' in systemd.exec %}
+MountAPIVFS={{ systemd.exec.mount_api_vfs | string | lower }}
+{% endif %}
+{% if 'protect_proc' in systemd.exec %}
+ProtectProc={{ systemd.exec.protect_proc }}
+{% endif %}
+{% if 'proc_subset' in systemd.exec %}
+ProcSubset={{ systemd.exec.proc_subset }}
+{% endif %}
+{% if 'bind_paths' in systemd.exec %}
+{% for bind in systemd.exec.bind_paths %}
+BindPaths={{ bind.source }}:{{ bind.destination }}:{{ bind.option }}
+{% endfor %}
+{% endif %}
+{% if 'bind_read_only_paths' in systemd.exec %}
+{% for bind in systemd.exec.bind_read_only_paths %}
+BindReadOnlyPaths={{ bind.source }}:{{ bind.destination }}:{{ bind.option }}
+{% endfor %}
+{% endif %}
+{% if 'mount_images' in systemd.exec %}
+{% for mount in systemd.exec.mount_images %}
+MountImages={{ mount.source }}:{{ mount.destination }}:{{ mount.options | join(',') }}
+{% endfor %}
+{% endif %}
+{% if 'extension_images' in systemd.exec %}
+{% for mount in systemd.exec.extension_images %}
+ExtensionImages={{ mount.source }}:{{ mount.options | join(',') }}
+{% endfor %}
+{% endif %}
+{% if 'extension_directories' in systemd.exec %}
+{% for mount in systemd.exec.extension_directories %}
+ExtensionDirectories={{ mount }}
+{% endfor %}
+{% endif %}
+{# user/group identity #}
+{% if 'user' in systemd.exec %}
+User={{ systemd.exec.user }}
+{% endif %}
+{% if 'group' in systemd.exec %}
+Group={{ systemd.exec.group }}
+{% endif %}
+{% if 'dynamic_user' in systemd.exec %}
+DynamicUser={{ systemd.exec.dynamic_user | string | lower }}
+{% endif %}
+{% if 'supplementary_groups' in systemd.exec %}
+{% for group in systemd.exec.supplementary_groups %}
+SupplementaryGroups={{ group }}
+{% endfor %}
+{% endif %}
+{% if 'set_login_environment' in systemd.exec %}
+SetLoginEnvironment={{ systemd.exec.set_login_environment | string | lower }}
+{% endif %}
+{% if 'pam_name' in systemd.exec %}
+PAMName={{ systemd.exec.pam_name }}
+{% endif %}
+{# capabilities #}
+{% if 'capability_bounding_set_include' in systemd.exec %}
+{% for capability in systemd.exec.capability_bounding_set_include %}
+CapabilityBoundingSet={{ capability | upper }}
+{% endfor %}
+{% endif %}
+{% if 'capability_bounding_set_exclude' in systemd.exec %}
+{% for capability in systemd.exec.capability_bounding_set_exclude %}
+CapabilityBoundingSet=~{{ capability | upper }}
+{% endfor %}
+{% endif %}
+{% if 'ambient_capabilities_include' in systemd.exec %}
+{% for capability in systemd.exec.ambient_capabilities_include %}
+AmbientCapabilities={{ capability | upper }}
+{% endfor %}
+{% endif %}
+{% if 'ambient_capabilities_exclude' in systemd.exec %}
+{% for capability in systemd.exec.ambient_capabilities_exclude %}
+AmbientCapabilities=~{{ capability | upper }}
+{% endfor %}
+{% endif %}
+{# security #}
+{% if 'no_new_privileges' in systemd.exec %}
+NoNewPrivileges={{ systemd.exec.no_new_privileges | string | lower }}
+{% endif %}
+{% if 'secure_bits' in systemd.exec %}
+{% for capability in systemd.exec.secure_bits %}
+SecureBits={{ capability }}
+{% endfor %}
+{% endif %}
+{# mandatory access control #}
+{% if 'se_linux_context' in systemd.exec %}
+SELinuxContext={{ systemd.exec.se_linux_context }}
+{% endif %}
+{% if 'app_armor_profile' in systemd.exec %}
+AppArmorProfile={{ systemd.exec.app_armor_profile }}
+{% endif %}
+{% if 'smack_process_label' in systemd.exec %}
+SmackProcessLabel={{ systemd.exec.smack_process_label }}
+{% endif %}
+{# process properties #}
+{% if 'limit_cpu' in systemd.exec %}
+LimitCPU={{ systemd.exec.limit_cpu.soft }}{% if systemd.exec.limit_cpu.hard | length > 0 %}:{{ systemd.exec.limit_cpu.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_fsize' in systemd.exec %}
+LimitFSIZE={{ systemd.exec.limit_fsize.soft }}{% if systemd.exec.limit_fsize.hard | length > 0 %}:{{ systemd.exec.limit_fsize.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_data' in systemd.exec %}
+LimitDATA={{ systemd.exec.limit_data.soft }}{% if systemd.exec.limit_data.hard | length > 0 %}:{{ systemd.exec.limit_data.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_stack' in systemd.exec %}
+LimitSTACK={{ systemd.exec.limit_stack.soft }}{% if systemd.exec.limit_stack.hard | length > 0 %}:{{ systemd.exec.limit_stack.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_core' in systemd.exec %}
+LimitCORE={{ systemd.exec.limit_core.soft }}{% if systemd.exec.limit_core.hard | length > 0 %}:{{ systemd.exec.limit_core.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_rss' in systemd.exec %}
+LimitRSS={{ systemd.exec.limit_rss.soft }}{% if systemd.exec.limit_rss.hard | length > 0 %}:{{ systemd.exec.limit_rss.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_nofile' in systemd.exec %}
+LimitNOFILE={{ systemd.exec.limit_nofile.soft }}{% if systemd.exec.limit_nofile.hard | length > 0 %}:{{ systemd.exec.limit_nofile.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_as' in systemd.exec %}
+LimitAS={{ systemd.exec.limit_as.soft }}{% if systemd.exec.limit_as.hard | length > 0 %}:{{ systemd.exec.limit_as.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_nproc' in systemd.exec %}
+LimitNPROC={{ systemd.exec.limit_nproc.soft }}{% if systemd.exec.limit_nproc.hard | length > 0 %}:{{ systemd.exec.limit_nproc.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_memlock' in systemd.exec %}
+LimitMEMLOCK={{ systemd.exec.limit_memlock.soft }}{% if systemd.exec.limit_memlock.hard | length > 0 %}:{{ systemd.exec.limit_memlock.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_locks' in systemd.exec %}
+LimitLOCKS={{ systemd.exec.limit_locks.soft }}{% if systemd.exec.limit_locks.hard | length > 0 %}:{{ systemd.exec.limit_locks.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_sigpending' in systemd.exec %}
+LimitSIGPENDING={{ systemd.exec.limit_sigpending.soft }}{% if systemd.exec.limit_sigpending.hard | length > 0 %}:{{ systemd.exec.limit_sigpending.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_msgqueue' in systemd.exec %}
+LimitMSGQUEUE={{ systemd.exec.limit_msgqueue.soft }}{% if systemd.exec.limit_msgqueue.hard | length > 0 %}:{{ systemd.exec.limit_msgqueue.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_nice' in systemd.exec %}
+LimitNICE={{ systemd.exec.limit_nice.soft }}{% if systemd.exec.limit_nice.hard | length > 0 %}:{{ systemd.exec.limit_nice.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_rtprio' in systemd.exec %}
+LimitRTPRIO={{ systemd.exec.limit_rtprio.soft }}{% if systemd.exec.limit_rtprio.hard | length > 0 %}:{{ systemd.exec.limit_rtprio.hard }}{% endif +%}
+{% endif %}
+{% if 'limit_rttime' in systemd.exec %}
+LimitRTTIME={{ systemd.exec.limit_rttime.soft }}{% if systemd.exec.limit_rttime.hard | length > 0 %}:{{ systemd.exec.limit_rttime.hard }}{% endif +%}
+{% endif %}
+{% if 'umask' in systemd.exec %}
+UMask={{ systemd.exec.umask }}
+{% endif %}
+{% if 'coredump_filter' in systemd.exec %}
+{% for capability in systemd.exec.coredump_filter %}
+CoredumpFilter={{ capability }}
+{% endfor %}
+{% endif %}
+{% if 'keyring_mode' in systemd.exec %}
+KeyringMode={{ systemd.exec.keyring_mode }}
+{% endif %}
+{% if 'oom_score_adjust' in systemd.exec %}
+OOMScoreAdjust={{ systemd.exec.oom_score_adjust }}
+{% endif %}
+{% if 'timer_slack_n_sec' in systemd.exec %}
+TimerSlackNSec={{ systemd.exec.timer_slack_n_sec }}
+{% endif %}
+{% if 'personality' in systemd.exec %}
+Personality={{ systemd.exec.personality }}
+{% endif %}
+{% if 'ignore_sigpipe' in systemd.exec %}
+IgnoreSIGPIPE={{ systemd.exec.ignore_sigpipe | string | lower }}
+{% endif %}
+{# scheduling #}
+{% if 'nice' in systemd.exec %}
+Nice={{ systemd.exec.nice | int }}
+{% endif %}
+{% if 'cpu_scheduling_policy' in systemd.exec %}
+CPUSchedulingPolicy={{ systemd.exec.cpu_scheduling_policy | string | lower }}
+{% endif %}
+{% if 'cpu_scheduling_priority' in systemd.exec %}
+CPUSchedulingPriority={{ systemd.exec.cpu_scheduling_priority | int }}
+{% endif %}
+{% if 'cpu_scheduling_reset_on_fork' in systemd.exec %}
+CPUSchedulingResetOnFork={{ systemd.exec.cpu_scheduling_reset_on_fork | string | lower }}
+{% endif %}
+{% if 'cpu_affinity' in systemd.exec %}
+{% for cpu in systemd.exec.cpu_affinity %}
+CPUAffinity={{ cpu }}
+{% endfor %}
+{% endif %}
+{% if 'numa_policy' in systemd.exec %}
+NUMAPolicy={{ systemd.exec.numa_policy | string | lower }}
+{% endif %}
+{% if 'numa_mask' in systemd.exec %}
+{% for mask in systemd.exec.numa_mask %}
+NUMAMask={{ mask }}
+{% endfor %}
+{% endif %}
+{% if 'io_scheduling_class' in systemd.exec %}
+IOSchedulingClass={{ systemd.exec.io_scheduling_class | string | lower }}
+{% endif %}
+{% if 'io_scheduling_priority' in systemd.exec %}
+IOSchedulingPriority={{ systemd.exec.io_scheduling_priority | int }}
+{% endif %}
+{# sandboxing #}
+{% if 'protect_system' in systemd.exec %}
+ProtectSystem={{ systemd.exec.protect_system | string | lower }}
+{% endif %}
+{% if 'protect_home' in systemd.exec %}
+ProtectHome={{ systemd.exec.protect_home | string | lower }}
+{% endif %}
+{% if 'runtime_directory' in systemd.exec %}
+RuntimeDirectory={% for dir in systemd.exec.runtime_directory %}{{ dir.path }}{% if dir.link | length > 0 %}:{{ dir.link }} {% endif %}{%- endfor +%}
+{% endif %}
+{% if 'state_directory' in systemd.exec %}
+StateDirectory={% for dir in systemd.exec.state_directory %}{{ dir.path }}{% if dir.link | length > 0 %}:{{ dir.link }} {% endif %}{%- endfor +%}
+{% endif %}
+{% if 'cache_directory' in systemd.exec %}
+CacheDirectory={% for dir in systemd.exec.cache_directory %}{{ dir.path }}{% if dir.link | length > 0 %}:{{ dir.link }} {% endif %}{%- endfor +%}
+{% endif %}
+{% if 'logs_directory' in systemd.exec %}
+LogsDirectory={% for dir in systemd.exec.logs_directory %}{{ dir.path }}{% if dir.link | length > 0 %}:{{ dir.link }} {% endif %}{%- endfor +%}
+{% endif %}
+{% if 'configuration_directory' in systemd.exec %}
+ConfigurationDirectory={{ systemd.exec.configuration_directory | join(' ') }}
+{% endif %}
+{% if 'runtime_directory_mode' in systemd.exec %}
+RuntimeDirectoryMode={{ systemd.exec.runtime_directory_mode }}
+{% endif %}
+{% if 'state_directory_mode' in systemd.exec %}
+StateDirectoryMode={{ systemd.exec.state_directory_mode }}
+{% endif %}
+{% if 'cache_directory_mode' in systemd.exec %}
+CacheDirectoryMode={{ systemd.exec.cache_directory_mode }}
+{% endif %}
+{% if 'logs_directory_mode' in systemd.exec %}
+LogsDirectoryMode={{ systemd.exec.logs_directory_mode }}
+{% endif %}
+{% if 'configuration_directory_mode' in systemd.exec %}
+ConfigurationDirectoryMode={{ systemd.exec.configuration_directory_mode }}
+{% endif %}
+{% if 'runtime_directory_preserve' in systemd.exec %}
+{% if systemd.exec.runtime_directory_preserve is string %}
+RuntimeDirectoryPreserve={{ systemd.exec.runtime_directory_preserve | lower }}
+{% else %}
+RuntimeDirectoryPreserve={{ 'yes' if systemd.exec.runtime_directory_preserve else 'no' }}
+{% endif %}
+{% endif %}
+{% if 'timeout_clean_sec' in systemd.exec %}
+TimeoutCleanSec={{ systemd.exec.timeout_clean_sec }}
+{% endif %}
+{% if 'read_write_paths' in systemd.exec %}
+ReadWritePaths={{ systemd.exec.read_write_paths | join(' ') }}
+{% endif %}
+{% if 'read_only_paths' in systemd.exec %}
+ReadOnlyPaths={{ systemd.exec.read_only_paths | join(' ') }}
+{% endif %}
+{% if 'inaccessible_paths' in systemd.exec %}
+InaccessiblePaths={{ systemd.exec.inaccessible_paths | join(' ') }}
+{% endif %}
+{% if 'exec_paths' in systemd.exec %}
+ExecPaths={{ systemd.exec.exec_paths | join(' ') }}
+{% endif %}
+{% if 'no_exec_paths' in systemd.exec %}
+NoExecPaths={{ systemd.exec.no_exec_paths | join(' ') }}
+{% endif %}
+{% if 'temporary_file_system' in systemd.exec %}
+{% for tmpfs in systemd.exec.temporary_file_system %}
+TemporaryFileSystem={{ tmpfs.path }}{% if 'options' in tmpfs %}:{{ tmpfs.options | join(',') }}{% endif +%}
+{% endfor %}
+{% endif %}
+{% if 'private_tmp' in systemd.exec %}
+PrivateTmp={{ systemd.exec.private_tmp | string | lower }}
+{% endif %}
+{% if 'private_devices' in systemd.exec %}
+PrivateDevices={{ systemd.exec.private_devices | string | lower }}
+{% endif %}
+{% if 'private_network' in systemd.exec %}
+PrivateNetwork={{ systemd.exec.private_network | string | lower }}
+{% endif %}
+{% if 'network_namespace_path' in systemd.exec %}
+NetworkNamespacePath={{ systemd.exec.network_namespace_path }}
+{% endif %}
+{% if 'private_ipc' in systemd.exec %}
+PrivateIPC={{ systemd.exec.private_ipc | string | lower }}
+{% endif %}
+{% if 'ipc_namespace_path' in systemd.exec %}
+IPCNamespacePath={{ systemd.exec.ipc_namespace_path }}
+{% endif %}
+{% if 'memory_ksm' in systemd.exec %}
+MemoryKSM={{ systemd.exec.memory_ksm | string | lower }}
+{% endif %}
+{% if 'private_users' in systemd.exec %}
+PrivateUsers={{ systemd.exec.private_users | string | lower }}
+{% endif %}
+{% if 'protect_hostname' in systemd.exec %}
+ProtectHostname={{ systemd.exec.protect_hostname | string | lower }}
+{% endif %}
+{% if 'protect_clock' in systemd.exec %}
+ProtectClock={{ systemd.exec.protect_clock | string | lower }}
+{% endif %}
+{% if 'protect_kernel_tunables' in systemd.exec %}
+ProtectKernelTunables={{ systemd.exec.protect_kernel_tunables | string | lower }}
+{% endif %}
+{% if 'protect_kernel_modules' in systemd.exec %}
+ProtectKernelModules={{ systemd.exec.protect_kernel_modules | string | lower }}
+{% endif %}
+{% if 'protect_kernel_logs' in systemd.exec %}
+ProtectKernelLogs={{ systemd.exec.protect_kernel_logs | string | lower }}
+{% endif %}
+{% if 'protect_control_groups' in systemd.exec %}
+ProtectControlGroups={{ systemd.exec.protect_control_groups | string | lower }}
+{% endif %}
+{% if 'restrict_address_families_allow' in systemd.exec %}
+{% for family in systemd.exec.restrict_address_families_allow %}
+RestrictAddressFamilies={{ family }}
+{% endfor %}
+{% endif %}
+{% if 'restrict_address_families_deny' in systemd.exec %}
+{% for family in systemd.exec.restrict_address_families_deny %}
+RestrictAddressFamilies=~{{ family }}
+{% endfor %}
+{% endif %}
+{% if 'restrict_file_systems_allow' in systemd.exec %}
+{% for filesystem in systemd.exec.restrict_file_systems_allow %}
+RestrictFileSystems={{ filesystem }}
+{% endfor %}
+{% endif %}
+{% if 'restrict_file_systems_deny' in systemd.exec %}
+{% for filesystem in systemd.exec.restrict_file_systems_deny %}
+RestrictFileSystems=~{{ filesystem }}
+{% endfor %}
+{% endif %}
+{% if 'restrict_namespaces_allow' in systemd.exec %}
+{% if systemd.exec.restrict_namespaces_allow is iterable and (systemd.exec.restrict_namespaces_allow is not string and systemd.exec.restrict_namespaces_allow is not mapping) %}
+RestrictNamespaces={{ systemd.exec.restrict_namespaces_allow | join(' ') }}
+{% else %}
+RestrictNamespaces={{ systemd.exec.restrict_namespaces_allow | string | lower }}
+{% endif %}
+{% endif %}
+{% if 'restrict_namespaces_deny' in systemd.exec %}
+{% for namespace in systemd.exec.restrict_namespaces_deny %}
+RestrictNamespaces=~{{ namespace }}
+{% endfor %}
+{% endif %}
+{% if 'lock_personality' in systemd.exec %}
+LockPersonality={{ systemd.exec.lock_personality | string | lower }}
+{% endif %}
+{% if 'memory_deny_write_execute' in systemd.exec %}
+MemoryDenyWriteExecute={{ systemd.exec.memory_deny_write_execute | string | lower }}
+{% endif %}
+{% if 'restrict_realtime' in systemd.exec %}
+RestrictRealtime={{ systemd.exec.restrict_realtime | string | lower }}
+{% endif %}
+{% if 'restrict_suid_sgid' in systemd.exec %}
+RestrictSUIDSGID={{ systemd.exec.restrict_suid_sgid | string | lower }}
+{% endif %}
+{% if 'remove_ipc' in systemd.exec %}
+RemoveIPC={{ systemd.exec.remove_ipc | string | lower }}
+{% endif %}
+{% if 'private_mounts' in systemd.exec %}
+PrivateMounts={{ systemd.exec.private_mounts | string | lower }}
+{% endif %}
+{% if 'mount_flags' in systemd.exec %}
+MountFlags={{ systemd.exec.mount_flags | string | lower }}
+{% endif %}
+{# system call filtering #}
+{% if 'system_call_filter_allow' in systemd.exec %}
+{% for call in systemd.exec.system_call_filter_allow %}
+SystemCallFilter={{ call }}
+{% endfor %}
+{% endif %}
+{% if 'system_call_filter_deny' in systemd.exec %}
+{% for call in systemd.exec.system_call_filter_deny %}
+SystemCallFilter=~{{ call.set }}:{{ call.error | default('kill') }}
+{% endfor %}
+{% endif %}
+{% if 'system_call_error_number' in systemd.exec %}
+SystemCallErrorNumber={{ systemd.exec.system_call_error_number }}
+{% endif %}
+{% if 'system_call_architectures' in systemd.exec %}
+SystemCallArchitectures={{ systemd.exec.system_call_architectures | join(' ') }}
+{% endif %}
+{% if 'system_call_log_match' in systemd.exec %}
+{% for call in systemd.exec.system_call_log_match %}
+SystemCallLog={{ call }}
+{% endfor %}
+{% endif %}
+{% if 'system_call_log_exclusions' in systemd.exec %}
+{% for call in systemd.exec.system_call_log_exclusions %}
+SystemCallLog=~{{ call }}
+{% endfor %}
+{% endif %}
+{# environment #}
+{% if 'environment' in systemd.exec %}
+{% for env in systemd.exec.environment %}
+Environment="{{ env.var }}={{ env.value}}"
+{% endfor %}
+{% endif %}
+{% if 'environment_file' in systemd.exec %}
+{% for file in systemd.exec.environment_file %}
+EnvironmentFile={{ file }}
+{% endfor %}
+{% endif %}
+{% if 'pass_environment' in systemd.exec %}
+{% for env in systemd.exec.pass_environment %}
+PassEnvironment={{ env }}
+{% endfor %}
+{% endif %}
+{% if 'unset_environment' in systemd.exec %}
+{% for env in systemd.exec.unset_environment %}
+UnsetEnvironment={{ env }}
+{% endfor %}
+{% endif %}
+{# logging and standard input/output #}
+{% if 'standard_input' in systemd.exec %}
+StandardInput={{ systemd.exec.standard_input }}
+{% endif %}
+{% if 'standard_output' in systemd.exec %}
+StandardOutput={{ systemd.exec.standard_output }}
+{% endif %}
+{% if 'standard_error' in systemd.exec %}
+StandardError={{ systemd.exec.standard_error }}
+{% endif %}
+{% if 'standard_input_text' in systemd.exec %}
+{% for text in systemd.exec.standard_input_text %}
+StandardInputText={{ text }}
+{% endfor %}
+{% endif %}
+{% if 'standard_input_data' in systemd.exec %}
+{% for data in systemd.exec.standard_input_data %}
+StandardInputData={{ data }}
+{% endfor %}
+{% endif %}
+{% if 'log_level_max' in systemd.exec %}
+LogLevelMax={{ systemd.exec.log_level_max | lower }}
+{% endif %}
+{% if 'log_extra_fields' in systemd.exec %}
+LogExtraFields={% for field in systemd.exec.log_extra_fields %}'{{ field.field }}={{ field.value }}' {%- endfor +%}
+{% endif %}
+{% if 'log_rate_limit_interval_sec' in systemd.exec %}
+LogRateLimitIntervalSec={{ systemd.exec.log_rate_limit_interval_sec }}
+{% endif %}
+{% if 'log_rate_limit_burst' in systemd.exec %}
+LogRateLimitBurst={{ systemd.exec.log_rate_limit_burst | int }}
+{% endif %}
+{% if 'log_filter_patterns' in systemd.exec %}
+{% for pattern in systemd.exec.log_filter_patterns %}
+LogFilterPatterns={{ pattern }}
+{% endfor %}
+{% endif %}
+{% if 'log_namespace' in systemd.exec %}
+LogNamespace={{ systemd.exec.log_namespace }}
+{% endif %}
+{% if 'syslog_identifier' in systemd.exec %}
+SyslogIdentifier={{ systemd.exec.syslog_identifier }}
+{% endif %}
+{% if 'syslog_facility' in systemd.exec %}
+SyslogFacility={{ systemd.exec.syslog_facility }}
+{% endif %}
+{% if 'syslog_level' in systemd.exec %}
+SyslogLevel={{ systemd.exec.syslog_level | lower }}
+{% endif %}
+{% if 'syslog_level_prefix' in systemd.exec %}
+SyslogLevelPrefix={{ systemd.exec.syslog_level_prefix | string | lower }}
+{% endif %}
+{% if 'tty_path' in systemd.exec %}
+TTYPath={{ systemd.exec.tty_path }}
+{% endif %}
+{% if 'tty_reset' in systemd.exec %}
+TTYReset={{ 'yes' if systemd.exec.tty_reset else 'no' }}
+{% endif %}
+{% if 'tty_v_hangup' in systemd.exec %}
+TTYVHangup={{ 'yes' if systemd.exec.tty_v_hangup else 'no' }}
+{% endif %}
+{% if 'tty_rows' in systemd.exec %}
+TTYRows={{ systemd.exec.tty_rows | int }}
+{% endif %}
+{% if 'tty_columns' in systemd.exec %}
+TTYColumns={{ systemd.exec.tty_columns | int }}
+{% endif %}
+{% if 'tty_v_t_disallocate' in systemd.exec %}
+TTYVTDisallocate={{ 'yes' if systemd.exec.tty_v_t_disallocate else 'no' }}
+{% endif %}
+{# credentials #}
+{% if 'load_credential' in systemd.exec %}
+{% for cred in systemd.exec.load_credential %}
+LoadCredential={{ cred.id }}:{{ cred.path }}
+{% endfor %}
+{% endif %}
+{% if 'load_credential_encrypted' in systemd.exec %}
+{% for cred in systemd.exec.load_credential_encrypted %}
+LoadCredentialEncrypted={{ cred.id }}:{{ cred.path }}
+{% endfor %}
+{% endif %}
+{% if 'import_credential' in systemd.exec %}
+{% for cred in systemd.exec.import_credential %}
+ImportCredential={{ cred }}
+{% endfor %}
+{% endif %}
+{% if 'set_credential' in systemd.exec %}
+{% for cred in systemd.exec.set_credential %}
+SetCredential={{ cred.id }}:{{ cred.data }}
+{% endfor %}
+{% endif %}
+{% if 'set_credential_encrypted' in systemd.exec %}
+{% for cred in systemd.exec.set_credential_encrypted %}
+SetCredentialEncrypted={{ cred.id }}:{{ cred.data }}
+{% endfor %}
+{% endif %}
+{# system v compatibility #}
+{% if 'utmp_identifier' in systemd.exec %}
+UtmpIdentifier={{ systemd.exec.utmp_identifier }}
+{% endif %}
+{% if 'utmp_mode' in systemd.exec %}
+UtmpMode={{ systemd.exec.utmp_mode }}
+{% endif %}
+{% endif %}

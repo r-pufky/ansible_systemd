@@ -1,0 +1,9 @@
+[Unit]
+Description=test timer
+
+[Timer]
+OnBootSec=1year
+Unit=test.service
+
+[Install]
+WantedBy=timers.target

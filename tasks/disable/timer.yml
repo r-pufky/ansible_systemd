@@ -1,0 +1,15 @@
+---
+###############################################################################
+# Disable a defined systemd timer
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_timers.
+
+- name: 'Systemd | disable | timer {{ systemd.name }}'
+  ansible.builtin.service:
+    name: '{{ systemd.name }}.timer'
+    enabled: false
+    state: 'stopped'
+  when: systemd.state | lower == 'absent' and not systemd_testing_enable
+  notify: 'Handlers | reload systemd'

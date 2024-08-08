@@ -1,0 +1,141 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# Environment
+###############################################################################
+# Set environment variables.
+#
+# Environment variables are NOT suitable for passing secrets.
+#
+# Environment variables are exposed to unprivileged clients via D-Bus IPC, and
+# generally not understood as being data that requires protection; they are
+# propagated down the process tree, including across security boundaries (such
+# as setuid/setgid executables), and leak to processes that should not have
+# access to secret data.
+#
+# Use load_credential, load_credential_encrypted, set_credential_encrypted to
+# securely pass data to service.
+#
+# Special Case:
+#                 *: explicitly quoted as "{VAR}={VALUE}" when rendered
+#                 *: Unquoted using QUOTING rules
+#                 *: quote entire assignment if value contains spaces or equals
+#                    sign.
+#                 *: variable expansion is not performed inside strings
+#                 *: $ character has no special meaning
+#                 *: SPECIFIERS expansion is performed
+#   [a-z,A-Z,0-9,_]: acceptable variable name characters; do not start with a
+#                    digit or leave empty.
+#
+# Values:
+#   - var: str - environment variable name
+#     value: str - environment variable value
+#   {OMIT}: no environment variables (default)
+#
+# Variable: environment | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://man7.org/linux/man-pages/man7/environ.7.html
+
+# Set environment variables from text files.
+#
+# Overrides values set with environment. Last read wins when reading from
+# multiple text files.
+#
+# Values:
+#     {PATH}: absolute path or wildcard expression for environment files; read
+#             after previous processes exits and before new processes start.
+#    -{PATH}: ignore errors when accessing {PATH}
+#     {OMIT}: disabled (default)
+#
+# Variable: environment_file | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#EnvironmentFile
+
+# Pass service manager environment variables to unit.
+#
+# Variables specified that are not set will not be passed and silently ignored.
+# No effect for user service manager.
+#
+# Variables are overridden by environment, environment_file.
+#
+# Values:
+#     {VAR}: environment variable name to pass to unit
+#    {OMIT}: disabled (default)
+#
+# Variable: pass_environment | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/environ.7.html
+
+# Unset service manager environment variables for unit.
+#
+# Undo's any assignments from environment, environment_file, pass_environment,
+# service variables or PAM modules.
+#
+# If a variable assignment is specified (that is: a variable name, followed by "=", followed by its value), then any environment variable matching this precise assignment is removed.
+#
+# If a variable name is specified (that is a variable name without any following "=" or value), then any assignment matching the variable name, regardless of its value is removed. Note that the effect of UnsetEnvironment= is applied as final step when the environment list passed to executed processes is compiled.
+#
+# Values:
+#   {VAR}={VALUE}: matching variable and assignment are removed
+#          {VAR}=: remove matching variable name assignments (regardless of value)
+#          {OMIT}: disabled (default)
+#
+# Variable: unset_environment | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/environ.7.html

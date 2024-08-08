@@ -1,0 +1,15 @@
+---
+###############################################################################
+# Disable a defined systemd service
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_services.
+
+- name: 'Systemd | disable | service {{ systemd.name }}'
+  ansible.builtin.service:
+    name: '{{ systemd.name }}.service'
+    enabled: false
+    state: 'stopped'
+  when: systemd.state | lower == 'absent' and not systemd_testing_enable
+  notify: 'Handlers | reload systemd'

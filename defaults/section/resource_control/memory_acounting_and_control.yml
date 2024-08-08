@@ -1,0 +1,434 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# Memory Accounting and Control
+###############################################################################
+# Enable process and kernel memory accounting?
+#
+# Turning on memory accounting for one unit will also implicitly turn it on for
+# all units contained in the same slice, all parent slices, and units within.
+#
+# Values:
+#     True: enable process accounting
+#    False: disable process accounting
+#   {OMIT}: True (default) default changed with DefaultMemoryAccounting= in
+#           systemd-system.conf.
+#
+# Variable: memory_accounting | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+
+# Running minimum memory use protection.
+#
+# Unit treated as if it was using less memory resulting in memory to be
+# preferentially reclaimed from unprotected units. For a protection to be
+# effective it is generally required to set a corresponding allocation on all
+# ancestors; which is distributed between children (with the exception of the
+# root slice). Any allocation that is not explicitly distributed to specific
+# children is used to create a shared protection for all children. As this is a
+# shared protection, the children will freely compete for the memory.
+#
+# Applies to startup and shutdown phases of system if startup_memory_low is
+# unset.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: memory_min | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Default minimum memory use protection.
+#
+# Set default memory_min for children.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: default_memory_min | str
+#
+# Default: omit (system default).
+
+# Running low memory use protection.
+#
+# Weaker protection than memory_min where memory may still be reclaimed to
+# avoid invoking the OOM killer in case there is no other reclaimable memory.
+#
+# Unit treated as if it was using less memory resulting in memory to be
+# preferentially reclaimed from unprotected units. For a protection to be
+# effective it is generally required to set a corresponding allocation on all
+# ancestors; which is distributed between children (with the exception of the
+# root slice). Any allocation that is not explicitly distributed to specific
+# children is used to create a shared protection for all children. As this is a
+# shared protection, the children will freely compete for the memory.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: memory_low | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Default running low memory use protection.
+#
+# Set default memory_low for children.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: default_memory_low | str
+#
+# Default: omit (system default).
+
+# Startup and shutdown low memory use protection.
+#
+# Weaker protection than memory_min where memory may still be reclaimed to
+# avoid invoking the OOM killer in case there is no other reclaimable memory
+# during startup and shutdown.
+#
+# Unit treated as if it was using less memory resulting in memory to be
+# preferentially reclaimed from unprotected units. For a protection to be
+# effective it is generally required to set a corresponding allocation on all
+# ancestors; which is distributed between children (with the exception of the
+# root slice). Any allocation that is not explicitly distributed to specific
+# children is used to create a shared protection for all children. As this is a
+# shared protection, the children will freely compete for the memory.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: startup_memory_low | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Default startup and shutdown low memory use protection.
+#
+# Set default startup_memory_low for children.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: default_startup_memory_low | str
+#
+# Default: omit (system default).
+
+# Running high memory use protection.
+#
+# Throttle limit on memory usage. Memory usage may go above the limit if
+# unavoidable, but the processes are heavily slowed down and memory is taken
+# away aggressively in such cases. This is the main mechanism to control memory
+# usage.
+#
+# The effective configuration is reported as EffectiveMemoryHigh.
+#
+# Applies to startup and shutdown phases of system if startup_memory_high is
+# unset.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: memory_high | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Startup and shutdown high memory use protection.
+#
+# Throttle limit on memory usage during startup and shutdown. Memory usage may
+# go above the limit if unavoidable, but the processes are heavily slowed down
+# and memory is taken away aggressively in such cases. This is the main
+# mechanism to control memory usage.
+#
+# The effective configuration is reported as EffectiveMemoryHigh.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: startup_memory_high | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Running max memory use protection.
+#
+# Absolute limit on memory usage. If memory usage cannot be contained under the
+# limit, out-of-memory killer is invoked inside the unit. It is recommended to
+# use memory_high as the main control mechanism and memory_max as the last line
+# of defense.
+#
+# The effective configuration is reported as EffectiveMemoryMax.
+#
+# Applies to startup and shutdown phases of system if startup_memory_max is
+# unset.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: memory_max | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Startup and shutdown max memory use protection.
+#
+# Absolute limit on memory usage during startup and shutdown. If memory usage
+# cannot be contained under the limit, out-of-memory killer is invoked inside
+# the unit. It is recommended to use startup_memory_high as the main control
+# mechanism and startup_memory_max as the last line of defense.
+#
+# The effective configuration is reported as EffectiveMemoryMax.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: startup_memory_max | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Running swap max memory use protection.
+#
+# Absolute limit on swap memory usage.
+#
+# Applies to startup and shutdown phases of system if startup_memory_swap_max
+# is unset.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: memory_swap_max | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Startup and shutdown swap max memory use protection.
+#
+# Absolute limit on swap memory usage during startup and shutdown.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: startup_memory_swap_max | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Running zswap max memory use protection.
+#
+# Absolute limit on zswap memory usage. Zswap is a lightweight compressed cache
+# for swap pages. It takes pages that are in the process of being swapped out
+# and attempts to compress them into a dynamically allocated RAM-based memory
+# pool. If the limit specified is hit, no entries from this unit will be stored
+# in the pool until existing entries are faulted back or written out to disk.
+#
+# Applies to startup and shutdown phases of system if startup_memory_z_swap_max
+# is unset.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: memory_z_swap_max | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+# * https://docs.kernel.org/admin-guide/mm/zswap.html
+
+# Startup and shutdown zswap max memory use protection.
+#
+# Absolute limit on zswap memory usage during startup and shutdown. Zswap is a
+# lightweight compressed cache for swap pages. It takes pages that are in the
+# process of being swapped out and attempts to compress them into a dynamically
+# allocated RAM-based memory pool. If the limit specified is hit, no entries
+# from this unit will be stored in the pool until existing entries are faulted
+# back or written out to disk.
+#
+# Values:
+#      {SIZE}: SIZE memory size
+#      {INT}%: memory size as a percent of physical memory
+#    infinity: all available memory protected (inherit all protection from
+#              ancestors).
+#      {OMIT}: infinity (default)
+#
+# Variable: startup_memory_z_swap_max | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#memory-interface-files
+
+# Write zswap cache to backing storage?
+#
+# Allows disabling writeback of swap pages for IO-intensive applications, while
+# retaining the ability to store compressed pages in Zswap. See the kernel's
+# Zswap documentation for more details.
+#
+# Values:
+#     True: enable writes to backing storage
+#    False: disable writes to backing storage
+#   {OMIT}: True (default)
+#
+# Variable: memory_z_swap_writeback | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/mm/zswap.html
+
+# Restrict execution to specified NUMA nodes.
+#
+# Does not guarantee that all of the memory NUMA nodes will be used by the
+# processes as it may be limited by parent units. The effective configuration
+# is reported as EffectiveMemoryNodes.
+#
+# Applies to startup and shutdown phases of system if
+# startup_allowed_memory_nodes is unset.
+#
+# Values:
+#        #: use specific NUMA node
+#      #-#: use range of NUMA nodes
+#   {OMIT}: no restrictions (default)
+#
+# allowed_memory_nodes: ['1-8', 10, 11]
+#
+# Variable: allowed_memory_nodes | list of str
+#
+# Default: omit (system default).
+
+# Startup and shutdown restrict execution to specified NUMA nodes.
+#
+# Does not guarantee that all of the memory NUMA nodes will be used by the
+# processes as it may be limited by parent units. The effective configuration
+# is reported as EffectiveMemoryNodes.
+#
+# Values:
+#        #: use specific NUMA node
+#      #-#: use range of NUMA nodes
+#   {OMIT}: no restrictions (default)
+#
+# startup_allowed_memory_nodes: ['1-8', 10, 11]
+#
+# Variable: startup_allowed_memory_nodes | list of str
+#
+# Default: omit (system default).

@@ -1,0 +1,24 @@
+{# kill section heading #}
+{% if 'kill' in systemd %}
+{% if 'kill_mode' in systemd.kill %}
+KillMode={{ systemd.kill.kill_mode | lower }}
+{% endif %}
+{% if 'kill_signal' in systemd.kill %}
+KillSignal={{ systemd.kill.kill_signal | upper }}
+{% endif %}
+{% if 'restart_kill_signal' in systemd.kill %}
+RestartKillSignal={{ systemd.kill.restart_kill_signal | upper }}
+{% endif %}
+{% if 'send_sighup' in systemd.kill %}
+SendSIGHUP={{ systemd.kill.send_sighup | string | lower }}
+{% endif %}
+{% if 'send_sigkill' in systemd.kill %}
+SendSIGKILL={{ systemd.kill.send_sigkill | string | lower }}
+{% endif %}
+{% if 'final_kill_signal' in systemd.kill %}
+FinalKillSignal={{ systemd.kill.final_kill_signal | upper }}
+{% endif %}
+{% if 'watchdog_signal' in systemd.kill %}
+WatchdogSignal={{ systemd.kill.watchdog_signal | upper }}
+{% endif %}
+{% endif %}

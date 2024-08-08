@@ -1,0 +1,133 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# BPF programs
+###############################################################################
+# Absolute path to BPF program (/sys/fs/bpf) to filter ingress traffic.
+#
+# Add custom network traffic filters implemented as BPF programs, applying to
+# all IP packets received over AF_INET and AF_INET6 sockets.
+#
+# Filters configured with this option are applied to all sockets created by
+# processes of this unit. Loaded in addition to filters any of the parent
+# slice, units this unit might be a member of, any ip_address_allow, any
+# ip_address_deny filters in any of these units. By default there are no
+# filters specified.
+#
+# Values:
+#   {PATH}: absolute path to BPF program (/sys/fs/bpf)
+#   {OMIT}: use no filters (default)
+#
+# Variable: ip_ingress_filter_path | list of str
+#
+# Default: omit (system default).
+
+# Absolute path to BPF program (/sys/fs/bpf) to filter egress traffic.
+#
+# Add custom network traffic filters implemented as BPF programs, applying to
+# all IP packets sent over AF_INET and AF_INET6 sockets.
+#
+# Filters configured with this option are applied to all sockets created by
+# processes of this unit. Loaded in addition to filters any of the parent
+# slice, units this unit might be a member of, any ip_address_allow, any
+# ip_address_deny filters in any of these units. By default there are no
+# filters specified.
+#
+# Values:
+#   {PATH}: absolute path to BPF program (/sys/fs/bpf)
+#   {OMIT}: use no filters (default)
+#
+# Variable: ip_egress_filter_path | list of str
+#
+# Default: omit (system default).
+
+# Attach custom BPF programs to unit cgroup
+#
+# Cgroup-bpf hooks in the form of BPF programs are loaded to the BPF filesystem
+# and attached with cgroup-bpf attach flags determined by the unit.
+#
+# Values:
+#   - type: str - BPF attach type in bpftool
+#         Values:
+#                egress: egress path of the inet socket
+#               ingress: ingress path of the inet socket
+#           sock_create: opening of an inet socket
+#              sock_ops: various socket operations
+#                device: device access
+#                 bind4: call to bind for an inet4 socket
+#                 bind6: call to bind for an inet6 socket
+#              connect4: call to connect for an inet4 socket
+#              connect6: call to connect for an inet6 socket
+#            post_bind4: return from bind for an inet4 socket
+#            post_bind6: return from bind for an inet6 socket
+#              sendmsg4: call to sendto, sendmsg, sendmmsg for an unconnected
+#                        udp4 socket.
+#              sendmsg6: call to sendto, sendmsg, sendmmsg for an unconnected
+#                        udp6 socket.
+#                sysctl: sysctl access
+#              recvmsg4: call to recvfrom, recvmsg, recvmmsg for an
+#                        unconnected udp4 socket.
+#              recvmsg6: call to recvfrom, recvmsg, recvmmsg for an
+#                        unconnected udp6 socket.
+#            getsockopt: call to getsockopt
+#            setsockopt: call to setsockopt
+#     path: str - absolute path to BPF program (/sys/fs/bpf)
+#   {OMIT}: no custom BPF attachments (default)
+#
+# bpf_program:
+#   - type: 'egress'
+#     path: '/sys/fs/bpf/egress-hook'
+#   - type: 'bind6'
+#     path: '/sys/fs/bpf/sock-addr-hook'
+#
+# Variable: bpf_program | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/bpf/
+# * https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/include/uapi/linux/bpf.h

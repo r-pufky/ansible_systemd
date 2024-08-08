@@ -1,0 +1,149 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Kill] Settings
+###############################################################################
+# Unit Kill configuration.
+#
+# Define the killing procedure of processes belonging to the unit.
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd_scope - scope
+#
+# See reference sections for syntax formats:
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.kill.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+# How unit processes are killed.
+#
+# Processes will first be terminated via SIGTERM (unless changed via
+# kill_signal or restart_kill_signal). Setting send_sighup will follow with a
+# SIGHUP. If processes still remain after:
+# * the main process of a unit has exited (applies to kill_mode: mixed)
+# * the delay configured via the timeout_stop_sec has passed (applies to
+#   kill_mode: control-group, mixed, process).
+#
+# The termination request is repeated with the SIGKILL signal or the signal
+# specified via final_kill_signal (unless disabled via send_sigkill).
+#
+# Values:
+#   control-group: all remaining processes in the control group of this
+#                  unit will be killed on unit stop (default).
+#           mixed: the kill_signal/restart_kill_signal is sent to the
+#                  main process while the subsequent
+#                  send_sigkill/final_kill_signal is sent to all
+#                  remaining processes of the unit's control group.
+#         process: only the main process is killed (not recommended)
+#            none: no process is killed (strongly recommended against)
+#
+# Variable: kill_mode | str
+#
+# Default: omit (system default).
+
+# Signal to use when stopping a service.
+#
+# This controls the signal that is sent as first step of shutting down a unit,
+# and is usually followed by SIGKILL. For a list of valid signals, see signal.
+#
+# Right after sending specified signal, systemd will always send SIGCONT,
+# ensuring suspended tasks terminate cleanly.
+#
+# Values:
+#   {SIGNAL}: signal to use
+#     {OMIT}: SIGTERM (default)
+#
+# Variable: kill_signal | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/signal.7.html
+
+# Signal to use when restarting a service.
+#
+# This controls the signal that is sent as first step of restarting a unit,
+# and is usually followed by SIGKILL. For a list of valid signals, see signal.
+# Defaults to kill_signal.
+#
+# Right after sending specified signal, systemd will always send SIGCONT,
+# ensuring suspended tasks restart cleanly.
+#
+# Values:
+#   {SIGNAL}: signal to use
+#     {OMIT}: kill_signal (default)
+#
+# Variable: restart_kill_signal | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/signal.7.html
+
+# Send SIGHUP to remaining processes immediately after kill_signal?
+#
+# Specifies whether to send SIGHUP to remaining processes immediately after
+# sending the signal configured with kill_signal. This is useful to indicate to
+# shells and shell-like programs that their connection has been severed.
+#
+# Values:
+#   {OMIT}: False (default)
+#
+# Variable: send_sighup | bool
+#
+# Default: omit (system default).
+
+# Send SIGKILL/final_kill_signal to remaining processes after timeout?
+#
+# Specifies whether to send SIGKILL (or final_kill_signal) to remaining
+# processes after a timeout, if the normal shutdown procedure left processes of
+# the service around. When disabled, a kill_mode of control-group or mixed
+# service will not restart if processes from prior services exist within the
+# control group.
+#
+# Values:
+#   {OMIT}: True (default)
+#
+# Variable: send_sigkill | bool
+#
+# Default: omit (system default).
+
+# Signal to send remaining processes after timeout if send_sigkill is enabled.
+#
+# Specifies which signal to send to remaining processes after a timeout if
+# send_sigkill is enabled. The signal configured here should be one that is not
+# typically caught and processed by services (SIGTERM is not suitable).
+# Developers can find it useful to use this to generate a coredump to
+# troubleshoot why a service did not terminate upon receiving the initial
+# SIGTERM signal. This can be achieved by configuring limit_core and setting
+# final_kill_signal to either SIGQUIT or SIGABRT.
+#
+# Values:
+#   {SIGNAL}: signal to use
+#     {OMIT}: SIGKILL (default)
+#
+# Variable: final_kill_signal | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/signal.7.html
+
+# Signal to terminate service when watchdog_sec expires.
+#
+# Values:
+#   {SIGNAL}: signal to use
+#     {OMIT}: SIGABRT (default)
+#
+# Variable: watchdog_signal | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/signal.7.html

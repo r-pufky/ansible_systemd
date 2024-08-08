@@ -1,0 +1,30 @@
+---
+# Role variable returned variables are scoped to the current play only (e.g.
+# converge.yml) and must be tested between each application of the role. Test
+# these values while converging versus verify.yml (where scoping will prevent)
+# testing these values.
+#
+# Role applied with no settings should not change anything. Use directory
+# stat to ensure no changes are applied to systemd.
+#
+# Generates:
+#   _test_systemd_cache_default_stat: stat /etc/systemd/system
+
+- name: 'Default | converge'
+  hosts: all
+  gather_facts: true
+  tags: 'molecule-idempotence-notest'
+  tasks:
+    - name: 'Default | converge | snapsnot systemd directory'
+      ansible.builtin.stat:
+        path: '/etc/systemd/system'
+      register: _test_systemd_default_stat
+
+    - name: 'Default | converge | export snapshot to cache for verification'
+      ansible.builtin.set_fact:
+        cacheable: true
+        _test_systemd_cache_default_stat: '{{ _test_systemd_default_stat }}'
+
+    - name: 'Default | converge | systemd'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.systemd'

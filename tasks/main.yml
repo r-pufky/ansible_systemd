@@ -1,0 +1,49 @@
+---
+# Always load everything before removing to prevent dependency failures.
+- name: 'Load service'
+  ansible.builtin.include_tasks: 'load/service.yml'
+  loop: '{{ systemd_services | default([]) }}'
+  loop_control:
+    loop_var: 'systemd'
+
+- name: 'Load timer'
+  ansible.builtin.include_tasks: 'load/timer.yml'
+  loop: '{{ systemd_timers | default([]) }}'
+  loop_control:
+    loop_var: 'systemd'
+
+- name: 'Enable service'
+  ansible.builtin.include_tasks: 'enable/service.yml'
+  loop: '{{ systemd_services | default([]) }}'
+  loop_control:
+    loop_var: 'systemd'
+
+- name: 'Enable timer'
+  ansible.builtin.include_tasks: 'enable/timer.yml'
+  loop: '{{ systemd_timers | default([]) }}'
+  loop_control:
+    loop_var: 'systemd'
+
+- name: 'Disable service'
+  ansible.builtin.include_tasks: 'disable/service.yml'
+  loop: '{{ systemd_services | default([]) }}'
+  loop_control:
+    loop_var: 'systemd'
+
+- name: 'Disable timer'
+  ansible.builtin.include_tasks: 'disable/timer.yml'
+  loop: '{{ systemd_timers | default([]) }}'
+  loop_control:
+    loop_var: 'systemd'
+
+- name: 'Unload service'
+  ansible.builtin.include_tasks: 'unload/service.yml'
+  loop: '{{ systemd_services | default([]) }}'
+  loop_control:
+    loop_var: 'systemd'
+
+- name: 'Unload timer'
+  ansible.builtin.include_tasks: 'unload/timer.yml'
+  loop: '{{ systemd_timers | default([]) }}'
+  loop_control:
+    loop_var: 'systemd'

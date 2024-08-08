@@ -1,0 +1,593 @@
+---
+# Role variable returned variables are scoped to the current play only (e.g.
+# converge.yml) and must be tested between each application of the role. Test
+# these values while converging versus verify.yml (where scoping will prevent)
+# testing these values.
+#
+# Verify systemd unit files are rendered correctly (syntax only, not for valid
+# configurations).
+
+- name: 'File format all options | converge'
+  hosts: all
+  gather_facts: true
+  tags: 'molecule-idempotence-notest'
+  tasks:
+    - name: 'File format all options | converge | create all options'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.systemd'
+      vars:
+        systemd_testing_enable: true
+        systemd_services:
+          - name: 'reboot'
+            state: 'present'
+            unit:
+              description: 'periodic system reboot timer'
+              documentation:
+                - 'https://example.com'
+                - 'https://example.com/url2'
+              wants: ['test.service']
+              requires: ['test.service']
+              requisite: ['test.service']
+              binds_to: ['test.service', 'test2.service']
+              part_of: ['test.service']
+              upholds: ['test.service', 'test2.service']
+              conflicts: ['test-non-existent.service']
+              before: ['test-before.service']
+              after: ['multi-user.target']
+              on_failure: ['test-non-existent-failure.service']
+              on_success: ['test-non-existent-success.service']
+              propagates_reload_to: ['test.service']
+              propagates_reload_from: ['test.service']
+              propagates_stop_to: ['test.service']
+              stop_propagated_from: ['test.service']
+              joins_namespace_of: ['test.service']
+              requires_mounts_for: ['/']
+              wants_mounts_for: ['/']
+              on_success_job_mode: 'replace'
+              on_failure_job_mode: 'replace'
+              ignore_on_isolate: false
+              stop_when_unneeded: false
+              refuse_manual_start: false
+              refuse_manual_stop: false
+              allow_isolate: false
+              default_dependencies: true
+              survive_final_kill_signal: false
+              collect_mode: 'inactive'
+              failure_action: 'none'
+              success_action: 'none'
+              failure_action_exit_status: 255
+              success_action_exit_status: 255
+              job_timeout_sec: 'infinity'
+              job_running_timeout_sec: 'infinity'
+              job_timeout_action: 'none'
+              job_running_reboot_argument: 'none'
+              start_limit_interval_sec: 'infinity'
+              start_limit_burst: 0
+              start_limit_action: 'none'
+              reboot_argument: 'none'
+              source_path: '/var/run/generated/timer'
+              condition_architecture: ['native', 'x86-64']
+              condition_firmware: ['uefi', 'device-tree']
+              condition_virtualization: [true, 'private-users']
+              condition_host: ['hostname']
+              condition_kernel_command_line: ['BOOT_IMAGE']
+              condition_kernel_version: ['>5.0', '<5.7']
+              condition_credential: ['credential']
+              condition_environment: ['DISPLAY']
+              condition_security: ['selinux', 'apparmor']
+              condition_capability: ['SYS_ADMIN']
+              condition_ac_power: false
+              condition_needs_update: '/etc/'
+              condition_first_boot: false
+              condition_path_exists: ['/']
+              condition_path_exists_glob: ['/etc/*']
+              condition_path_is_directory: ['/etc']
+              condition_path_is_symbolic_link: ['/usr/bin/grepdiff']
+              condition_path_is_mount_point: ['/']
+              condition_path_is_read_write: ['/']
+              condition_path_is_encrypted: ['/']
+              condition_directory_not_empty: ['/']
+              condition_file_not_empty: ['/etc/passwd']
+              condition_file_is_executable: ['/usr/bin/ls']
+              condition_user: 'root'
+              condition_group: 'root'
+              condition_control_group_controller: ['v2']
+              condition_memory: ['<90%']
+              condition_cpus: ['>4']
+              condition_cpu_feature: ['apic', 'sse']
+              condition_os_release: ['ID=manjaro']
+              condition_memory_pressure: '100%'
+              condition_cpu_pressure: '100%'
+              condition_io_pressure: '100%'
+              assert_architecture: ['native', 'x86-64']
+              assert_firmware: ['uefi', 'device-tree']
+              assert_virtualization: [true, 'private-users']
+              assert_host: ['hostname']
+              assert_kernel_command_line: ['BOOT_IMAGE']
+              assert_kernel_version: ['>5.0', '<5.7']
+              assert_credential: ['credential']
+              assert_environment: ['DISPLAY']
+              assert_security: ['selinux', 'apparmor']
+              assert_capability: ['SYS_ADMIN']
+              assert_ac_power: false
+              assert_needs_update: '/etc/'
+              assert_first_boot: false
+              assert_path_exists: ['/']
+              assert_path_exists_glob: ['/etc/*']
+              assert_path_is_directory: ['/etc']
+              assert_path_is_symbolic_link: ['/usr/bin/grepdiff']
+              assert_path_is_mount_point: ['/']
+              assert_path_is_read_write: ['/']
+              assert_path_is_encrypted: ['/']
+              assert_directory_not_empty: ['/']
+              assert_file_not_empty: ['/etc/passwd']
+              assert_file_is_executable: ['/usr/bin/ls']
+              assert_user: 'root'
+              assert_group: 'root'
+              assert_control_group_controller: ['v2']
+              assert_memory: ['<90%']
+              assert_cpus: ['>4']
+              assert_cpu_feature: ['apic', 'sse']
+              assert_os_release: ['ID=manjaro']
+              assert_memory_pressure: '100%'
+              assert_cpu_pressure: '100%'
+              assert_io_pressure: '100%'
+            service:
+              type: 'simple'
+              exit_type: 'main'
+              remain_after_exit: false
+              guess_main_pid: false
+              pid_file: '/var/run/test_pid'
+              bus_name: 'org.freedesktop.hostname1'
+              exec_start: ['echo test', 'echo test2']
+              exec_start_pre: ['echo test']
+              exec_start_post: ['echo test']
+              exec_condition: [255]
+              exec_reload: ['echo test']
+              exec_stop: ['echo test']
+              exec_stop_post: ['echo test']
+              restart_sec: '1hour'
+              restart_steps: 100
+              restart_max_delay_sec: 'infinity'
+              timeout_start_sec: 'infinity'
+              timeout_stop_sec: 'infinity'
+              timeout_abort_sec: 'infinity'
+              timeout_sec: 'infinity'
+              timeout_start_failure_mode: 'kill'
+              timeout_stop_failure_mode: 'kill'
+              runtime_max_sec: 'infinity'
+              runtime_randomized_extra_sec: 300
+              watchdog_sec: 300
+              restart: 'on-abnormal'
+              restart_mode: 'normal'
+              success_exit_status: [255]
+              restart_prevent_exit_status: [234, 245]
+              restart_force_exit_status: [2, 3]
+              root_directory_start_only: false
+              non_blocking: false
+              notify_access: 'none'
+              sockets: ['SOCKET']
+              file_descriptor_store_max: 1024
+              file_descriptor_store_preserve: false
+              usb_function_descriptors: '/etc/usb-functions'
+              usb_function_strings: '/etc/usb-strings'
+              oom_policy: 'kill'
+              open_file:
+                - path: '/etc'
+                  fd_name: 'test'
+                  options:
+                    - 'read-only'
+                    - 'truncate'
+              reload_signal: 'SIGHUP'
+            exec:
+              no_new_privileges: false
+              secure_bits: ['keep-caps', 'keep-caps-locked']
+              load_credential: [{id: 'credential', path: '/etc/cred/test'}]
+              load_credential_encrypted:
+                - id: 'credential'
+                  path: '/etc/cred/test'
+              import_credential: ['/etc/cred/test']
+              set_credential: [{id: 'credential', data: 'DATA'}]
+              set_credential_encrypted: [{id: 'credential', data: 'DATA'}]
+              standard_input: 'null'
+              standard_output: 'inherit'
+              standard_error: 'inherit'
+              standard_input_text: ['input text']
+              standard_input_data: ['input DATA']
+              log_level_max: 'info'
+              log_extra_fields: [{field: 'PRIORITY', value: 'MESSAGE'}]
+              log_rate_limit_interval_sec: '30s'
+              log_rate_limit_burst: 10000
+              log_filter_patterns: ['*']
+              log_namespace: 'test-namespace'
+              syslog_identifier: 'test-namespace'
+              syslog_facility: 'syslog'
+              syslog_level: 'crit'
+              syslog_level_prefix: true
+              tty_path: '/dev/console'
+              tty_reset: false
+              tty_v_hangup: false
+              tty_rows: 80
+              tty_columns: 100
+              tty_v_t_disallocate: false
+              system_call_filter_allow: ['@system-service']
+              system_call_filter_deny:
+                - set: '@system-service'
+                  error: 'kill'
+              system_call_error_number: 255
+              system_call_architectures: ['native', 'x86-64']
+              system_call_log_match: ['crit']
+              system_call_log_exclusions: []
+              nice: 0
+              cpu_scheduling_policy: 0
+              cpu_scheduling_priority: 0
+              cpu_scheduling_reset_on_fork: false
+              cpu_affinity: ['numa']
+              numa_policy: 'default'
+              numa_mask: ['1-3', 7]
+              io_scheduling_class: 'idle'
+              io_scheduling_priority: '4'
+              limit_cpu: {soft: 'infinity', hard: ''}
+              limit_fsize: {soft: 'infinity', hard: ''}
+              limit_data: {soft: 'infinity', hard: ''}
+              limit_stack: {soft: 'infinity', hard: ''}
+              limit_core: {soft: 'infinity', hard: ''}
+              limit_rss: {soft: 'infinity', hard: ''}
+              limit_nofile: {soft: 'infinity', hard: ''}
+              limit_as: {soft: 'infinity', hard: ''}
+              limit_nproc: {soft: 'infinity', hard: ''}
+              limit_memlock: {soft: 'infinity', hard: ''}
+              limit_locks: {soft: 'infinity', hard: ''}
+              limit_sigpending: {soft: 'infinity', hard: ''}
+              limit_msgqueue: {soft: 'infinity', hard: ''}
+              limit_nice: {soft: 'infinity', hard: 'infinity'}
+              limit_rtprio: {soft: 'infinity', hard: ''}
+              limit_rttime: {soft: 'infinity', hard: ''}
+              umask: '0022'
+              coredump_filter: ['private-anonymous', 'shared-anonymous']
+              keyring_mode: 'inherit'
+              oom_score_adjust: 1000
+              timer_slack_n_sec: '50000ns'
+              personality: 'x86-64'
+              ignore_sigpipe: true
+              user: 'test-user'
+              group: 'test-group'
+              dynamic_user: false
+              supplementary_groups: ['test-group2', 'test-group3']
+              set_login_environment: false
+              pam_name: 'pam-service-name'
+              environment: [{var: 'TEST', value: 'value'}]
+              environment_file: ['/etc/env']
+              pass_environment: ['SYSTEMD_VAR']
+              unset_environment: ['ENV']
+              protect_system: false
+              protect_home: false
+              runtime_directory: [{path: 'foo', link: ''}]
+              state_directory: [{path: 'foo', link: ''}]
+              cache_directory: [{path: 'foo', link: ''}]
+              logs_directory: [{path: 'foo', link: ''}]
+              configuration_directory: ['foo', 'bar']
+              runtime_directory_mode: '0755'
+              state_directory_mode: '0755'
+              cache_directory_mode: '0755'
+              logs_directory_mode: '0755'
+              configuration_directory_mode: '0755'
+              runtime_directory_preserve: false
+              timeout_clean_sec: 'infinity'
+              read_write_paths: ['/']
+              read_only_paths: ['/etc']
+              inaccessible_paths: ['/proc']
+              exec_paths: ['/usr/bin']
+              no_exec_paths: ['/sbin']
+              temporary_file_system: [{path: '/etc', options: ['nodev']}]
+              private_tmp: false
+              private_devices: false
+              private_network: false
+              network_namespace_path: '/proc/100/ns/net'
+              private_ipc: false
+              ipc_namespace_path: '/proc/100/ns/net'
+              MemoryKSM: false
+              private_users: false
+              protect_hostname: false
+              protect_clock: false
+              protect_kernel_tunables: false
+              protect_kernel_modules: false
+              protect_kernel_logs: false
+              protect_control_groups: false
+              restrict_address_families_allow: ['AF_UNIX', 'AF_INET']
+              restrict_address_families_deny: ['none']
+              restrict_file_systems_allow: ['@temporary', 'ext4']
+              restrict_file_systems_deny: ['@privileged-api']
+              restrict_namespaces_allow: ['cgroup', 'ipc']
+              restrict_namespaces_deny: ['pid', 'user']
+              lock_personality: false
+              memory_deny_write_execute: false
+              restrict_realtime: false
+              restrict_suid_sgid: false
+              remove_ipc: false
+              private_mounts: false
+              mount_flags: 'shared'
+              capability_bounding_set_include: ['SYS_ADMIN']
+              capability_bounding_set_exclude: ['NET_ADMIN']
+              ambient_capabilities_include: ['SYS_ADMIN']
+              ambient_capabilities_exclude: ['NET_ADMIN']
+              exec_search_path: ['/bin', '/sbin']
+              working_directory: '/tmp'
+              root_directory: '/tmp'
+              root_image: '/tmp/image'
+              root_image_options:
+                - name: 'root'
+                  options: ['nodev']
+                - name: 'tmp'
+                  options: ['nodev']
+              root_ephemeral: false
+              root_hash: '0xHASH'
+              root_hash_signature: 'SIG'
+              root_verity: '/tmp/dm-verity'
+              root_image_policy: >-
+                root=verity+signed+encrypted+unprotected+absent
+              mount_image_policy: >-
+                root=verity+signed+encrypted+unprotected+absent
+              extension_image_policy: >-
+                root=verity+signed+encrypted+unprotected+absent
+              mount_api_vfs: false
+              protect_proc: 'noaccess'
+              proc_subset: 'all'
+              bind_paths:
+                - source: '/'
+                  destination: '/other'
+                  option: 'rbind'
+              bind_read_only_paths:
+                - source: '/'
+                  destination: '/other'
+                  option: 'rbind'
+              mount_images:
+                - source: 'root'
+                  destination: 'root'
+                  options: ['nodev']
+              extension_images: [{source: 'root', options: ['nodev']}]
+              extension_directories: ['/tmp', '/tmp2']
+              se_linux_context: ''
+              app_armor_profile: ''
+              smack_process_label: ''
+              utmp_identifier: 'IDET'
+              utmp_mode: 'init'
+            resource_control:
+              ip_accounting: false
+              ip_address_allow: ['127.0.0.0/8', '224.0.0.0/4']
+              ip_address_deny: ['127.0.0.0/8', '224.0.0.0/4']
+              socket_bind_allow:
+                - address: 'any'
+                  protocol: 'udp'
+                  ports: '1-65535'
+              socket_bind_deny:
+                - address: 'any'
+                  protocol: 'udp'
+                  ports: '1-65535'
+              restrict_network_interfaces_allow: ['eth1']
+              restrict_network_interfaces_deny: ['eth2']
+              nft_set:
+                - type: 'cgroup'
+                  family: 'bridge'
+                  table: 'test'
+                  set: 'set'
+                - type: 'cgroup'
+                  family: 'bridge'
+                  table: 'test'
+                  set: 'set'
+              tasks_accounting: false
+              tasks_max: 'infinity'
+              coredump_receive: false
+              device_allow:
+                - device: 'char-cpu/*'
+                  read: true
+                  write: false
+                  create: false
+                - device: 'char-cpu/*'
+                  read: true
+                  write: true
+                  create: true
+              device_policy: 'auto'
+              io_accounting: false
+              io_weight: 10000
+              startup_io_weight: 10000
+              io_device_weight: [{path: '/dev/sda1', weight: 500}]
+              io_read_bandwidth_max: [{path: '/dev/sda1', bandwidth: 15000}]
+              io_write_bandwidth_max: [{path: '/dev/sda1', bandwidth: 15000}]
+              io_read_iops_max: [{path: '/dev/sda1', iops: 15000}]
+              io_write_iops_max: [{path: '/dev/sda1', iops: 15000}]
+              io_device_latency_target_sec:
+                - path: '/dev/sda1'
+                  latency: '25ms'
+              ip_ingress_filter_path: ['/sys/fs/bpf']
+              ip_egress_filter_path: ['/sys/fs/bpf']
+              bpf_program: [{type: 'egress', path: '/sys/fs/bpf/egress-hook'}]
+              memory_accounting: false
+              memory_min: 'infinity'
+              default_memory_min: 'infinity'
+              memory_low: 'infinity'
+              default_memory_low: 'infinity'
+              startup_memory_low: 'infinity'
+              default_startup_memory_low: 'infinity'
+              memory_high: 'infinity'
+              startup_memory_high: 'infinity'
+              memory_max: 'infinity'
+              startup_memory_max: 'infinity'
+              memory_swap_max: 'infinity'
+              startup_memory_swap_max: 'infinity'
+              memory_z_swap_max: 'infinity'
+              startup_memory_z_swap_max: 'infinity'
+              memory_z_swap_writeback: false
+              allowed_memory_nodes: ['1-8', 10, 11]
+              startup_allowed_memory_nodes: ['1-8', 10, 11]
+              cpu_accounting: false
+              cpu_weight: 10000
+              startup_cpu_weight: 10000
+              cpu_quota: 100
+              cpu_quota_period_sec: 1000
+              allowed_cpus: ['1-8', 10, 11]
+              startup_allowed_cpus: ['1-8', 10, 11]
+              managed_oom_swap: 'auto'
+              managed_oom_memory_pressure: 'auto'
+              managed_oom_memory_pressure_limit: 100
+              managed_oom_preference: 'none'
+              memory_pressure_watch: 'auto'
+              memory_pressure_threshold_sec: '1s'
+              slice: 'test.slice'
+              delegate: ['cpu', 'cpuset']
+              delegate_subgroup: 'system'
+              disable_controllers: ['cpu', 'memory']
+            kill:
+              kill_mode: 'control-group'
+              kill_signal: 'SIGKILL'
+              restart_kill_signal: 'SIGHUP'
+              send_sighup: true
+              send_sigkill: true
+              final_kill_signal: 'SIGKILL'
+              watchdog_signal: 'SIGABRT'
+            install:
+              alias: ['test2.timer']
+              wanted_by: ['timers.target']
+              required_by: ['timers.target']
+              upheld_by: ['timers.target']
+              also: []
+              default_instance: 'test.timer'
+        systemd_timers:
+          - name: 'reboot'
+            state: 'present'
+            unit:
+              description: 'periodic system reboot timer'
+              documentation:
+                - 'https://example.com'
+                - 'https://example.com/url2'
+              wants: ['test.service']
+              requires: ['test.service']
+              requisite: ['test.service']
+              binds_to: ['test.service', 'test2.service']
+              part_of: ['test.service']
+              upholds: ['test.service', 'test2.service']
+              conflicts: ['test-non-existent.service']
+              before: ['test-before.service']
+              after: ['multi-user.target']
+              on_failure: ['test-non-existent-failure.service']
+              on_success: ['test-non-existent-success.service']
+              propagates_reload_to: ['test.service']
+              propagates_reload_from: ['test.service']
+              propagates_stop_to: ['test.service']
+              stop_propagated_from: ['test.service']
+              joins_namespace_of: ['test.service']
+              requires_mounts_for: ['/']
+              wants_mounts_for: ['/']
+              on_success_job_mode: 'replace'
+              on_failure_job_mode: 'replace'
+              ignore_on_isolate: false
+              stop_when_unneeded: false
+              refuse_manual_start: false
+              refuse_manual_stop: false
+              allow_isolate: false
+              default_dependencies: true
+              survive_final_kill_signal: false
+              collect_mode: 'inactive'
+              failure_action: 'none'
+              success_action: 'none'
+              failure_action_exit_status: 255
+              success_action_exit_status: 255
+              job_timeout_sec: 'infinity'
+              job_running_timeout_sec: 'infinity'
+              job_timeout_action: 'none'
+              job_running_reboot_argument: 'none'
+              start_limit_interval_sec: 'infinity'
+              start_limit_burst: 0
+              start_limit_action: 'none'
+              reboot_argument: 'none'
+              source_path: '/var/run/generated/timer'
+              condition_architecture: ['native', 'x86-64']
+              condition_firmware: ['uefi', 'device-tree']
+              condition_virtualization: [true, 'private-users']
+              condition_host: ['hostname']
+              condition_kernel_command_line: ['BOOT_IMAGE']
+              condition_kernel_version: ['>5.0', '<5.7']
+              condition_credential: ['credential']
+              condition_environment: ['DISPLAY']
+              condition_security: ['selinux', 'apparmor']
+              condition_capability: ['SYS_ADMIN']
+              condition_ac_power: false
+              condition_needs_update: '/etc/'
+              condition_first_boot: false
+              condition_path_exists: ['/']
+              condition_path_exists_glob: ['/etc/*']
+              condition_path_is_directory: ['/etc']
+              condition_path_is_symbolic_link: ['/usr/bin/grepdiff']
+              condition_path_is_mount_point: ['/']
+              condition_path_is_read_write: ['/']
+              condition_path_is_encrypted: ['/']
+              condition_directory_not_empty: ['/']
+              condition_file_not_empty: ['/etc/passwd']
+              condition_file_is_executable: ['/usr/bin/ls']
+              condition_user: 'root'
+              condition_group: 'root'
+              condition_control_group_controller: ['v2']
+              condition_memory: ['<90%']
+              condition_cpus: ['>4']
+              condition_cpu_feature: ['apic', 'sse']
+              condition_os_release: ['ID=manjaro']
+              condition_memory_pressure: '100%'
+              condition_cpu_pressure: '100%'
+              condition_io_pressure: '100%'
+              assert_architecture: ['native', 'x86-64']
+              assert_firmware: ['uefi', 'device-tree']
+              assert_virtualization: [true, 'private-users']
+              assert_host: ['hostname']
+              assert_kernel_command_line: ['BOOT_IMAGE']
+              assert_kernel_version: ['>5.0', '<5.7']
+              assert_credential: ['credential']
+              assert_environment: ['DISPLAY']
+              assert_security: ['selinux', 'apparmor']
+              assert_capability: ['SYS_ADMIN']
+              assert_ac_power: false
+              assert_needs_update: '/etc/'
+              assert_first_boot: false
+              assert_path_exists: ['/']
+              assert_path_exists_glob: ['/etc/*']
+              assert_path_is_directory: ['/etc']
+              assert_path_is_symbolic_link: ['/usr/bin/grepdiff']
+              assert_path_is_mount_point: ['/']
+              assert_path_is_read_write: ['/']
+              assert_path_is_encrypted: ['/']
+              assert_directory_not_empty: ['/']
+              assert_file_not_empty: ['/etc/passwd']
+              assert_file_is_executable: ['/usr/bin/ls']
+              assert_user: 'root'
+              assert_group: 'root'
+              assert_control_group_controller: ['v2']
+              assert_memory: ['<90%']
+              assert_cpus: ['>4']
+              assert_cpu_feature: ['apic', 'sse']
+              assert_os_release: ['ID=manjaro']
+              assert_memory_pressure: '100%'
+              assert_cpu_pressure: '100%'
+              assert_io_pressure: '100%'
+            install:
+              alias: ['test2.timer']
+              wanted_by: ['timers.target']
+              required_by: ['timers.target']
+              upheld_by: ['timers.target']
+              also: []
+              default_instance: 'test.timer'
+            timer:
+              default_dependencies: true
+              on_active_sec: '1hour'
+              on_boot_sec: '1hour'
+              on_startup_sec: '1hour'
+              on_unit_active_sec: '1hour'
+              on_unit_inactive_sec: '1hour'
+              on_calendar: ['1hour']
+              accuracy_sec: '1min'
+              randomized_delay_sec: 300
+              fixed_random_delay: true
+              on_clock_change: false
+              on_timezone_change: false
+              unit: 'reboot.service'
+              persistent: false
+              wake_system: false
+              remain_after_elapse: true

@@ -1,0 +1,769 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Unit] Heading
+###############################################################################
+# Unit unit section configuration.
+#
+# Encodes information about a process controlled and supervised by systemd.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * COMMAND LINES (service command lines)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#Command%20lines
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+
+###############################################################################
+# Systemd Unit Heading
+###############################################################################
+# Unit description.
+#
+# Used by systemd (and other UIs) as a user-visible label for unit, string
+# should identify unit rather than describe it. Do not repeat unit name.
+#
+# 'Apache2 Web Server' is good, whereas 'high-performance light-weight HTTP
+# server' (too generic) or 'Apache2' (meaningless) are bad.
+#
+# Systemd may use this as a noun in status messages ('Starting description...',
+# 'Started description.', 'Reached target description.', 'Failed to start
+# description.'); it should be capitalized and should not be a full sentence,
+# or a phrase with a continuous verb.
+#
+# Values:
+#   {UNIT}: string identifying unit
+#   {OMIT}: disabled (default)
+#
+# Variable: description | str
+#
+# Default: omit (system default).
+
+# Reference documentation.
+#
+# URIs should be listed in order of relevance (highest to lowest).
+#
+# Values:
+#    {URI}: documentation URI: http://, https://, file:, info:, man:
+#   {OMIT}: disabled (default)
+#
+# Variable: documentation | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/uri.7.html
+
+# Wants (weak) requirement dependencies on other units.
+#
+# Units listed in this option will be started if the configuring unit is. If
+# listed units fail to start or cannot be added to transaction, this unit will
+# still be started. Recommended way to hook start-up of one unit to start-up of
+# another unit.
+#
+# Does not influence order of services starting or stopping; use before and
+# after. If a unit pulls in a service with wants and no ordering is configured,
+# both units will be started simultaneously and without any delay between them.
+#
+# Values:
+#   {UNIT}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: wants | list of str
+#
+# Default: omit (system default).
+
+# Require (strong) requirement dependencies on other units.
+#
+# Units listed will be activated with unit. If other units fail to activate,
+# and an ordering dependency after on failing unit is set, this unit will not
+# be started. This unit will be stopped (or restarted) if one of the other
+# units is explicitly stopped (or restarted).
+#
+# Recommend using wants to achieve a system that is more robust when dealing
+# with failing services.
+#
+# Does not imply other units always have to be in active state when this unit
+# is running. condition_* do not cause start job of a unit with a requires
+# dependency on it to fail. Units deactivating on their own are not propagated
+# to units having a requires dependency. Use binds_to with after to ensure that
+# a unit may never be in active state without a specific other unit also in
+# active state.
+#
+# Values:
+#   {UNIT}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: requires | list of str
+#
+# Default: omit (system default).
+
+# Requisite requirement dependencies on other units.
+#
+# Like requires except if units listed are not already started, they will not
+# be started and starting of this unit will fail immediately. Combine with
+# after to ensure this unit is not started before the other unit.
+#
+# When Requisite=b.service is used on a.service, this dependency will show as
+# RequisiteOf=a.service in property listing of b.service. RequisiteOf=
+# dependency cannot be specified directly.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: requisite | list of str
+#
+# Default: omit (system default).
+
+# Binding requirement dependencies on other units.
+#
+# Like requires except if unit bound to is stopped, this unit will be stopped
+# too.
+#
+# Used in conjunction with after on same unit the behavior of binds_to is
+# stronger. Unit bound has to be in active state for this unit to also be in
+# active state. Units that get skipped due to condition_* will be stopped; best
+# to combine binds_to with after.
+#
+# When BindsTo=b.service is used on a.service, this dependency will show as
+# BoundBy=a.service in property listing of b.service. BoundBy= dependency
+# cannot be specified directly.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: binds_to | list of str
+#
+# Default: omit (system default).
+
+# Part of requirement dependencies on other units.
+#
+# Like requires except limited to stopping and restarting of units. When
+# systemd stops or restarts units listed, the action is propagated to this
+# unit. One-way dependency - changes to this unit do not affect listed units.
+#
+# When PartOf=b.service is used on a.service, this dependency will show as
+# ConsistsOf=a.service in property listing of b.service. ConsistsOf= dependency
+# cannot be specified directly.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: part_of | list of str
+#
+# Default: omit (system default).
+
+# Upholds requirement dependencies on other units.
+#
+# Like wants except as long as this unit is up, all units listed are started
+# whenever found to be inactive or failed, and no job is queued for them. Has
+# continuous effect, constantly restarting unit if necessary. Restart happens
+# without delay with usual per-unit rate-limit.
+#
+# When Upholds=b.service is used on a.service, this dependency will show as
+# UpheldBy=a.service in the property listing of b.service.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: upholds | list of str
+#
+# Default: omit (system default).
+
+# Conflicts (negative) requirement dependencies on other units.
+#
+# Starting a conflicting unit with stop this unit, and vice versa.
+#
+# Use before or after to ensure conflicting units are not running at the same
+# time.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: conflicts | list of str
+#
+# Default: omit (system default).
+
+# Before requirement dependencies on other units.
+#
+# Ensures configured unit is started before listed unit begins starting up.
+#
+# When two units with an ordering dependency between them are shut down, the
+# inverse of the start-up order is applied. If one unit is shut down and the
+# other is started, the shutdown is ordered before the start-up.
+#
+# No effect on device units.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: before | list of str
+#
+# Default: omit (system default).
+
+# After requirement dependencies on other units.
+#
+# Ensures listed unit is fully started up before configured unit is started.
+#
+# When two units with an ordering dependency between them are shut down, the
+# inverse of the start-up order is applied. If one unit is shut down and the
+# other is started, the shutdown is ordered before the start-up.
+#
+# No effect on device units.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: after | list of str
+#
+# Default: omit (system default).
+
+# Units to activate when this unit enters failed state.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: on_failure | list of str
+#
+# Default: omit (system default).
+
+# Units to activate when this unit enters inactive state.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: on_success | list of str
+#
+# Default: omit (system default).
+
+# Propagate reload requests to units.
+#
+# Issuing a reload request on a unit will automatically also enqueue reload
+# requests on all units that are linked to it.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: propagates_reload_to | list of str
+#
+# Default: omit (system default).
+
+# Propagate reload requests from units.
+#
+# Issuing a reload request on a unit will automatically also enqueue reload
+# requests on all units that are linked to it.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: propagates_reload_from | list of str
+#
+# Default: omit (system default).
+
+# Propagate stop requests from units.
+#
+# Issuing a stop request on a unit will automatically also enqueue stop
+# requests on all units that are linked to it.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: propagates_stop_to | list of str
+#
+# Default: omit (system default).
+
+# Propagate stop requests from units.
+#
+# Issuing a stop request on a unit will automatically also enqueue stop
+# requests on all units that are linked to it.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: stop_propagated_from | list of str
+#
+# Default: omit (system default).
+
+# Network and temporary file namespaces to join.
+#
+# Unit sees same /tmp/, /var/tmp/, IPC namespace and network namespace as one
+# listed unit that is started. If multiple listed units are already started and
+# do not share their namespace, then it is not defined which namespace is
+# joined.
+#
+# Units listed imply an inverse joins_namespace_of dependency; which should
+# define one of private_network, network_namespace_path, private_ipc,
+# ipc_namespace_path, private_tmp.
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: joins_namespace_of | list of str
+#
+# Default: omit (system default).
+
+# Require mounts for unit.
+#
+# Adds requires, after for all mount units required to access specified path.
+#
+# Mount points marked with noauto are not mounted automatically through
+# local-fs.target but are still honored for this option (pulled in by unit).
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: requires_mounts_for | list of str
+#
+# Default: omit (system default).
+
+# Want mounts for unit.
+#
+# Adds wants, after for all mount units required to access specified path.
+#
+# Mount points marked with noauto are not mounted automatically through
+# local-fs.target but are still honored for this option (pulled in by unit).
+#
+# Values:
+#   {NAME}: unit name
+#   {OMIT}: disabled (default)
+#
+# Variable: wants_mounts_for | list of str
+#
+# Default: omit (system default).
+
+# How units listed in on_success will be enqueued.
+#
+# systemctl --job-mode= for more details.
+#
+# Values:
+#                   fail: requested operation conflicts with a pending job the
+#                         operation will fail.
+#                replace: any conflicting pending job will be replaced as
+#                         necessary (default).
+#   replace-irreversibly: like replace, but also mark the new jobs as
+#                         irreversible. This job mode should be used on any
+#                         transaction which pulls in shutdown.target.
+#                isolate: only valid for start operations and causes all other
+#                         units to be stopped when specified unit is started.
+#                         Only a single unit may be listed in on_success.
+#                  flush: all queued jobs cancelled when new job queued
+#    ignore-dependencies: all unit dependencies are ignored for new job and the
+#                         operation is executed immediately.
+#    ignore-requirements: like ignore-dependencies, but only ignores
+#                         requirement dependencies, ordering dependencies will
+#                         still be honored.
+#   {OMIT}: replace (default)
+#
+# Variable: on_success_job_mode | str
+#
+# Default: omit (system default).
+
+# How units listed in on_failure will be enqueued.
+#
+# systemctl --job-mode= for more details.
+#
+# Values:
+#                   fail: requested operation conflicts with a pending job the
+#                         operation will fail.
+#                replace: any conflicting pending job will be replaced as
+#                         necessary (default).
+#   replace-irreversibly: like replace, but also mark the new jobs as
+#                         irreversible. This job mode should be used on any
+#                         transaction which pulls in shutdown.target.
+#                isolate: only valid for start operations and causes all other
+#                         units to be stopped when specified unit is started.
+#                         Only a single unit may be listed in on_failure.
+#                  flush: all queued jobs cancelled when new job queued
+#    ignore-dependencies: all unit dependencies are ignored for new job and the
+#                         operation is executed immediately.
+#    ignore-requirements: like ignore-dependencies, but only ignores
+#                         requirement dependencies, ordering dependencies will
+#                         still be honored.
+#   {OMIT}: replace (default)
+#
+# Variable: on_failure_job_mode | str
+#
+# Default: omit (system default).
+
+# Ignore on isolate?
+#
+# Values:
+#     True: unit not stopped when isolating another unit
+#    False: unit stopped when isolating another unit
+#   {OMIT}: False (service, target, socket, timer, path) else True (default)
+#
+# Variable: ignore_on_isolate | bool
+#
+# Default: omit (system default).
+
+# Stop when unit is no longer used?
+#
+# In order to minimize work, systemd will not stop units by default unless they
+# are conflicting with other units, or the user explicitly requested their shut
+# down.
+#
+# Values:
+#     True: unit stopped when no longer used (automatically cleaned up)
+#    False: unit not stopped
+#   {OMIT}: False (default)
+#
+# Variable: stop_when_unneeded | bool
+#
+# Default: omit (system default).
+
+# Only activate unit indirectly?
+#
+# Explicit start-up is denied; start-up as a dependency of another unit will
+# succeed. Safety feature to ensure user does not accidentally activate units
+# that are not intended to be activated explicitly deactivated.
+#
+# Values:
+#     True: only activate indirectly
+#    False: no activate restrictions
+#   {OMIT}: False (default)
+#
+# Variable: refuse_manual_start | bool
+#
+# Default: omit (system default).
+
+# Only deactivate unit indirectly?
+#
+# Explicit termination is denied; termination as a dependency of another unit
+# will succeed. Safety feature to ensure user does not accidentally deactivate
+# units that are not intended to be deactivated.
+#
+# Values:
+#     True: only terminate indirectly
+#    False: no terminate restrictions
+#   {OMIT}: False (default)
+#
+# Variable: refuse_manual_stop | bool
+#
+# Default: omit (system default).
+
+# Allow unit to be used with systemctl isolate command?
+#
+# Leave disabled (as a precaution to avoid unusable system states) except for
+# units that are used similar to runlevels in SysV init systems.
+#
+# Values:
+#     True: allow isolate command
+#    False: deny isolate command
+#   {OMIT}: False (default)
+#
+# Variable: allow_isolate | bool
+#
+# Default: omit (system default).
+
+# create implicit default dependencies based on unit?
+#
+# Only services involved with early boot or late shutdown should set this
+# option to no. Highly Recommended to leave this option enabled for the
+# majority of common units.
+#
+# Values:
+#     True: default dependencies based on type will implicitly be created
+#    False: default non-essential dependencies will not be created
+#   {OMIT}: True (default)
+#
+# Variable: default_dependencies | bool
+#
+# Default: omit (system default).
+
+# create implicit default dependencies based on unit?
+#
+# Replaces older mechanism that allowed a program to set "argv[0][0] = '@'" as
+# described at systemd and Storage Daemons for Root File System.
+#
+# Values:
+#     True: processes belonging to this unit will not
+#           be sent the final SIGTERM/SIGKILL signals during final phase of
+#           system shutdown process.
+#    False: send final SIGTERM/SIGKILL signals
+#   {OMIT}: False (default)
+#
+# Variable: survive_final_kill_signal | bool
+#
+# Default: omit (system default).
+
+# Garbage collection behavior.
+#
+# Values:
+#             inactive: unit will be unloaded if inactive state and not
+#                       referenced by clients, jobs or other units; it is
+#                       not unloaded in failed state until systemctl
+#                       reset-failed or equivalent is used to reset
+#                       failed state (default).
+#   inactive-or-failed: unit is unloaded even in failed state
+#               {OMIT}: inactive (default)
+#
+# Variable: collect_mode | str
+#
+# Default: omit (system default).
+
+# Action when unit stops and enters failed state.
+#
+# Values:
+#                 none: (system/user) no action triggered (default)
+#               reboot: (system) reboot following the normal shutdown
+#                       procedure.
+#         reboot-force: (system) forced reboot which will terminate all
+#                       processes forcibly but should cause no dirty file
+#                       systems on reboot.
+#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS
+#             poweroff: (system) poweroff system
+#       poweroff-force: (system) force poweroff system
+#   poweroff-immediate: (system) immediately poweroff system
+#                 exit: (system/user) exit following the normal shutdown
+#                       procedure. Exit status may be overridden
+#                       failure_action_exit_status.
+#           exit-force: (system/user) terminate without shutting down services.
+#                       Exit status may be overridden with
+#                       failure_action_exit_status.
+#          soft-reboot: (system) userspace reboot operation
+#    soft-reboot-force: (system) userspace reboot operation (without shutdown
+#                       transaction).
+#                kexec: (system) kernel execute
+#          kexec-force: (system) force kernel execute
+#                 halt: (system) halt system
+#           halt-force: (system) force halt system
+#       halt-immediate: (system) immediately halt system
+#               {OMIT}: none (default)
+#
+# Variable: failure_action | str
+#
+# Default: omit (system default).
+
+# Action when unit stops and enters inactive state.
+#
+# Values:
+#                 none: (system/user) no action triggered (default)
+#               reboot: (system) reboot following the normal shutdown
+#                       procedure.
+#         reboot-force: (system) forced reboot which will terminate all
+#                       processes forcibly but should cause no dirty file
+#                       systems on reboot.
+#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS
+#             poweroff: (system) poweroff system
+#       poweroff-force: (system) force poweroff system
+#   poweroff-immediate: (system) immediately poweroff system
+#                 exit: (system/user) exit following the normal shutdown
+#                       procedure. Exit status may be overridden
+#                       success_action_exit_status.
+#           exit-force: (system/user) terminate without shutting down services.
+#                       Exit status may be overridden with
+#                       success_action_exit_status.
+#          soft-reboot: (system) userspace reboot operation
+#    soft-reboot-force: (system) userspace reboot operation (without shutdown
+#                       transaction).
+#                kexec: (system) kernel execute
+#          kexec-force: (system) force kernel execute
+#                 halt: (system) halt system
+#           halt-force: (system) force halt system
+#       halt-immediate: (system) immediately halt system
+#               {OMIT}: none (default)
+#
+# Variable: success_action | str
+#
+# Default: omit (system default).
+
+# Exit status on failure action.
+#
+# Instead of propagating exit status of the main process of triggering unit use
+# specified status.
+#
+# Values:
+#       '': propagate exit status of main process (default)
+#    0-255: specified exit status
+#   {OMIT}: '' (default)
+#
+# Variable: failure_action_exit_status | int
+#
+# Default: omit (system default).
+
+# Exit status on success action.
+#
+# Instead of propagating exit status of the main process of triggering unit use
+# specified status.
+#
+# Values:
+#       '': propagate exit status of main process (default)
+#    0-255: specified exit status
+#   {OMIT}: '' (default)
+#
+# Variable: success_action_exit_status | int
+#
+# Default: omit (system default).
+
+# Job timeout when queued.
+#
+# Measuring started when the whole job is queued to run. If timeout expires job
+# will be cancelled.
+#
+# Values:
+#   infinity: job timeouts disabled (default)
+#     {TIME}: TIME job start timeout
+#     {OMIT}: infinity (default)
+#
+# Variable: job_timeout_sec | str
+#
+# Default: omit (system default).
+
+# Job timeout when started.
+#
+# Measuring started when the whole job is started. If timeout expires job will
+# be cancelled.
+#
+# Values:
+#   infinity: job timeouts disabled (default)
+#     {TIME}: TIME actual job start timeout
+#     {OMIT}: infinity (default)
+#
+# Variable: job_running_timeout_sec | str
+#
+# Default: omit (system default).
+
+# Additional action to take when job_timeout_sec or job_running_* elapses.
+#
+# Values:
+#                 none: (system/user) no action triggered (default)
+#               reboot: (system) reboot following the normal shutdown
+#                       procedure.
+#         reboot-force: (system) forced reboot which will terminate all
+#                       processes forcibly but should cause no dirty file
+#                       systems on reboot.
+#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS
+#             poweroff: (system) poweroff system
+#       poweroff-force: (system) force poweroff system
+#   poweroff-immediate: (system) immediately poweroff system
+#                 exit: (system/user) exit following the normal shutdown
+#                       procedure.
+#           exit-force: (system/user) terminate without shutting down services
+#          soft-reboot: (system) userspace reboot operation
+#    soft-reboot-force: (system) userspace reboot operation (without shutdown
+#                       transaction).
+#                kexec: (system) kernel execute
+#          kexec-force: (system) force kernel execute
+#                 halt: (system) halt system
+#           halt-force: (system) force halt system
+#       halt-immediate: (system) immediately halt system
+#               {OMIT}: none (default)
+#
+# Variable: job_timeout_action | str
+#
+# Default: omit (system default).
+
+# Optional reboot string to use when job_timeout_sec or job_running_* elapses.
+#
+# Values:
+#     none: no reboot string (default)
+#       '': no reboot string (default)
+#   {OMIT}: none (default)
+#
+# Variable: job_running_reboot_argument | str
+#
+# Default: omit (system default).
+
+# Unit start rate check interval.
+#
+# Units started more than start_limit_burst times within
+# start_limit_interval_sec time are not permitted to start any more.
+#
+# Values:
+#   infinity: no time limit between interval checking
+#          0: disable rate limiting
+#     {TIME}: TIME interval between checking
+#     {OMIT}: none (default)
+#
+# Variable: start_limit_interval_sec | str
+#
+# Default: omit (system default).
+
+# Unit allowed starts per interval.
+#
+# Units started more than start_limit_burst times within
+# start_limit_interval_sec time are not permitted to start any more.
+#
+# Values:
+#        0: disable burst limits
+#   {OMIT}: 0 (default)
+#
+# Variable: start_limit_burst | int
+#
+# Default: omit (system default).
+
+# Additional action if start rate limiting (start_limit_*) triggered.
+#
+# Values:
+#                 none: (system/user) no action, start not permitted (default)
+#               reboot: (system) reboot following the normal shutdown procedure
+#         reboot-force: (system) forced reboot which will terminate all
+#                       processes forcibly but should cause no dirty file
+#                       systems on reboot.
+#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS
+#             poweroff: (system) poweroff system
+#       poweroff-force: (system) force poweroff system
+#   poweroff-immediate: (system) immediately poweroff system
+#                 exit: (system/user) exit following the normal shutdown
+#                       procedure.
+#           exit-force: (system/user) terminate without shutting down services
+#          soft-reboot: (system) userspace reboot operation
+#    soft-reboot-force: (system) userspace reboot operation (without shutdown
+#                       transaction).
+#                kexec: (system) kernel execute
+#          kexec-force: (system) force kernel execute
+#                 halt: (system) halt system
+#           halt-force: (system) force halt system
+#       halt-immediate: (system) immediately halt system
+#               {OMIT}: none (default)
+#
+# Variable: start_limit_action | str
+#
+# Default: omit (system default).
+
+# Optional reboot string for systemctl reboot.
+#
+# Values:
+#     none: no reboot string (default)
+#       '': no reboot string (default)
+#   {OMIT}: none (default)
+#
+# Variable: reboot_argument | str
+#
+# Default: omit (system default).
+
+# Path to config file unit generated from.
+#
+# Useful for implementation of generator tools that convert configuration from
+# an external configuration file format into native unit files. This
+# functionality should not be used in normal units.
+#
+# Values:
+#       '': no config file specified (default)
+#   {PATH}: generated config file location
+#   {OMIT}: none (default)
+#
+# Variable: source_path | str
+#
+# Default: omit (system default).

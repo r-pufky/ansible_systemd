@@ -1,0 +1,579 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# Paths
+###############################################################################
+# List of absolute paths to executable used in exec_* variables.
+#
+# Overrides $PATH if not in environment, environment_file, or pass_environment.
+#
+# Values:
+#   {PATH}: absolute path to executable
+#       '': no executable (default)
+#   {OMIT}: '' (default)
+#
+# Variable: exec_search_path | list of str
+#
+# Default: omit (system default).
+
+# Set working directory for executed processes.
+#
+# Uses root_directory relative path. If root_directory/root_image is unset then
+# directory is relative to root of system running the service manager.
+#
+# Values:
+#    {PATH}: absolute path to working directory
+#         ~: use home directory of user specified in user
+#        '': use root_directory if run as system instance, use user home
+#            directory if run as user (default).
+#   -{PATH}: missing working directory is not considered fatal
+#    {OMIT}: '' (default)
+#
+# Variable: working_directory | str
+#
+# Default: omit (system default).
+
+# Set root directory for executed processes.
+#
+# Uses pivot_root and chroot. Relative to host root directory (root of the
+# system running the service manager). Ensure process binary and all auxiliary
+# files are available in the new root. Only available for system services, or
+# services running per-user instances of service manager (private_users
+# implicitly enabled - requires sysctl kernel.unprivileged_userns_clone=1).
+#
+# mount_api_vfs and private_users are useful with root_directory.
+#
+# If used together with notify_access, notification socket automatically
+# mounted into the root environment. Host OS os-release available (read-only)
+# as /run/host/os-release. Updated on soft reboot
+#
+# Values:
+#              {PATH}: absolute path to root directory
+#                  '': do not set root directory
+#              {OMIT}: '' (default)
+#   {PATH}.{VERSION}/: versioned directories may be used (see reference)
+#
+# Variable: root_directory | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.v.html
+
+# Set root image path to a block device node or regular file.
+#
+# Mounts a file system hierarchy from a block device node or loopback file
+# instead of a directory. The device node or file system image file needs to
+# contain a file system without a partition table, or a file system within an
+# MBR/MS-DOS or GPT partition table with only a single Linux-compatible
+# partition, or a set of file systems within a GPT partition table that follows
+# the Discoverable Partitions Specification.
+#
+# When device_policy is closed,strict,auto and device_allow is set, this adds
+# /dev/loop-control with rw mode,block-loop,block-blkext with rwm mode to
+# device_allow.
+#
+# Host OS os-release available (read-only) as /run/host/os-release. Updated on
+# soft reboot.
+#
+# Automatically adds dependency After= on systemd-udevd.service.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#              {PATH}: absolute path to root image file or block device node
+#                  '': do not set root image file or block device node
+#              {OMIT}: '' (default)
+#   {PATH}.{VERSION}/: versioned directories may be used (see reference)
+#
+# Variable: root_image | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://uapi-group.org/specifications/specs/discoverable_partitions_specification
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.v.html
+
+# Mount options for root_image.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#   - name: str - partition name
+#         Values:
+#               root: root partitions from GPT partition table (default)
+#                usr: usr partitions from GPT partition table
+#               home: home partitions from GPT partition table
+#                srv: srv partitions from GPT partition table
+#                esp: esp partitions from GPT partition table
+#           xbootldr: xbootldr partitions from GPT partition table
+#                tmp: tmp partitions from GPT partition table
+#                var: var partitions from GPT partition table
+#     options: list of str - mount options used on root_image (see reference)
+#
+# Variable: root_image_options | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://manpages.debian.org/bookworm/mount/mount.8.en.html
+# * https://uapi-group.org/specifications/specs/discoverable_partitions_specification
+
+# Run executed processes in ephemeral copy of root_directory or root_image?
+#
+# Ephemeral copy located in /var/lib/systemd/ephemeral-trees/ while service is
+# active and cleaned up when service stopped or restarted. Ephemeral copy
+# created by making a sub volume snapshot if root_directory is a sub volume.
+#
+# root_directory or root_image should be located on the same filesystem as
+# /var/lib/systemd/ephemeral-trees/. btrfs should be used and the
+# root_directory a sub volume which systemd can snapshot. For root images a
+# filesystem with reflinks should be used.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#     True: run in ephemeral copy
+#    False: do not run in ephemeral copy
+#   {OMIT}: False (default)
+#
+# Variable: root_ephemeral | bool
+#
+# Default: omit (system default).
+
+# Data integrity (dm-verity) root hash.
+#
+# This option enables data integrity checks using dm-verity, if image contains
+# integrity data or root_verify is used. Specified hash must match root hash of
+# integrity data, and is usually at least 256 bits (64 formatted hexadecimal
+# characters) long.
+#
+# Values:
+#   {HASH}: Hexadecimal root hash
+#   {PATH}: Path to a file containing a root hash in ASCII hexadecimal format
+#       '': read hash from extended file attribute in image file with
+#           'user.verity.roothash'; if not found use file with {IMAGE}.roothash
+#           suffix next to the image.
+#   {OMIT}: '' (default)
+#
+# Only available for system service instances of the service manager.
+#
+# Variable: root_hash | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/xattr.7.html
+
+# PKCS7 signature for root_hash.
+#
+# The dm-verity volume will only be opened if the signature of the root hash is
+# valid and signed by a public key present in the kernel keyring.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#   {HASH}: base64 ASCII string encoding of a DER-encoded signature prefixed by
+#           'base64:'.
+#   {PATH}: path to a DER-encoded signature file
+#       '': read hash from file with {IMAGE}.roothash.p7s next to the image.
+#   {OMIT}: '' (default)
+#
+# Variable: root_hash_signature | str
+#
+# Default: omit (system default).
+
+# Path to data integrity (dm-verity) file.
+#
+# This option enables data integrity checks using dm-verity, if root_image is
+# used and a root-hash is passed and if the used image itself does not contain
+# the integrity data. The integrity data must be matched by the root hash.
+#
+# This option is supported only for disk images that contain a single file
+# system, without an enveloping partition table. Images that contain a GPT
+# partition table should instead include both root file system and matching
+# Verity data in the same image, implementing the Discoverable Partitions
+# Specification.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#   {PATH}: path to dm-verity data integrity file
+#       '': read hash from file with {IMAGE}.verity next to the image.
+#   {OMIT}: '' (default)
+#
+# Variable: root_verity | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://uapi-group.org/specifications/specs/discoverable_partitions_specification
+
+# Root image policy used when mounting image in root_image.
+#
+# Policy string per systemd.image-policy.
+#
+# Special Case:
+#   {OMIT}: root=verity+signed+encrypted+unprotected+absent: \
+#           usr=verity+signed+encrypted+unprotected+absent: \
+#           home=encrypted+unprotected+absent: \
+#           srv=encrypted+unprotected+absent: \
+#           tmp=encrypted+unprotected+absent: \
+#           var=encrypted+unprotected+absent
+#
+# Variable: root_image_policy | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.image-policy.html
+
+# Mount image policy used when mounting image in mount_image.
+#
+# Policy string per systemd.image-policy.
+#
+# Special Case:
+#   {OMIT}: root=verity+signed+encrypted+unprotected+absent: \
+#           usr=verity+signed+encrypted+unprotected+absent: \
+#           home=encrypted+unprotected+absent: \
+#           srv=encrypted+unprotected+absent: \
+#           tmp=encrypted+unprotected+absent: \
+#           var=encrypted+unprotected+absent
+#
+# Variable: mount_image_policy | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.image-policy.html
+
+# Extension image policy used when mounting image in extension_image.
+#
+# Policy string per systemd.image-policy.
+#
+# Special Case:
+#   {OMIT}: root=verity+signed+encrypted+unprotected+absent: \
+#           usr=verity+signed+encrypted+unprotected+absent
+#
+# Variable: extension_image_policy | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.image-policy.html
+
+# Create private mount point for unit process?
+#
+# Create private mount namespace for the unit's processes and API file systems
+# /proc/, /sys/, /dev/ and /run/ (as an empty 'tmpfs') are mounted inside of
+# it, unless they are already mounted. Note that this option has no effect
+# unless used in conjunction with root_directory/root_image as these four
+# mounts are generally mounted in the host anyway, and unless the root
+# directory is changed, the private mount namespace will be a 1:1 copy of the
+# host's, and include these four mounts. Note that the /dev/ file system of the
+# host is bind mounted if this option is used without private_devices. To run
+# the service with a private, minimal version of /dev/, combine this option
+# with private_devices.
+#
+# Values:
+#     True: create a private mount namespace
+#    False: do not create a private mount namespace
+#   {OMIT}: False (default)
+#
+# Variable: mount_api_vfs | bool
+#
+# Default: omit (system default).
+
+# Protect /proc (hidepid mount option).
+#
+# Manage the hidepid mount option of the procfs instance for the unit that
+# controls which directories with process metainformation (/proc/PID) are
+# visible and accessible.
+#
+# The root user is unaffected by this option, so to be effective it has to be
+# used together with user, dynamic_user, and also without the 'CAP_SYS_PTRACE'
+# capability, which also allows a process to bypass this feature. It cannot be
+# used for services that need to access metainformation about other user
+# processes. This option implies mount_api_vfs.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#     noaccess: remove ability to access most other user process metadata in
+#               /proc/.
+#    invisible: processes owned by other users are hidden from /proc/;
+#               recommended.
+#   ptraceable: all processes that cannot be ptrace'ed are hidden to it
+#      default: no /proc/ access restrictions or visibility are made (default)
+#       {OMIT}: default (default)
+#
+# Variable: protect_proc | str
+#
+# Default: omit (system default).
+
+# Set subset mount option for procfs.
+#
+# Kernel APIs via /proc/ are made unavailable with this setting. This option
+# implies mount_api_vfs.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#      all: access all /proc/<pid>/ directories (default)
+#      pid: all files and directories not directly associated with process
+#           management and introspection are made invisible in the /proc/ file
+#           system configured for the unit's processes. This controls subset
+#           mount option of the procfs instance for the unit.
+#   {OMIT}: all (default)
+#
+# Variable: proc_subset | str
+#
+# Default: omit (system default).
+
+# Configure writable bind mounts.
+#
+# Makes a particular file or directory available at additional place in unit
+# view of the file system. Any bind mounts created are unit specific, not
+# visible in the host's mount table.
+#
+# Implies mount namespace is allocated for unit (private_mounts).
+#
+# Values:
+#   - source: str - source bind mount path, prefix with '-' to ignore errors;
+#           if root_directory or root_image this refers to host file system.
+#     destination: str - destination bind mount path, prefix with '-' to ignore
+#           errors. Must exist or systemd must be able to create it. Cannot use
+#           paths in inaccessible_paths, /home/, and protected if protect_home
+#           is set. temporary_file_system: ro or protect_home: tmpfs should be
+#           used instead. if root_directory or root_image this refers to a path
+#           below the root directory of the unit.
+#     option: str - bind mount option
+#         Values:
+#             rbind: recursive bind mount
+#           norbind: non-recursive bind mount
+#   {OMIT}: do not configure bind mounts (default)
+#
+# Variable: bind_paths | list of dict
+#
+# Default: omit (system default).
+
+# Configure read-only bind mounts.
+#
+# Makes a particular file or directory available at additional place in unit
+# view of the file system. Any bind mounts created are unit specific, not
+# visible in the host's mount table.
+#
+# Implies mount namespace is allocated for unit (private_mounts).
+#
+# Values:
+#   - source: str - source bind mount path, prefix with '-' to ignore errors;
+#           if root_directory or root_image this refers to host file system.
+#     destination: str - destination bind mount path, prefix with '-' to ignore
+#           errors. Must exist or systemd must be able to create it. Cannot use
+#           paths in inaccessible_paths, /home/, and protected if protect_home
+#           is set. temporary_file_system: ro or protect_home: tmpfs should be
+#           used instead. if root_directory or root_image this refers to a path
+#           below the root directory of the unit.
+#     option: str - bind mount option
+#         Values:
+#             rbind: recursive bind mount
+#           norbind: non-recursive bind mount
+#   {OMIT}: do not configure bind mounts (default)
+#
+# Variable: bind_read_only_paths | list of dict
+#
+# Default: omit (system default).
+
+# Mount image paths to a block device node or regular file with options.
+#
+# Mounts a file system hierarchy from a block device node or loopback file
+# instead of a directory. The device node or file system image file needs to
+# contain a file system without a partition table, or a file system within an
+# MBR/MS-DOS or GPT partition table with only a single Linux-compatible
+# partition, or a set of file systems within a GPT partition table that follows
+# the Discoverable Partitions Specification.
+#
+# When device_policy is closed,strict,auto and device_allow is set, this adds
+# /dev/loop-control with rw mode,block-loop,block-blkext with rwm mode to
+# device_allow.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#   - source: str - source bind mount path, prefix with '-' to ignore errors;
+#           if root_directory or root_image this refers to host file system.
+#           May use partition names:
+#         Values:
+#               root: root partitions from GPT partition table (default)
+#                usr: usr partitions from GPT partition table
+#               home: home partitions from GPT partition table
+#                srv: srv partitions from GPT partition table
+#                esp: esp partitions from GPT partition table
+#           xbootldr: xbootldr partitions from GPT partition table
+#                tmp: tmp partitions from GPT partition table
+#                var: var partitions from GPT partition table
+#     destination: str - destination bind mount path, prefix with '-' to ignore
+#           errors. Must exist or systemd must be able to create it. Cannot use
+#           paths in inaccessible_paths, /home/, and protected if protect_home
+#           is set. temporary_file_system: ro or protect_home: tmpfs should be
+#           used instead. if root_directory or root_image this refers to a path
+#           below the root directory of the unit.
+#           May use partition names:
+#         Values:
+#               root: root partitions from GPT partition table (default)
+#                usr: usr partitions from GPT partition table
+#               home: home partitions from GPT partition table
+#                srv: srv partitions from GPT partition table
+#                esp: esp partitions from GPT partition table
+#           xbootldr: xbootldr partitions from GPT partition table
+#                tmp: tmp partitions from GPT partition table
+#                var: var partitions from GPT partition table
+#     options: list of str - mount options used on root_image (see reference)
+#   {OMIT}: do not configure mounts (default)
+#
+# Variable: mount_images | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://uapi-group.org/specifications/specs/discoverable_partitions_specification
+# * https://manpages.debian.org/bookworm/mount/mount.8.en.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+
+# Mount image paths to block device or regular file via overlay with options.
+#
+# A read-only OverlayFS will be set up on top of /usr/ and /opt/ hierarchies
+# for sysext images and /etc/ hierarchy for confext images. The order in which # the images are listed will determine the order in which the overlay is laid
+# down: images specified first to last will result in overlayfs layers bottom
+# to top.
+#
+# Sysext images must have /usr/lib/extension-release.d/extension-release.IMAGE.
+#
+# Confext images must have /etc/extension-release.d/extension-release.IMAGE,
+# with appropriate metadata matching root_image or root_directory on the host. #
+# When device_policy is closed,strict,auto and device_allow is set, this adds
+# /dev/loop-control with rw mode,block-loop,block-blkext with rwm mode to
+# device_allow.
+#
+# Only available for system service instances of the service manager.
+#
+# Values:
+#   - source: str - source bind mount path, prefix with '-' to ignore errors;
+#           if root_directory or root_image this refers to host file system.
+#           May use partition names:
+#         Values:
+#                        root: root partitions from GPT partition tabl
+#                              (default)
+#                         usr: usr partitions from GPT partition table
+#                        home: home partitions from GPT partition table
+#                         srv: srv partitions from GPT partition table
+#                         esp: esp partitions from GPT partition table
+#                    xbootldr: xbootldr partitions from GPT partition table
+#                         tmp: tmp partitions from GPT partition table
+#                         var: var partitions from GPT partition table
+#                      {PATH}: absolute path to root image file or block device
+#                              node.
+#           {PATH}.{VERSION}/: versioned directories may be used (private_users
+#                              reference).
+#     options: list of str - mount options used on root_image (see reference),
+#           'x-systemd.relax-extension-release-check' may be used to disable
+#           safety check extension-release file name matching image file name.
+#   {OMIT}: do not configure mounts (default)
+#
+# Variable: extension_images | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://uapi-group.org/specifications/specs/discoverable_partitions_specification
+# * https://manpages.debian.org/bookworm/mount/mount.8.en.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/os-release.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.v.html
+
+# Mount file system hierarchy from a directory via overlay with options.
+#
+# A read-only OverlayFS will be set up on top of /usr/ and /opt/ hierarchies
+# for sysext images and /etc/ hierarchy for confext images. The order in which # the images are listed will determine the order in which the overlay is laid
+# down: images specified first to last will result in overlayfs layers bottom
+# to top.
+#
+# Sysext images must have /usr/lib/extension-release.d/extension-release.IMAGE.
+#
+# Confext images must have /etc/extension-release.d/extension-release.IMAGE,
+# with appropriate metadata matching root_image or root_directory on the host.
+#
+# When device_policy is closed,strict,auto and device_allow is set, this adds
+# /dev/loop-control with rw mode,block-loop,block-blkext with rwm mode to
+# device_allow.
+#
+# Only available for system service instances of the service manager or
+# per-user instances (private_users implicitly enabled); requires unprivileged
+# user namespaces support to be enabled
+# 'sysctl kernel.unprivileged_userns_clone=1'
+#
+# Makes a particular file or directory available at additional place in unit
+# view of the file system. Any bind mounts created are unit specific, not
+# visible in the host's mount table.
+#
+# Implies mount namespace is allocated for unit (private_mounts).
+#
+# Values:
+#              {PATH}: absolute path to root image file or block device
+#                      node.
+#             -{PATH}: path errors are not considered fatal
+#   {PATH}.{VERSION}/: versioned directories may be used (private_users
+#                      reference).
+#   {OMIT}: do not configure mounts (default)
+#
+# Variable: extension_directories | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/os-release.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.v.html

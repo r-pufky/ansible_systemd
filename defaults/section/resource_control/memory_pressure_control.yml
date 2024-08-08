@@ -1,0 +1,173 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# Memory Pressure Control
+###############################################################################
+# Systemd OOM swap behavior.
+#
+# Values:
+#    auto: no active cgroup data use for monitoring and detection; if an
+#          ancestor cgroup has properties set to kill, may still be
+#          terminated by systemd-oomd (default).
+#    kill: if cgroup exceeds limits in oomd.conf or unit configuration,
+#          systemd-oomd will select a descendant cgroup and send SIGKILL
+#          to all of the processes under it. Results in After= and Wants=
+#          dependencies on systemd-oomd.service unless default_dependencies is
+#          False.
+#   {OMIT}: auto (default)
+#
+# Variable: managed_oom_swap | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-oomd.service.html
+# * https://www.freedesktop.org/software/systemd/man/latest/oomd.conf.html
+
+# Systemd OOM memory pressure behavior.
+#
+# Values:
+#    auto: no active cgroup data use for monitoring and detection; if an
+#          ancestor cgroup has properties set to kill, may still be
+#          terminated by systemd-oomd (default).
+#    kill: if cgroup exceeds limits in oomd.conf or unit configuration,
+#          systemd-oomd will select a descendant cgroup and send SIGKILL
+#          to all of the processes under it. Results in After= and Wants=
+#          dependencies on systemd-oomd.service unless default_dependencies is
+#          False.
+#   {OMIT}: auto (default)
+#
+# Variable: managed_oom_memory_pressure | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-oomd.service.html
+# * https://www.freedesktop.org/software/systemd/man/latest/oomd.conf.html
+
+# Override default memory pressure oomd.conf limit.
+#
+# Ignored unless managed_oom_memory_pressure: kill.
+#
+# Values:
+#    1-100: percent value limit to set (default 0)
+#   {OMIT}: 0 (default)
+#
+# Variable: managed_oom_memory_pressure_limit | int
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/oomd.conf.html
+
+# Omit or de-prioritize unit cgroup if systemd-oomd must act.
+#
+# When calculating candidates to relieve swap usage, systemd-oomd will only
+# respect these extended attributes if the unit's cgroup is owned by root.
+#
+# When calculating candidates to relieve memory pressure, systemd-oomd will
+# only respect these extended attributes if the unit's cgroup is owned by root,
+# or if the unit's cgroup owner, and the owner of the monitored ancestor cgroup
+# are the same.
+#
+# It is recommended to use avoid and omit sparingly, as it can adversely affect
+# systemd-oomd's kill behavior. Extended attributes are not applied recursively
+# to cgroups under this unit's cgroup.
+#
+# Values:
+#     none: rank cgroup defined systemd-oomd and oomd (default)
+#    avoid: only select cgroup if there are no other viable candidates,
+#           requires support for extended attributes (xattr).
+#     omit: ignore this cgroup as a candidate, requires support for extended
+#           attributes (xattr).
+#   {OMIT}: none (default)
+#
+# Variable: managed_oom_preference | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/oomd.conf.html
+# * https://man7.org/linux/man-pages/man7/xattr.7.html
+
+# Memory pressure monitoring.
+#
+# Values:
+#    False: do not to watch for memory pressure events, sets
+#           $MEMORY_PRESSURE_WATCH=/dev/null
+#     auto: watch if memory accounting is enabled
+#     skip: skipped (no explicit enable or disable)
+#     True: watch for memory pressure events, sets $MEMORY_PRESSURE_WATCH.
+#           Threshold information configured with memory_pressure_threshold_sec
+#           and stored in $MEMORY_PRESSURE_WRITE.
+#   {OMIT}: auto (default)
+#
+# Variable: memory_pressure_watch | bool or str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://systemd.io/MEMORY_PRESSURE
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+
+# Set memory pressure threshold time for memory pressure monitor.
+#
+# Specifies the maximum allocation latency before a memory pressure event is
+# signalled to the service, per 2s window.
+#
+# Values:
+#   {TIME}: TIME memory pressure threshold time, defaults to
+#           default_memory_pressure_threshold_sec
+#   {OMIT}: default_memory_pressure_threshold_sec (default)
+#
+# Variable: memory_pressure_threshold_sec | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://systemd.io/MEMORY_PRESSURE
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html

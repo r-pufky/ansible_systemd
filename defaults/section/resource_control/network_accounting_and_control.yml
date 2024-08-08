@@ -1,0 +1,312 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# Network Accounting and Control
+###############################################################################
+# Enable network traffic accounting.
+#
+# Accounts for all IPv4 and IPv6 sockets created by unit process, including
+# both listening and connection sockets where this applies. For socket
+# activated services this configuration setting, accounting data of the
+# service unit, and the socket unit are kept and displayed separately. No
+# propagation of the setting and the collected statistics is done, in either
+# direction. Any traffic sent or received on any of the socket unit's sockets
+# is accounted to the socket unit — and never to the service unit it might have
+# activated, even if the socket is used by it.
+#
+# The system default for this setting may be controlled with
+# DefaultIPAccounting.
+#
+# Only available for system services.
+#
+# Values:
+#    False: disable ip accounting
+#     True: enable ip accounting
+#   {OMIT}: False (default)
+#
+# Variable: ip_accounting | bool
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+
+# Allow IPv4/IPv6 addresses.
+#
+# Filter IP packets sent and received over AF_INET and AF_INET6 sockets.
+# Implicitly combined with any lists configured for any of the parent slice
+# units this unit might be a member of. Both ingress (source IP address
+# checked) and egress (destination IP address checked) are filtered by these
+# settings.
+#
+# Applied in the following order:
+# * Access granted on match in ip_address_allow
+# * Access denied on match in ip_address_deny
+# * Otherwise access granted
+#
+# Recommended ip_address_deny on upper-level slice unit and ip_address_allow on
+# lower level units.
+#
+# Values:
+#          any: any host - 0.0.0.0/0, ::/0
+#    localhost: all local loopback addresses - 127.0.0.0/8, ::1/128
+#   link-local:	all link-local IP addresses - 169.254.0.0/16, fe80::/64
+#    multicast: All IP multi-casting addresses - 224.0.0.0/4, ff00::/8
+#         {IP}: IPv4 or IPv6, assumes IPv4/32 and IPv6/128
+#       {CIDR}: IPv4 or IPv6
+#       {OMIT}: disable filtering (default)
+#
+# ip_address_allow:
+#   - '127.0.0.0/8'
+#   - '224.0.0.0/4'
+#
+# Variable: ip_address_allow | list of str
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+
+# Deny IPv4/IPv6 addresses.
+#
+# Filter IP packets sent and received over AF_INET and AF_INET6 sockets.
+# Implicitly combined with any lists configured for any of the parent slice
+# units this unit might be a member of. Both ingress (source IP address
+# checked) and egress (destination IP address checked) are filtered by these
+# settings.
+#
+# Applied in the following order:
+# * Access granted on match in ip_address_allow
+# * Access denied on match in ip_address_deny
+# * Otherwise access granted
+#
+# Recommended ip_address_deny on upper-level slice unit and ip_address_allow on
+# lower level units.
+#
+# Values:
+#          any: any host - 0.0.0.0/0, ::/0
+#    localhost: all local loopback addresses - 127.0.0.0/8, ::1/128
+#   link-local:	all link-local IP addresses - 169.254.0.0/16, fe80::/64
+#    multicast: All IP multi-casting addresses - 224.0.0.0/4, ff00::/8
+#         {IP}: IPv4 or IPv6, assumes IPv4/32 and IPv6/128
+#       {CIDR}: IPv4 or IPv6
+#       {OMIT}: disable filtering (default)
+#
+# ip_address_deny:
+#   - '127.0.0.0/8'
+#   - '224.0.0.0/4'
+#
+# Variable: ip_address_deny | list of str
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+
+# Allow socket binding.
+#
+# Maximum allowed number of assignments is 128.
+#
+# Applied in the following order:
+# * Bind allowed on match in socket_bind_allow
+# * Bind denied on match in socket_bind_deny
+# * Otherwise binding allowed
+#
+# Values:
+#   - address: str - IP address family
+#         Special Case:
+#           ipv4: IPv4
+#           ipv6: IPv6
+#            any: IPv4/6
+#             '': IPv4/6
+#     protocol: str - transport protocols
+#         Special Case:
+#           tcp: TCP
+#           udp: UDP
+#           any: TCP/UDP
+#            '': TCP/UDP
+#     ports: str - ports
+#         Special Case:
+#             #: a single port within 1-65535
+#           #-#: define a port range within 1-65535
+#           any: any port
+#            '': any port
+#   {OMIT}: disable binding (default)
+#
+# socket_bind_allow:
+#   - address: 'any'
+#     protocol: 'udp'
+#     ports: '1-65535'
+#   - address: ''
+#     protocol: 'tcp'
+#     ports: '22'
+#
+# socket_bind_allow:
+#   - '127.0.0.0/8'
+#   - '224.0.0.0/4'
+#
+# Variable: socket_bind_allow | list of dict
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+
+# Deny socket binding.
+#
+# Maximum allowed number of assignments is 128.
+#
+# Applied in the following order:
+# * Bind allowed on match in socket_bind_allow
+# * Bind denied on match in socket_bind_deny
+# * Otherwise binding allowed
+#
+# Values:
+#   - address: str - IP address family
+#         Special Case:
+#           ipv4: IPv4
+#           ipv6: IPv6
+#            any: IPv4/6
+#             '': IPv4/6
+#     protocol: str - transport protocols
+#         Special Case:
+#           tcp: TCP
+#           udp: UDP
+#           any: TCP/UDP
+#            '': TCP/UDP
+#     ports: str - ports
+#         Special Case:
+#             #: a single port within 1-65535
+#           #-#: define a port range within 1-65535
+#           any: any port
+#            '': any port
+#   {OMIT}: disable binding (default)
+#
+# socket_bind_deny:
+#   - address: 'any'
+#     protocol: 'udp'
+#     ports: '1-65535'
+#   - address: ''
+#     protocol: 'tcp'
+#     ports: '22'
+#
+# socket_bind_deny:
+#   - '127.0.0.0/8'
+#   - '224.0.0.0/4'
+#
+# Variable: socket_bind_deny | list of dict
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+
+# Allow network interfaces.
+#
+# By default processes can only use the network interfaces listed. The loopback
+# interface 'lo' is not treated in any special way, must be configured
+# explicitly in the unit file.
+#
+# Applied before restrict_network_interfaces_deny.
+#
+# Values:
+#   {INTERFACE}: network interface name (e.g. eth1)
+#        {OMIT}: do not allow network interface use (default)
+#
+# Variable: restrict_network_interfaces_allow | list of str
+#
+# Default: omit (system default).
+
+# Deny network interfaces.
+#
+# The loopback interface 'lo' is not treated in any special way, must be
+# configured explicitly in the unit file.
+#
+# Applied after restrict_network_interfaces_allow.
+#
+# Values:
+#   {INTERFACE}: network interface name (e.g. eth1)
+#        {OMIT}: do not allow network interface use (default)
+#
+# Variable: restrict_network_interfaces_deny | list of str
+#
+# Default: omit (system default).
+
+# NFT set for firewall.
+#
+# When a control group or a unit is realized, the corresponding ID will be
+# appended to the NFT sets and removed when the control group or unit removed.
+#
+# Systemd only inserts elements to (or removes from) the sets, so the related
+# NFT rules, tables and sets must be prepared elsewhere in advance. Failures to
+# manage the sets will be ignored.
+#
+# Only available for system services.
+#
+# Values:
+#   - type: str - source type
+#         Values:
+#           cgroup: control group (cgroupsv2)
+#             user: user (meta skuid)
+#            group: group (meta skgid)
+#     family: str - NFT address family
+#         Values:
+#              arp: layer 2 (ARP)
+#           bridge: layer 3 (Bridging)
+#             inet: IPv4/6
+#               ip: IPv4
+#              ip6: IPv6
+#           netdev: network device (interface)
+#     table: str - table name
+#     set: str - set name
+#
+# Variable: nft_set | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://netfilter.org/projects/nftables/index.html

@@ -1,0 +1,234 @@
+{# resource-control section heading #}
+{% if 'resource_control' in systemd %}
+{% if 'cpu_accounting' in systemd.resource_control %}
+CPUAccounting={{ systemd.resource_control.cpu_accounting | string | lower }}
+{% endif %}
+{% if 'cpu_weight' in systemd.resource_control %}
+CPUWeight={{ systemd.resource_control.cpu_weight }}
+{% endif %}
+{% if 'startup_cpu_weight' in systemd.resource_control %}
+StartupCPUWeight={{ systemd.resource_control.startup_cpu_weight }}
+{% endif %}
+{% if 'cpu_quota' in systemd.resource_control %}
+CPUQuota={{ systemd.resource_control.cpu_quota | int }}%
+{% endif %}
+{% if 'cpu_quota_period_sec' in systemd.resource_control %}
+CPUQuotaPeriodSec={{ systemd.resource_control.cpu_quota_period_sec }}ms
+{% endif %}
+{% if 'allowed_cpus' in systemd.resource_control %}
+AllowedCPUs={{ systemd.resource_control.allowed_cpus | join(',') }}
+{% endif %}
+{% if 'startup_allowed_cpus' in systemd.resource_control %}
+StartupAllowedCPUs={{ systemd.resource_control.startup_allowed_cpus | join(',') }}
+{% endif %}
+{# memory accounting and control #}
+{% if 'memory_accounting' in systemd.resource_control %}
+MemoryAccounting={{ systemd.resource_control.memory_accounting | string | lower }}
+{% endif %}
+{% if 'memory_min' in systemd.resource_control %}
+MemoryMin={{ systemd.resource_control.memory_min }}
+{% endif %}
+{% if 'default_memory_min' in systemd.resource_control %}
+DefaultMemoryMin={{ systemd.resource_control.default_memory_min }}
+{% endif %}
+{% if 'memory_low' in systemd.resource_control %}
+MemoryLow={{ systemd.resource_control.memory_low }}
+{% endif %}
+{% if 'default_memory_low' in systemd.resource_control %}
+DefaultMemoryLow={{ systemd.resource_control.default_memory_low }}
+{% endif %}
+{% if 'startup_memory_low' in systemd.resource_control %}
+StartupMemoryLow={{ systemd.resource_control.startup_memory_low }}
+{% endif %}
+{% if 'default_startup_memory_low' in systemd.resource_control %}
+DefaultStartupMemoryLow={{ systemd.resource_control.default_startup_memory_low }}
+{% endif %}
+{% if 'memory_high' in systemd.resource_control %}
+MemoryHigh={{ systemd.resource_control.memory_high }}
+{% endif %}
+{% if 'startup_memory_high' in systemd.resource_control %}
+StartupMemoryHigh={{ systemd.resource_control.startup_memory_high }}
+{% endif %}
+{% if 'memory_max' in systemd.resource_control %}
+MemoryMax={{ systemd.resource_control.memory_max }}
+{% endif %}
+{% if 'startup_memory_max' in systemd.resource_control %}
+StartupMemoryMax={{ systemd.resource_control.startup_memory_max }}
+{% endif %}
+{% if 'memory_swap_max' in systemd.resource_control %}
+MemorySwapMax={{ systemd.resource_control.memory_swap_max }}
+{% endif %}
+{% if 'startup_memory_swap_max' in systemd.resource_control %}
+StartupMemorySwapMax={{ systemd.resource_control.startup_memory_swap_max }}
+{% endif %}
+{% if 'memory_z_swap_max' in systemd.resource_control %}
+MemoryZSwapMax={{ systemd.resource_control.memory_z_swap_max }}
+{% endif %}
+{% if 'startup_memory_z_swap_max' in systemd.resource_control %}
+StartupMemoryZSwapMax={{ systemd.resource_control.startup_memory_z_swap_max }}
+{% endif %}
+{% if 'memory_z_swap_writeback' in systemd.resource_control %}
+MemoryZSwapWriteback={{ systemd.resource_control.memory_z_swap_writeback | string | lower }}
+{% endif %}
+{% if 'allowed_memory_nodes' in systemd.resource_control %}
+AllowedMemoryNodes={{ systemd.resource_control.allowed_memory_nodes | join(',') }}
+{% endif %}
+{% if 'startup_allowed_memory_nodes' in systemd.resource_control %}
+StartupAllowedMemoryNodes={{ systemd.resource_control.startup_allowed_memory_nodes | join(',') }}
+{% endif %}
+{# process accounting and control #}
+{% if 'tasks_accounting' in systemd.resource_control %}
+TasksAccounting={{ systemd.resource_control.tasks_accounting | string | lower }}
+{% endif %}
+{% if 'tasks_max' in systemd.resource_control %}
+TasksMax={{ systemd.resource_control.tasks_max }}
+{% endif %}
+{# IO accounting and control #}
+{% if 'io_accounting' in systemd.resource_control %}
+IOAccounting={{ systemd.resource_control.io_accounting | string | lower }}
+{% endif %}
+{% if 'io_weight' in systemd.resource_control %}
+IOWeight={{ systemd.resource_control.io_weight | int }}
+{% endif %}
+{% if 'startup_io_weight' in systemd.resource_control %}
+StartupIOWeight={{ systemd.resource_control.startup_io_weight | int }}
+{% endif %}
+{% if 'io_device_weight' in systemd.resource_control %}
+{% for device in systemd.resource_control.io_device_weight %}
+IODeviceWeight={{ device.path }} {{ device.weight | default(100) }}
+{% endfor %}
+{% endif %}
+{% if 'io_read_bandwidth_max' in systemd.resource_control %}
+{% for device in systemd.resource_control.io_read_bandwidth_max %}
+IOReadBandwidthMax={{ device.path }} {{ device.bandwidth }}
+{% endfor %}
+{% endif %}
+{% if 'io_write_bandwidth_max' in systemd.resource_control %}
+{% for device in systemd.resource_control.io_write_bandwidth_max %}
+IOWriteBandwidthMax={{ device.path }} {{ device.bandwidth }}
+{% endfor %}
+{% endif %}
+{% if 'io_read_iops_max' in systemd.resource_control %}
+{% for device in systemd.resource_control.io_read_iops_max %}
+IOReadIOPSMax={{ device.path }} {{ device.iops }}
+{% endfor %}
+{% endif %}
+{% if 'io_write_iops_max' in systemd.resource_control %}
+{% for device in systemd.resource_control.io_write_iops_max %}
+IOWriteIOPSMax={{ device.path }} {{ device.iops }}
+{% endfor %}
+{% endif %}
+{% if 'io_device_latency_target_sec' in systemd.resource_control %}
+{% for device in systemd.resource_control.io_device_latency_target_sec %}
+IODeviceLatencyTargetSec={{ device.path }} {{ device.latency }}
+{% endfor %}
+{% endif %}
+{# network accounting and control #}
+{% if 'ip_accounting' in systemd.resource_control %}
+IPAccounting={{ systemd.resource_control.ip_accounting | string | lower }}
+{% endif %}
+{% if 'ip_address_allow' in systemd.resource_control %}
+{% for address in systemd.resource_control.ip_address_allow %}
+IPAddressAllow={{ address }}
+{% endfor %}
+{% endif %}
+{% if 'ip_address_deny' in systemd.resource_control %}
+{% for address in systemd.resource_control.ip_address_deny %}
+IPAddressDeny={{ address }}
+{% endfor %}
+{% endif %}
+{% if 'socket_bind_allow' in systemd.resource_control %}
+{% for socket in systemd.resource_control.socket_bind_allow %}
+SocketBindAllow={{ socket.address | lower }}{% if socket.protocol | length > 0 %}:{{ socket.protocol | lower }}{% endif +%}{% if socket.ports | length > 0%}:{{ socket.ports | lower }}{% endif +%}
+{% endfor %}
+{% endif %}
+{% if 'socket_bind_deny' in systemd.resource_control %}
+{% for socket in systemd.resource_control.socket_bind_deny %}
+SocketBindDeny={{ socket.address | lower }}{% if socket.protocol | length > 0 %}:{{ socket.protocol | lower }}{% endif +%}{% if socket.ports | length > 0%}:{{ socket.ports | lower }}{% endif +%}
+{% endfor %}
+{% endif %}
+{% if 'restrict_network_interfaces_allow' in systemd.resource_control %}
+{% for interface in systemd.resource_control.restrict_network_interfaces_allow %}
+RestrictNetworkInterfaces={{ interface }}
+{% endfor %}
+{% endif %}
+{% if 'restrict_network_interfaces_deny' in systemd.resource_control %}
+{% for interface in systemd.resource_control.restrict_network_interfaces_deny %}
+RestrictNetworkInterfaces=~{{ interface }}
+{% endfor %}
+{% endif %}
+{% if 'nft_set' in systemd.resource_control %}
+NFTSet={% for set in systemd.resource_control.nft_set %}{{ set.type }}:{{ set.family }}:{{ set.table }}:{{ set.set }}{% if not loop.last %} {% endif %}{% endfor +%}
+{% endif %}
+{# BPF programs #}
+{% if 'ip_ingress_filter_path' in systemd.resource_control %}
+{% for path in systemd.resource_control.ip_ingress_filter_path %}
+IPIngressFilterPath={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'ip_egress_filter_path' in systemd.resource_control %}
+{% for path in systemd.resource_control.ip_egress_filter_path %}
+IPEgressFilterPath={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'bpf_program' in systemd.resource_control %}
+{% for program in systemd.resource_control.bpf_program %}
+BPFProgram={{ program.type }}:{{ program.path }}
+{% endfor %}
+{% endif %}
+{# device access #}
+{% if 'device_allow' in systemd.resource_control %}
+{% for device in systemd.resource_control.device_allow %}
+DeviceAllow={{ device.device }} {% if device.read %}r{% endif %}{% if device.write %}w{% endif %}{% if device.create %}m{% endif +%}
+{% endfor %}
+{% endif %}
+{% if 'device_policy' in systemd.resource_control %}
+DevicePolicy={{ systemd.resource_control.device_policy | lower }}
+{% endif %}
+{# control group management #}
+{% if 'slice' in systemd.resource_control %}
+Slice={{ systemd.resource_control.slice }}
+{% endif %}
+{% if 'delegate' in systemd.resource_control %}
+{% if systemd.resource_control.delegate is iterable and (service.delegate is not string and systemd.resource_control.delegate is not mapping) %}
+Delegate={{ systemd.resource_control.delegate | join(' ') }}
+{% else %}
+Delegate={{ systemd.resource_control.delegate | string | lower }}
+{% endif %}
+{% endif %}
+{% if 'delegate_subgroup' in systemd.resource_control %}
+DelegateSubgroup={{ systemd.resource_control.delegate_subgroup }}
+{% endif %}
+{% if 'disable_controllers' in systemd.resource_control %}
+{% for controller in systemd.resource_control.disable_controllers %}
+DisableControllers={{ controller }}
+{% endfor %}
+{% endif %}
+{# memory pressure control #}
+{% if 'managed_oom_swap' in systemd.resource_control %}
+ManagedOOMSwap={{ systemd.resource_control.managed_oom_swap | lower }}
+{% endif %}
+{% if 'managed_oom_memory_pressure' in systemd.resource_control %}
+ManagedOOMMemoryPressure={{ systemd.resource_control.managed_oom_memory_pressure | lower }}
+{% endif %}
+{% if 'managed_oom_memory_pressure_limit' in systemd.resource_control %}
+ManagedOOMMemoryPressureLimit={{ systemd.resource_control.managed_oom_memory_pressure_limit }}%
+{% endif %}
+{% if 'managed_oom_preference' in systemd.resource_control %}
+ManagedOOMPreference={{ systemd.resource_control.managed_oom_preference | lower }}
+{% endif %}
+{% if 'memory_pressure_watch' in systemd.resource_control %}
+{% if systemd.resource_control.memory_pressure_watch is string %}
+MemoryPressureWatch={{ systemd.resource_control.memory_pressure_watch | lower }}
+{% else %}
+MemoryPressureWatch={{ 'on' if systemd.resource_control.memory_pressure_watch else 'off' }}
+{% endif %}
+{% endif %}
+{% if 'memory_pressure_threshold_sec' in systemd.resource_control %}
+MemoryPressureThresholdSec={{ systemd.resource_control.memory_pressure_threshold_sec }}
+{% endif %}
+{# coredump control #}
+{% if 'coredump_receive' in systemd.resource_control %}
+CoredumpReceive={{ systemd.resource_control.coredump_receive | string | lower }}
+{% endif %}
+{% endif %}

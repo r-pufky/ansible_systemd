@@ -1,0 +1,183 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# CPU Accounting and Control
+###############################################################################
+# Enable CPU accounting?
+#
+# Enable CPU usage accounting for this unit; implicitly enables for all units
+# contained in the same slice, all parent slices, and units within.
+#
+# CPU accounting has no effect for unified cgroup hierarchy.
+#
+# Values:
+#     True: enable usage accounting
+#    False: disable usage accounting
+#   {OMIT}: True (default); default changed with DefaultCPUAccounting= in
+#           systemd.system.conf.
+#
+# Variable: cpu_accounting | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+
+# Running CPU weight (prioritization).
+#
+# Assign CPU time weight to processes executed. The available CPU time is split
+# up among all units within one slice relative to their CPU time weight. Higher
+# weight means more CPU time.
+#
+# Only effects cgroup-v2. cgroup-v1 equivalent is minimum weight.
+#
+# Applies to startup and shutdown phases of system if startup_cpu_weight is
+# unset.
+#
+# Values:
+#         1-10000: assign the specific CPU time weight to process executed
+#                  higher means more CPU time.
+#          'idle': mark idle scheduling - CPU resources only when non-idle
+#                  processes do not require resources.
+#          {OMIT}: 100 (default)
+#
+# Variable: cpu_weight | int or str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html
+# * https://docs.kernel.org/scheduler/sched-design-CFS.html
+
+# Startup and shutdown CPU weight (prioritization).
+#
+# Assign CPU time weight to processes executed at startup and shutdown. The
+# available CPU time is split up among all units within one slice relative to
+# their CPU time weight. Higher weight means more CPU time.
+#
+# Only effects cgroup-v2. cgroup-v1 equivalent is minimum weight.
+#
+# Values:
+#         1-10000: assign the specific CPU time weight to process executed
+#                  higher means more CPU time.
+#          'idle': mark idle scheduling - CPU resources only when non-idle
+#                  processes do not require resources.
+#          {OMIT}: 100 (default)
+#
+# Variable: startup_cpu_weight | int or str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html
+# * https://docs.kernel.org/scheduler/sched-design-CFS.html
+
+# CPU time quota.
+#
+# Values:
+#   1-100+: percent value (without %), values greater than 100 will use time
+#           on more than one CPU.
+#   {OMIT}: no quota (default)
+#
+# Variable: cpu_quota | int
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html
+# * https://docs.kernel.org/scheduler/sched-design-CFS.html
+
+# CPU time quota measurement period (milliseconds).
+#
+# Duration that cpu_quota is measured over.
+#
+# Values:
+#   1-1000: time in milliseconds
+#   {OMIT}: 100 (default)
+#
+# Variable: cpu_quota_period_sec | int
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html
+# * https://docs.kernel.org/scheduler/sched-design-CFS.html
+
+# Running execution restriction to specified CPUs.
+#
+# Does not guarantee all CPUs will be used by processes as it may be limited
+# by parent units. The effective configuration is reported as effective_cpus.
+#
+# Applies to startup and shutdown phases of system if startup_allowed_cpus is
+# unset.
+#
+# Values:
+#        #: use specific core
+#      #-#: use range of cores
+#   {OMIT}: no restrictions (default)
+#
+# allowed_cpus: ['1-8', 10, 11]
+#
+# Variable: allowed_cpus | list of str
+#
+# Default: omit (system default).
+
+# Startup and shutdown execution restriction to specified CPUs.
+#
+# Does not guarantee all CPUs will be used by processes as it may be limited
+# by parent units. The effective configuration is reported as effective_cpus.
+#
+# Values:
+#        #: use specific core
+#      #-#: use range of cores
+#   {OMIT}: no restrictions (default)
+#
+# startup_allowed_cpus: ['1-8', 10, 11]
+#
+# Variable: startup_allowed_cpus | list of str
+#
+# Default: omit (system default).

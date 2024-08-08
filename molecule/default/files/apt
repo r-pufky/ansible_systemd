@@ -1,0 +1,81 @@
+/var/log/apt/term.log
+{
+  # rotation
+  rotate 12
+  noolddir
+
+  # frequency
+  monthly
+
+  # file selection
+  missingok
+  notifempty
+
+  # files and folders
+  nocreate
+  nocreateolddir
+  nocopy
+  nocopytruncate
+  norenamecopy
+  noshred
+  noallowhardlink
+
+  # compression
+  compress
+  compresscmd /bin/gzip
+  uncompresscmd /bin/gunzip
+  compressext .gz
+  compressoptions -6
+  nodelaycompress
+
+  # filenames
+  nodateext
+
+  # mail
+  nomail
+  maillast
+
+  # scripts
+  nosharedscripts
+}
+/var/log/apt/history.log
+/var/log/apt/multi-logs-format-test.log
+{
+  # rotation
+  rotate 12
+  noolddir
+
+  # frequency
+  monthly
+
+  # file selection
+  missingok
+  notifempty
+
+  # files and folders
+  nocreate
+  nocreateolddir
+  nocopy
+  nocopytruncate
+  norenamecopy
+  noshred
+  noallowhardlink
+
+  # compression
+  compress
+  compresscmd /bin/gzip
+  uncompresscmd /bin/gunzip
+  compressext .gz
+  compressoptions -6
+  nodelaycompress
+
+  # filenames
+  nodateext
+
+  # mail
+  nomail
+  maillast
+
+  # scripts
+  nosharedscripts
+}

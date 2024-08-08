@@ -1,0 +1,466 @@
+{# [Unit] section heading #}
+{% if 'unit' in systemd %}
+[Unit]
+{% if 'description' in systemd.unit %}
+Description={{ systemd.unit.description }}
+{% endif %}
+{% if 'documentation' in systemd.unit %}
+{% for uri in systemd.unit.documentation %}
+Documentation={{ uri }}
+{% endfor %}
+{% endif %}
+{% if 'wants' in systemd.unit %}
+{% for dep in systemd.unit.wants %}
+Wants={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'requires' in systemd.unit %}
+{% for dep in systemd.unit.requires %}
+Requires={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'requisite' in systemd.unit %}
+{% for dep in systemd.unit.requisite %}
+Requisite={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'binds_to' in systemd.unit %}
+{% for dep in systemd.unit.binds_to %}
+BindsTo={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'part_of' in systemd.unit %}
+{% for dep in systemd.unit.part_of %}
+PartOf={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'upholds' in systemd.unit %}
+{% for dep in systemd.unit.upholds %}
+Upholds={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'conflicts' in systemd.unit %}
+{% for dep in systemd.unit.conflicts %}
+Conflicts={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'before' in systemd.unit %}
+{% for dep in systemd.unit.before %}
+Before={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'after' in systemd.unit %}
+{% for dep in systemd.unit.after %}
+After={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'on_failure' in systemd.unit %}
+{% for dep in systemd.unit.on_failure %}
+OnFailure={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'on_success' in systemd.unit %}
+{% for dep in systemd.unit.on_success %}
+OnSuccess={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'propagates_reload_to' in systemd.unit %}
+{% for dep in systemd.unit.propagates_reload_to %}
+PropagatesReloadTo={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'propagates_reload_from' in systemd.unit %}
+{% for dep in systemd.unit.propagates_reload_from %}
+ReloadPropagatedFrom={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'propagates_stop_to' in systemd.unit %}
+{% for dep in systemd.unit.propagates_stop_to %}
+PropagatesStopTo={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'stop_propagated_from' in systemd.unit %}
+{% for dep in systemd.unit.stop_propagated_from %}
+StopPropagatedFrom={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'joins_namespace_of' in systemd.unit %}
+{% for dep in systemd.unit.joins_namespace_of %}
+JoinsNamespaceOf={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'requires_mounts_for' in systemd.unit %}
+{% for dep in systemd.unit.requires_mounts_for %}
+RequiresMountsFor={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'wants_mounts_for' in systemd.unit %}
+{% for dep in systemd.unit.wants_mounts_for %}
+WantsMountsFor={{ dep }}
+{% endfor %}
+{% endif %}
+{% if 'on_success_job_mode' in systemd.unit %}
+OnSuccessJobMode={{ systemd.unit.on_success_job_mode | lower }}
+{% endif %}
+{% if 'on_failure_job_mode' in systemd.unit %}
+OnFailureJobMode={{ systemd.unit.on_failure_job_mode | lower }}
+{% endif %}
+{% if 'ignore_on_isolate' in systemd.unit %}
+IgnoreOnIsolate={{ systemd.unit.ignore_on_isolate | string | lower }}
+{% endif %}
+{% if 'stop_when_unneeded' in systemd.unit %}
+StopWhenUnneeded={{ systemd.unit.stop_when_unneeded | string | lower }}
+{% endif %}
+{% if 'refuse_manual_start' in systemd.unit %}
+RefuseManualStart={{ systemd.unit.refuse_manual_start | string | lower }}
+{% endif %}
+{% if 'refuse_manual_stop' in systemd.unit %}
+RefuseManualStop={{ systemd.unit.refuse_manual_stop | string | lower }}
+{% endif %}
+{% if 'allow_isolate' in systemd.unit %}
+AllowIsolate={{ systemd.unit.allow_isolate | string | lower }}
+{% endif %}
+{% if 'default_dependencies' in systemd.unit %}
+DefaultDependencies={{ systemd.unit.default_dependencies | string | lower }}
+{% endif %}
+{% if 'survive_final_kill_signal' in systemd.unit %}
+SurviveFinalKillSignal={{ systemd.unit.survive_final_kill_signal | string | lower }}
+{% endif %}
+{% if 'collect_mode' in systemd.unit %}
+CollectMode={{ systemd.unit.collect_mode | lower }}
+{% endif %}
+{% if 'failure_action' in systemd.unit %}
+FailureAction={{ systemd.unit.failure_action | lower }}
+{% endif %}
+{% if 'success_action' in systemd.unit %}
+SuccessAction={{ systemd.unit.success_action | lower }}
+{% endif %}
+{% if 'failure_action_exit_status' in systemd.unit %}
+FailureActionExitStatus={{ systemd.unit.failure_action_exit_status }}
+{% endif %}
+{% if 'success_action_exit_status' in systemd.unit %}
+SuccessActionExitStatus={{ systemd.unit.success_action_exit_status }}
+{% endif %}
+{% if 'job_timeout_sec' in systemd.unit %}
+JobTimeoutSec={{ systemd.unit.job_timeout_sec }}
+{% endif %}
+{% if 'job_running_timeout_sec' in systemd.unit %}
+JobRunningTimeoutSec={{ systemd.unit.job_running_timeout_sec }}
+{% endif %}
+{% if 'job_timeout_action' in systemd.unit %}
+JobTimeoutAction={{ systemd.unit.job_timeout_action }}
+{% endif %}
+{% if 'job_timeout_reboot_argument' in systemd.unit %}
+JobTimeoutRebootArgument={{ systemd.unit.job_timeout_reboot_argument }}
+{% endif %}
+{% if 'start_limit_interval_sec' in systemd.unit %}
+StartLimitIntervalSec={{ systemd.unit.start_limit_interval_sec }}
+{% endif %}
+{% if 'start_limit_burst' in systemd.unit %}
+StartLimitBurst={{ systemd.unit.start_limit_burst | int }}
+{% endif %}
+{% if 'start_limit_action' in systemd.unit %}
+StartLimitAction={{ systemd.unit.start_limit_action }}
+{% endif %}
+{% if 'reboot_argument' in systemd.unit %}
+RebootArgument={{ systemd.unit.reboot_argument }}
+{% endif %}
+{% if 'source_path' in systemd.unit %}
+SourcePath={{ systemd.unit.source_path }}
+{% endif %}
+{# conditions #}
+{% if 'condition_architecture' in systemd.unit %}
+{% for arch in systemd.unit.condition_architecture %}
+ConditionArchitecture={{ arch }}
+{% endfor %}
+{% endif %}
+{% if 'condition_firmware' in systemd.unit %}
+{% for firmware in systemd.unit.condition_firmware %}
+ConditionFirmware={{ firmware }}
+{% endfor %}
+{% endif %}
+{% if 'condition_virtualization' in systemd.unit %}
+{% for virt in systemd.unit.condition_virtualization %}
+ConditionVirtualization={{ virt }}
+{% endfor %}
+{% endif %}
+{% if 'condition_host' in systemd.unit %}
+{% for host in systemd.unit.condition_host %}
+ConditionHost={{ host }}
+{% endfor %}
+{% endif %}
+{% if 'condition_kernel_command_line' in systemd.unit %}
+{% for command in systemd.unit.condition_kernel_command_line %}
+ConditionKernelCommandLine={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'condition_kernel_version' in systemd.unit %}
+{% for version in systemd.unit.condition_kernel_version %}
+ConditionKernelVersion={{ version }}
+{% endfor %}
+{% endif %}
+{% if 'condition_credential' in systemd.unit %}
+{% for credential in systemd.unit.condition_credential %}
+ConditionCredential={{ credential }}
+{% endfor %}
+{% endif %}
+{% if 'condition_environment' in systemd.unit %}
+{% for env in systemd.unit.condition_environment %}
+ConditionEnvironment={{ env }}
+{% endfor %}
+{% endif %}
+{% if 'condition_security' in systemd.unit %}
+{% for security in systemd.unit.condition_security %}
+ConditionSecurity={{ security }}
+{% endfor %}
+{% endif %}
+{% if 'condition_capability' in systemd.unit %}
+{% for capability in systemd.unit.condition_capability %}
+ConditionCapability={{ capability }}
+{% endfor %}
+{% endif %}
+{% if 'condition_ac_power' in systemd.unit %}
+ConditionACPower={{ systemd.unit.condition_ac_power | string | lower }}
+{% endif %}
+{% if 'condition_needs_update' in systemd.unit %}
+ConditionNeedsUpdate={{ systemd.unit.condition_needs_update | lower }}
+{% endif %}
+{% if 'condition_first_boot' in systemd.unit %}
+ConditionFirstBoot={{ systemd.unit.condition_first_boot | string | lower }}
+{% endif %}
+{% if 'condition_path_exists' in systemd.unit %}
+{% for path in systemd.unit.condition_path_exists %}
+ConditionPathExists={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_path_exists_glob' in systemd.unit %}
+{% for path in systemd.unit.condition_path_exists_glob %}
+ConditionPathExistsGlob={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_path_is_directory' in systemd.unit %}
+{% for path in systemd.unit.condition_path_is_directory %}
+ConditionPathIsDirectory={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_path_is_symbolic_link' in systemd.unit %}
+{% for path in systemd.unit.condition_path_is_symbolic_link %}
+ConditionPathIsSymbolicLink={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_path_is_mount_point' in systemd.unit %}
+{% for path in systemd.unit.condition_path_is_mount_point %}
+ConditionPathIsMountPoint={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_path_is_read_write' in systemd.unit %}
+{% for path in systemd.unit.condition_path_is_read_write %}
+ConditionPathIsReadWrite={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_path_is_encrypted' in systemd.unit %}
+{% for path in systemd.unit.condition_path_is_encrypted %}
+ConditionPathIsEncrypted={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_directory_not_empty' in systemd.unit %}
+{% for path in systemd.unit.condition_directory_not_empty %}
+ConditionDirectoryNotEmpty={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_file_not_empty' in systemd.unit %}
+{% for path in systemd.unit.condition_file_not_empty %}
+ConditionFileNotEmpty={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_file_is_executable' in systemd.unit %}
+{% for path in systemd.unit.condition_file_is_executable %}
+ConditionFileIsExecutable={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'condition_user' in systemd.unit %}
+ConditionUser={{ systemd.unit.condition_user }}
+{% endif %}
+{% if 'condition_group' in systemd.unit %}
+ConditionGroup={{ systemd.unit.condition_group }}
+{% endif %}
+{% if 'condition_control_group_controller' in systemd.unit %}
+{% for controller in systemd.unit.condition_control_group_controller %}
+ConditionControlGroupController={{ controller }}
+{% endfor %}
+{% endif %}
+{% if 'condition_memory' in systemd.unit %}
+{% for condition in systemd.unit.condition_memory %}
+ConditionMemory={{ condition }}
+{% endfor %}
+{% endif %}
+{% if 'condition_cpus' in systemd.unit %}
+{% for condition in systemd.unit.condition_cpus %}
+ConditionCPUs={{ condition }}
+{% endfor %}
+{% endif %}
+{% if 'condition_cpu_feature' in systemd.unit %}
+{% for feature in systemd.unit.condition_cpu_feature %}
+ConditionCPUFeature={{ feature }}
+{% endfor %}
+{% endif %}
+{% if 'condition_os_release' in systemd.unit %}
+{% for feature in systemd.unit.condition_os_release %}
+ConditionOSRelease={{ feature }}
+{% endfor %}
+{% endif %}
+{% if 'condition_memory_pressure' in systemd.unit %}
+ConditionMemoryPressure={{ systemd.unit.condition_memory_pressure }}
+{% endif %}
+{% if 'condition_cpu_pressure' in systemd.unit %}
+ConditionCPUPressure={{ systemd.unit.condition_cpu_pressure }}
+{% endif %}
+{% if 'condition_io_pressure' in systemd.unit %}
+ConditionIOPressure={{ systemd.unit.condition_io_pressure }}
+{% endif %}
+{# asserts #}
+{% if 'assert_architecture' in systemd.unit %}
+{% for arch in systemd.unit.assert_architecture %}
+AssertArchitecture={{ arch }}
+{% endfor %}
+{% endif %}
+{% if 'assert_virtualization' in systemd.unit %}
+{% for virt in systemd.unit.assert_virtualization %}
+AssertVirtualization={{ virt }}
+{% endfor %}
+{% endif %}
+{% if 'assert_host' in systemd.unit %}
+{% for host in systemd.unit.assert_host %}
+AssertHost={{ host }}
+{% endfor %}
+{% endif %}
+{% if 'assert_kernel_command_line' in systemd.unit %}
+{% for command in systemd.unit.assert_kernel_command_line %}
+AssertKernelCommandLine={{ command }}
+{% endfor %}
+{% endif %}
+{% if 'assert_kernel_version' in systemd.unit %}
+{% for version in systemd.unit.assert_kernel_version %}
+AssertKernelVersion={{ version }}
+{% endfor %}
+{% endif %}
+{% if 'assert_credential' in systemd.unit %}
+{% for credential in systemd.unit.assert_credential %}
+AssertCredential={{ credential }}
+{% endfor %}
+{% endif %}
+{% if 'assert_environment' in systemd.unit %}
+{% for env in systemd.unit.assert_environment %}
+AssertEnvironment={{ env }}
+{% endfor %}
+{% endif %}
+{% if 'assert_security' in systemd.unit %}
+{% for security in systemd.unit.assert_security %}
+AssertSecurity={{ security }}
+{% endfor %}
+{% endif %}
+{% if 'assert_capability' in systemd.unit %}
+{% for capability in systemd.unit.assert_capability %}
+AssertCapability={{ capability }}
+{% endfor %}
+{% endif %}
+{% if 'assert_ac_power' in systemd.unit %}
+AssertACPower={{ systemd.unit.assert_ac_power | string | lower }}
+{% endif %}
+{% if 'assert_needs_update' in systemd.unit %}
+AssertNeedsUpdate={{ systemd.unit.assert_needs_update | lower }}
+{% endif %}
+{% if 'assert_first_boot' in systemd.unit %}
+AssertFirstBoot={{ systemd.unit.assert_first_boot | string | lower }}
+{% endif %}
+{% if 'assert_path_exists' in systemd.unit %}
+{% for path in systemd.unit.assert_path_exists %}
+AssertPathExists={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_path_exists_glob' in systemd.unit %}
+{% for path in systemd.unit.assert_path_exists_glob %}
+AssertPathExistsGlob={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_path_is_directory' in systemd.unit %}
+{% for path in systemd.unit.assert_path_is_directory %}
+AssertPathIsDirectory={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_path_is_symbolic_link' in systemd.unit %}
+{% for path in systemd.unit.assert_path_is_symbolic_link %}
+AssertPathIsSymbolicLink={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_path_is_mount_point' in systemd.unit %}
+{% for path in systemd.unit.assert_path_is_mount_point %}
+AssertPathIsMountPoint={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_path_is_read_write' in systemd.unit %}
+{% for path in systemd.unit.assert_path_is_read_write %}
+AssertPathIsReadWrite={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_path_is_encrypted' in systemd.unit %}
+{% for path in systemd.unit.assert_path_is_encrypted %}
+AssertPathIsEncrypted={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_directory_not_empty' in systemd.unit %}
+{% for path in systemd.unit.assert_directory_not_empty %}
+AssertDirectoryNotEmpty={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_file_not_empty' in systemd.unit %}
+{% for path in systemd.unit.assert_file_not_empty %}
+AssertFileNotEmpty={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_file_is_executable' in systemd.unit %}
+{% for path in systemd.unit.assert_file_is_executable %}
+AssertFileIsExecutable={{ path }}
+{% endfor %}
+{% endif %}
+{% if 'assert_user' in systemd.unit %}
+AssertUser={{ systemd.unit.assert_user }}
+{% endif %}
+{% if 'assert_group' in systemd.unit %}
+AssertGroup={{ systemd.unit.assert_group }}
+{% endif %}
+{% if 'assert_control_group_controller' in systemd.unit %}
+{% for controller in systemd.unit.assert_control_group_controller %}
+AssertControlGroupController={{ controller }}
+{% endfor %}
+{% endif %}
+{% if 'assert_memory' in systemd.unit %}
+{% for Assert in systemd.unit.assert_memory %}
+AssertMemory={{ Assert }}
+{% endfor %}
+{% endif %}
+{% if 'assert_cpus' in systemd.unit %}
+{% for Assert in systemd.unit.assert_cpus %}
+AssertCPUs={{ Assert }}
+{% endfor %}
+{% endif %}
+{% if 'assert_cpu_feature' in systemd.unit %}
+{% for feature in systemd.unit.assert_cpu_feature %}
+AssertCPUFeature={{ feature }}
+{% endfor %}
+{% endif %}
+{% if 'assert_os_release' in systemd.unit %}
+{% for feature in systemd.unit.assert_os_release %}
+AssertOSRelease={{ feature }}
+{% endfor %}
+{% endif %}
+{% if 'assert_memory_pressure' in systemd.unit %}
+AssertMemoryPressure={{ systemd.unit.assert_memory_pressure }}
+{% endif %}
+{% if 'assert_cpu_pressure' in systemd.unit %}
+AssertCPUPressure={{ systemd.unit.assert_cpu_pressure }}
+{% endif %}
+{% if 'assert_io_pressure' in systemd.unit %}
+AssertIOPressure={{ systemd.unit.assert_io_pressure }}
+{% endif %}
+{% endif %}

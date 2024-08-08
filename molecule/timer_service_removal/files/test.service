@@ -1,0 +1,10 @@
+[Unit]
+Description=test timer service
+Requires=test.timer
+
+[Service]
+Type=simple
+ExecStart=echo "this is a test service"
+User=root
+Group=root
+

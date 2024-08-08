@@ -1,0 +1,98 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# Device Access
+###############################################################################
+# Allow access to specific device nodes.
+#
+# implemented using eBPF filtering. Use private_devices in exec when access to
+# physical devices should be disallowed.
+#
+# Only reference device groups resolvable at time of unit start. Any device
+# groups not resolvable at start are not added to allow list.
+#
+# Consider extending service units with a pair of After=modprobe@xyz.service
+# and Wants=modprobe@xyz.service lines that load the necessary kernel module
+# implementing the device group if missing.
+#
+# Values:
+#   - device: str - device node specifier
+#         Values:
+#            /dev/{PATH}: path to device node starting with '/dev/'
+#            char-{NAME}: character device group name from /proc/devices
+#                         wildcard globbing allowed.
+#           block-{NAME}: block device group name from /proc/devices
+#                         wildcard globbing allowed.
+#     read: bool - enable reading
+#     write: bool - enable writing
+#     create: bool - enable creation
+#   {OMIT}: all devices allowed access, see device_policy (default)
+#
+# device_allow:
+#   - device: 'char-cpu/*'
+#     read: true
+#     write: false
+#     create: false
+#
+# Variable: device_allow | list of dict
+#
+# Default: omit (system default).
+
+# Policy for allowing device access.
+#
+# Values:
+#     auto: access to all devices if device_allow not specified (default)
+#   closed: access to standard pseudo devices including /dev/null,
+#           /dev/zero, /dev/full, /dev/random, and /dev/urandom in
+#           addition to device_allow.
+#   strict: only allow types of access that are explicitly specified in
+#           device_allow.
+#   {OMIT}: auto (default)
+#
+# Variable: device_policy | str
+#
+# Default: omit (system default).

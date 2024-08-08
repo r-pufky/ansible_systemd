@@ -1,0 +1,93 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# Process Accounting and Control
+###############################################################################
+# Enable task accounting?
+#
+# Turning on tasks accounting for one unit will also implicitly turn it on for
+# all units contained in the same slice, all parent slices, and units within.
+#
+# The system default for this setting may be controlled with
+# DefaultTasksAccounting.
+#
+# Values:
+#    False: kernel will not track
+#     True: kernel will keep track of the total number of tasks in the unit and
+#           its children. This number includes both kernel threads and
+#           userspace processes, with each thread counted individually.
+#   {OMIT}: True (default)
+#
+# Variable: tasks_accounting | bool
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+
+# Max number of tasks that may be created.
+#
+# Ensures that the number of tasks accounted for the unit stays below a
+# specific limit.
+#
+# The effective configuration is reported as EffectiveTasksMax.
+#
+# The system default for this setting may be controlled with DefaultTasksMax.
+#
+# Values:
+#       {INT}: number of max tasks
+#      {INT}%: percent of tasks relative to max tasks on system (default 4915)
+#    infinity: no task limit
+#      {OMIT}: infinity (default)
+#
+# Variable: tasks_max | str
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#pid

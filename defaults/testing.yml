@@ -1,0 +1,15 @@
+---
+###############################################################################
+# Systemd Testing
+###############################################################################
+# Options exposed specifically for unit testing without bouncing systemd.
+# These are not needed in normal operation.
+
+# Enable testing.
+#
+# This will disable reload of systemd allowing for inspection of written files
+# for correct formatting without needing the exact hardware for services to be
+# successfully reloaded.
+#
+# Default: False.
+systemd_testing_enable: false

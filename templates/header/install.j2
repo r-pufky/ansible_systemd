@@ -1,0 +1,32 @@
+{# [Install] section heading #}
+{% if 'install' in systemd %}
+[Install]
+{% if 'alias' in systemd.install %}
+{% for name in systemd.install.alias %}
+Alias={{ name }}
+{% endfor %}
+{% endif %}
+{% if 'wanted_by' in systemd.install %}
+{% for name in systemd.install.wanted_by %}
+WantedBy={{ name }}
+{% endfor %}
+{% endif %}
+{% if 'required_by' in systemd.install %}
+{% for name in systemd.install.required_by %}
+RequiredBy={{ name }}
+{% endfor %}
+{% endif %}
+{% if 'upheld_by' in systemd.install %}
+{% for name in systemd.install.upheld_by %}
+UpheldBy={{ name }}
+{% endfor %}
+{% endif %}
+{% if 'also' in systemd.install %}
+{% for name in systemd.install.also %}
+Also={{ name }}
+{% endfor %}
+{% endif %}
+{% if 'default_instance' in systemd.install %}
+DefaultInstance={{ systemd.install.default_instance }}
+{% endif %}
+{% endif %}

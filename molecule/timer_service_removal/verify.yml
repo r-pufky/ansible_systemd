@@ -1,0 +1,52 @@
+---
+# yamllint disable rule:line-length
+- name: 'Timer service removal | verify | test.service'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Timer service removal | verify | test.service | gather service status'
+      ansible.builtin.service_facts:
+
+    - name: 'Timer service removal | verify | test.service | query file'
+      ansible.builtin.stat:
+        path: '/etc/systemd/system/test.service'
+      register: _test_systemd_test_service_remove
+
+    - name: 'Timer service removal | verify | test.service | assert service inactive'
+      ansible.builtin.assert:
+        that:
+          - '"test.service" not in ansible_facts.services'
+        fail_msg: 'test.service should not be enabled.'
+
+    - name: 'Timer service removal | verify | test.service | assert file removed'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_test_service_remove.stat.exists
+        fail_msg: '/etc/systemd/system/test.service should not exist.'
+
+- name: 'Timer service removal | verify | test.timer'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Timer service removal | verify | test.timer | gather timer status'
+      ansible.builtin.command: 'systemctl status test.timer'
+      register: _test_systemd_timer_status
+      changed_when: false
+      failed_when: _test_systemd_timer_status.rc != 4
+
+    - name: 'Timer service removal | verify | test.timer | query file'
+      ansible.builtin.stat:
+        path: '/etc/systemd/system/test.timer'
+      register: _test_systemd_test_timer_remove
+
+    - name: 'Timer service removal | verify | test.timer | assert timer inactive'
+      ansible.builtin.assert:
+        that:
+          - _test_systemd_timer_status.rc == 4
+        fail_msg: 'test.timer should not be enabled.'
+
+    - name: 'Timer service removal | verify | test.timer | assert file removed'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_test_timer_remove.stat.exists
+        fail_msg: '/etc/systemd/system/test.timer should not exist.'

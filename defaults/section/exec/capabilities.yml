@@ -1,0 +1,145 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# Capabilities
+###############################################################################
+# Capabilities to include in the capability bounding set for service.
+#
+# Capabilities listed will be included in the bounding set, all others are
+# removed. Applied before capability_bounding_set_exclude.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#   {NAME}: capability name (see reference)
+#   {OMIT}: no limits on capabilities (default)
+#
+# Variable: capability_bounding_set_include | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/capabilities.7.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html
+
+# Capabilities to exclude in the capability bounding set for service.
+#
+# Capabilities listed will be exclude in the bounding set, all others are
+# included. Applied after capability_bounding_set_include.
+#
+# If capability_bounding_set_include is not used, assignment is inverted (all
+# but listed capabilities are included).
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#   {NAME}: capability name (see reference)
+#   {OMIT}: no limits on capabilities (default)
+#
+# Variable: capability_bounding_set_exclude | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/capabilities.7.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html
+
+# Capabilities to include in the ambient capability set for service.
+#
+# Capabilities listed will be included in the ambient set, all others are
+# removed. Applied before ambient_capabilities_exclude.
+#
+# Used to execute as non-privileged user but still give some capabilities.
+#
+# Automatically adds keep-caps to secure_bits.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#   {NAME}: capability name (see reference)
+#   {OMIT}: no limits on capabilities (default)
+#
+# Variable: ambient_capabilities_include | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/capabilities.7.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html
+
+# Capabilities to exclude in the ambient capability set for service.
+#
+# Capabilities listed will be included in the ambient set, all others are
+# removed. Applied after ambient_capabilities_include.
+#
+# If ambient_capabilities_include is not used, assignment is inverted (all but
+# listed capabilities are included).
+#
+# Used to execute as non-privileged user but still give some capabilities.
+#
+# Automatically adds keep-caps to secure_bits.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#   {NAME}: capability name (see reference)
+#   {OMIT}: no limits on capabilities (default)
+#
+# Variable: ambient_capabilities_exclude | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/capabilities.7.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html

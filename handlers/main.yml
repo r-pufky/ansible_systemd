@@ -1,0 +1,9 @@
+---
+###############################################################################
+# Systemd Handlers
+###############################################################################
+
+- name: 'Handlers | reload systemd'
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+  when: not systemd_testing_enable

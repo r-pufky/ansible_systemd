@@ -1,0 +1,64 @@
+---
+# yamllint disable rule:line-length
+- name: 'Timer service | verify | test.service'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Timer service | verify | test.service | gather service status'
+      ansible.builtin.service_facts:
+
+    - name: 'Timer service | verify | test.service | query file'
+      ansible.builtin.copy:
+        src: 'files/test.service'
+        dest: '/etc/systemd/system/test.service'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_systemd_timer_service
+
+    - name: 'Timer service | verify | test.service | assert service active'
+      ansible.builtin.assert:
+        that:
+          - '"test.service" in ansible_facts.services'
+        fail_msg: 'test.service should be enabled.'
+
+    - name: 'Timer service | verify | test.service | assert expected file'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_timer_service.changed
+        fail_msg: '/etc/systemd/system/test.service is not in expected format: {{ _test_systemd_timer_service.diff }}.'
+
+- name: 'Timer service | verify | test.timer'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Timer service | verify | test.timer | gather timer status'
+      ansible.builtin.command: 'systemctl status test.timer'
+      register: _test_systemd_timer_status
+      changed_when: false
+
+    - name: 'Timer service | verify | test.timer | query file'
+      ansible.builtin.copy:
+        src: 'files/test.timer'
+        dest: '/etc/systemd/system/test.timer'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_systemd_timer_service
+
+    - name: 'Timer service | verify | test.timer | assert timer active'
+      ansible.builtin.assert:
+        that:
+          - _test_systemd_timer_status.rc == 0
+          - '"Active: active" in _test_systemd_timer_status.stdout'
+        fail_msg: 'test.timer should be enabled.'
+
+    - name: 'Timer service | verify | test.timer | assert expected file'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_timer_service.changed
+        fail_msg: '/etc/systemd/system/test.timer is not in expected format: {{ _test_systemd_timer_service.diff }}.'

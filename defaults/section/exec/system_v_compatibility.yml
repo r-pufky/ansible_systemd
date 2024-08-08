@@ -1,0 +1,84 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# System V Compatibility
+###############################################################################
+# Four character identifier strong for utmp and wtmp entries.
+#
+# Only set for services such as getty where utmp/wtmp entries must be created
+# and cleared before and after execution, or for services executed as if are
+# run by a getty process.
+#
+# Values:
+#   {IDENTIFIER}: identifier, uses %I style replacements, truncated if longer
+#                 than four characters.
+#         {OMIT}: no identifier set (default)
+#
+# Variable: utmp_identifier | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man5/utmp.5.html
+# * http://linux.die.net/man/8/agetty
+
+# Set environment variables from text files.
+#
+# Controls type of utmp/wtmp entries for service if utmp_identifier set.
+#
+# Values:
+#     init: only INIT_PROCESS entry generated, process must implement a
+#           getty-compatible utmp/wtmp logic.
+#    login: INIT_PROCESS, LOGIN_PROCESS entry generated
+#     user: INIT_PROCESS, LOGIN_PROCESS, USER_PROCESS entry generated
+#   {OMIT}: init (default)
+#
+# Variable: utmp_mode | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#EnvironmentFile

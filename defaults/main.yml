@@ -1,0 +1,102 @@
+---
+###############################################################################
+# Systemd Unit Configuration and Management
+###############################################################################
+# Manage systemd units. Standard ansible built-ins may be used after
+# configuration (stop, start, reload, etc). Systemd will be force reloaded on
+# role completion to ensure unit availability after role application.
+#
+# Variables are defined in sections directory using lower_with_under; and are
+# omitted by default unless specified. Use grep to find explicit definitions
+# and sections for reference:
+#
+#   grep -ri 'variable: exec_start'
+#   > service.yml:173:# Variable: exec_start | list of str
+#
+# All supported systemd options have been documented in sections.
+#
+# Actively migrate cronjobs to systemd (use timers, see reference).
+#
+# Reference:
+# * section/*.yml
+# * https://unix.stackexchange.com/questions/278564/cron-vs-systemd-timers
+# * https://gist.github.com/hkoba/e05c91ebdd4e2ffd1d79e78e76cf1ff5
+# * https://wiki.archlinux.org/title/Systemd/Timers#As_a_cron_replacement
+# * https://opensource.com/article/20/7/systemd-timers
+
+# Service definitions.
+#
+# Managed files are placed in systemd_role_root with root:root 0644.
+#
+# systemd_services:
+#     list of dict - services to manage for systemd
+#   - name: str - service name
+#         Special Case:
+#           [a-z,A-Z,:,-,_,.,\]: acceptable characters, max length 255.
+#         Values:
+#            {NAME}: service name (name.service)
+#           {NAME}@: template service name (name@.service); may be referenced
+#                    using SPECIFIERS (%i, etc) in definitions.
+#     unit: dict - section/unit/*.yml unit definition
+#     service: dict - section/service.yml unit definition
+#     exec: dict - section/exec/*.yml unit definition
+#     resource_control: dict - section/resource_control/*.yml unit definition
+#     kill: dict - section/kill.yml unit definition
+#     install: dict - section/install.yml install definition
+#     state: str - timer started
+#         Values:
+#           present: manage configuration
+#            absent: remove configuration
+#         Default: 'present'.
+#
+# systemd_services:
+#   - name: 'reboot'
+#     unit:
+#       description: 'periodic system reboot service'
+#       requires:
+#         - 'reboot.timer'
+#     service:
+#       type: 'simple'
+#       exec_start: 'perl -e "sleep(rand(30))";/sbin/reboot'
+#       user: 'root'
+#     state: 'present'
+#
+# Default: [].
+systemd_services: []
+
+# Timer definitions.
+#
+# Managed files are placed in systemd_role_root with root:root 0644.
+#
+# systemd_timers:
+#     list of dict - timers to manage for systemd
+#   - name: str - timer name
+#         Special Case:
+#           [a-z,A-Z,:,-,_,.,\]: acceptable characters, max length 255.
+#         Values:
+#            {NAME}: timer name (name.timer)
+#           {NAME}@: template timer name (name@.timer); may be referenced using
+#                    SPECIFIERS (%i, etc) in definitions.
+#     unit: dict - section/unit/*.yml unit definition
+#     timer: dict - section/timer.yml timer definition
+#     install: dict - section/install.yml install definition
+#     state: str - timer started
+#         Values:
+#           present: manage configuration
+#            absent: remove configuration
+#         Default: 'present'.
+#
+# systemd_timers:
+#   - name: 'reboot'
+#     unit:
+#       description: 'periodic system reboot timer'
+#     timer:
+#       unit: 'reboot.service'
+#       on_boot_sec: '1month'
+#     install:
+#       wanted_by:
+#         - 'timers.target'
+#     state: 'present'
+#
+# Default: [].
+systemd_timers: []

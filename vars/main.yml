@@ -1,0 +1,12 @@
+---
+###############################################################################
+# Default Systemd Dependencies
+###############################################################################
+
+# Last time systemd options were validated against a default configuration.
+systemd_role_validate_date: '2024-07-14'
+systemd_role_validate_version: '252.26'
+systemd_role_validate_release: 'bookworm'
+
+# Default systemd system location.
+systemd_role_root: '/etc/systemd/system'

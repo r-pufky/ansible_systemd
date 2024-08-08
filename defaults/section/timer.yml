@@ -1,0 +1,307 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Timer] Heading
+###############################################################################
+# Unit Timer section configuration.
+#
+# A matching Unit describing the unit to activate must exist. A service by the
+# same name as the timer is activated (activated together). Timer units
+# automatically gain a Before= dependency on the service they are supposed to
+# activate.
+#
+# Timers are scheduled to elapse within a time window starting with
+# on_calendar, on_active_sec, on_boot_sec, on_startup_sec, on_unit_active_sec
+# on_unit_inactive_sec, and ending with accuracy_sec.
+#
+# Timers do not necessarily expire at the precise time configured with these
+# settings.
+#
+# See reference sections for syntax formats:
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+# Enable default dependencies?
+#
+# Timer units automatically have these default dependencies:
+# * Requires=, After= on sysinit.target
+# * Before= on timers.target
+# * Conflicts=, Before= on shutdown.target
+#
+# Ensuring they are stopped cleanly prior to system shutdown. Only timer units
+# involved with early boot or late system shutdown should disable
+# default_dependencies.
+#
+# Variable: default_dependencies | bool
+#
+# Default: omit (system default).
+
+# Timer relative to the moment the timer unit itself is activated (seconds).
+#
+# Values:
+#   {TIME}: TIME timer relative to unit activation
+#
+# Variable: on_active_sec | str
+#
+# Default: omit (system default).
+
+# Timer relative to machine boot (seconds).
+#
+# Containers map this to on_startup_sec, making both equivalent.
+#
+# If a timer configured with on_boot_sec or on_startup_sec is already in the
+# past when the timer unit is activated, it will immediately elapse and the
+# configured unit is started. This is not the case for timers defined in the
+# other directives.
+#
+# Values:
+#   {TIME}: TIME timer relative to machine boot
+#
+# Variable: on_boot_sec | str
+#
+# Default: omit (system default).
+
+# Timer relative to service manager first start (seconds).
+#
+# If a timer configured with on_boot_sec or on_startup_sec is already in the
+# past when the timer unit is activated, it will immediately elapse and the
+# configured unit is started. This is not the case for timers defined in the
+# other directives.
+#
+# System timer units are very similar to on_boot_sec as the system service
+# manager is generally started very early at boot. It's primarily useful when
+# configured in units running in the per-user service manager, as the user
+# service manager is generally started on first login only, not already during
+# boot.
+#
+# Values:
+#   {TIME}: TIME timer relative to service manager first start
+#
+# Variable: on_startup_sec | str
+#
+# Default: omit (system default).
+
+# Timer relative to last unit activation (seconds).
+#
+# Values:
+#   {TIME}: TIME timer relative to last unit activation
+#
+# Variable: on_unit_active_sec | str
+#
+# Default: omit (system default).
+
+# Timer relative to last unit deactivation (seconds).
+#
+# Values:
+#   {TIME}: TIME timer relative to last unit deactivation
+#
+# Variable: on_unit_inactive_sec | str
+#
+# Default: omit (system default).
+
+# Realtime (wallclock) timer with calendar event expressions (seconds).
+#
+# Timers subject to accuracy_sec. Realtime clock must be set correctly or
+# timers might trigger unexpectedly. Systems that lack a battery-buffered
+# Realtime Clock (RTC) may want to enable systemd-time-wait-sync.service to
+# ensure clock is adjusted to a network time source before the timer event is
+# set up.
+#
+# Timer units with at least one on_calendar expression are automatically
+# ordered after time-sync.target, which systemd-time-wait-sync.service is
+# ordered before.
+#
+# Realtime clock does not pause when in suspend/hibernation. When resumed all
+# timers that triggered while the system was sleeping will be processed.
+# Multiple same activations will only be activated once.
+#
+# If wake_system is enabled a calendar time event will cause the system to wake
+# up.
+#
+# Timer units with on_calendar directive acquire a pair of additional
+# After= dependencies on time-set.target and time-sync.target, in order to
+# avoid being started before the system clock has been correctly set.
+#
+# Values:
+#   {TIME}: TIME timer relative to next calendar event
+#
+# Variable: on_calendar | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+
+# Accuracy the timer elapses with.
+#
+# Primarily power saving option allowing coalescing CPU wake-ups. It should not
+# be confused with randomized_delay_sec (which adds a random value to the next
+# elapse time and in intended to stretch elapsing of timer events over a longer
+# period to reduce workload spikes).
+#
+# Expiry time will be placed at a host-specific, randomized, but stable
+# position that is synchronized between all local timer units. This is done in
+# order to optimize power consumption to suppress unnecessary CPU wake-ups.
+#
+# Subject to timer slack in systemd-system.conf TimerSlackNSec= setting.
+#
+# Values:
+#    '1us': recommended for best accuracy
+#   {TIME}: TIME timer relative to next calendar event (make as high as
+#           possible and as low as necessary to reduce power consumption).
+#   {OMIT}: '1min' (default)
+#
+# Variable: accuracy_sec | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://man7.org/linux/man-pages/man2/prctl.2.html
+
+# Delay timer by random amount from 0 up to value (seconds).
+#
+# Used to stretch dispatching of similarly configured timer events over a
+# certain time interval to prevent them all firing at the same time, possibly
+# resulting in resource congestion.
+#
+# Each timer unit will determine this delay randomly before each iteration and
+# delay added on top of the next determined elapsing time, unless modified with
+# fixed_random_delay.
+#
+# Intended to stretch timer events over an interval, making it unlikely to fire
+# simultaneously.
+#
+# If randomized_delay_sec and accuracy_sec are used in conjunction, first the
+# randomized delay is added, and then the result is possibly further shifted to
+# coalesce it with other timer events happening on the system. Defaults
+# encourage (1min, 0) coalescing of timer events. In order to optimally stretch
+# timer events over a certain range of time, set accuracy_sec: '1us' and
+# randomized_delay_sec to some higher value.
+#
+# Values:
+#   {TIME}: TIME random delay time ceiling
+#   {OMIT}: 0 - no randomized delay (default)
+#
+# Variable: randomized_delay_sec | str
+#
+# Default: omit (system default).
+
+# Fix randomized offset specified by randomized_delay_sec?
+#
+# Offset specified by randomized_delay_sec reused for all firings of the same
+# timer (stable between restarts of manager) calculated from:
+# * machine ID
+# * user identifier
+# * timer name
+#
+# Effectively creates a fixed offset for an individual timer, reducing the
+# jitter in firings of this timer, while still avoiding firing at the same time
+# as other similarly configured timers.
+#
+# No effect if randomized_delay_sec: 0.
+#
+# Values:
+#   {OMIT}: False (default)
+#
+# Variable: fixed_random_delay | bool
+#
+# Default: omit (system default).
+
+# Trigger when Realtime clock jumps relative to monotonic clock?
+#
+# Values:
+#   {OMIT}: False (default)
+#
+# Variable: on_clock_change | bool
+#
+# Default: omit (system default).
+
+# Trigger when local system timezone is modified?
+#
+# Values:
+#   {OMIT}: False (default)
+#
+# Variable: on_timezone_change | bool
+#
+# Default: omit (system default).
+
+# Unit to activate when this timer elapses.
+#
+# It is recommended that the unit name that is activated and the unit name of
+# the timer unit are named identically, except for the suffix.
+#
+# Values
+#   {VAL}.!timer: .timer unit suffixes are not allowed
+#         {OMIT}: use service with same name as timer (default)
+#
+# Variable: unit | str
+#
+# Default: omit (system default).
+
+# Trigger immediately (persist) if trigger missed?
+#
+# Time when the service unit was last triggered is stored on disk. When the
+# timer is activated the service unit is triggered immediately if it would have
+# been triggered at least once during the time when the timer was inactive.
+#
+# Used to catch up on missed runs of the service when the system was powered
+# down. randomized_delay_sec still applies.
+#
+# Use 'systemctl clean --what=state' on timer unit to remove the timestamp file
+# maintained by this option from disk. Used before uninstalling a timer unit.
+#
+# Only works with on_calendar.
+#
+# Values:
+#   {OMIT}: False (default)
+#
+# Variable: persistent | bool
+#
+# Default: omit (system default)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
+
+# Resume from suspend if a timer elapses?
+#
+# Only makes sure system resumes, it does not re-suspend. Requires privileges
+# and generally only available in the system service manager.
+#
+# Monotonic clock timers behavior are altered depending on this option.
+#
+# Values:
+#     True: enable resume from suspend, using CLOCK_BOOTTIME for timers (tracks
+#           time during suspend).
+#    False: disable resume from suspect, using CLOCK_MONOTONIC for timers (does
+#           not track time during suspend).
+#   {OMIT}: False (default)
+#
+# Variable: wake_system | bool
+#
+# Default: omit (system default)
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man2/clock_getres.2.html
+
+# Keep timer loaded after elapsing?
+#
+# If remain_after_elapse enabled starting the timer a second time has no
+# effect. However, if remain_after_elapse disabled and the timer unit was
+# already unloaded, it can be started again, and thus the service can be
+# triggered multiple times.
+#
+# Values:
+#     True: timer stays loaded, state queryable even after it elapsed and the
+#           associated unit deactivated again.
+#    False: timer unloaded, useful for transient timer units
+#   {OMIT}: True (default)
+#
+# Variable: remain_after_elapse | bool
+#
+# Default: omit (system default)

@@ -1,0 +1,17 @@
+---
+###############################################################################
+# Create a defined systemd timer.
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_timers.
+
+- name: 'Systemd | load | timer {{ systemd.name }}'
+  ansible.builtin.template:
+    src: 'timer.j2'
+    dest: '{{ systemd_role_root }}/{{ systemd.name }}.timer'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  when: systemd.state | lower == 'present'
+  notify: 'Handlers | reload systemd'

@@ -1,0 +1,92 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Install] Heading
+###############################################################################
+# Unit install section configuration.
+#
+# Installation information for the unit. This section is not interpreted by
+# systemd during runtime; it is used by the enable and disable commands of the
+# systemctl tool during installation of a unit.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.device - device
+# * systemd.automount - automount
+# * systemd.target - target
+# * systemd.path - path
+# * systemd.timer - timer
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# See reference sections for syntax formats:
+# * SPECIFIERS (unit specifiers): install only supports the following: %a, %b,
+#   %B, %g, %G, %H, %i, %j, %l, %m, %n, %N, %o, %p, %u, %U, %v, %w, %W, %%.
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#%5BInstall%5D%20Section%20Options
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+# Additional names this unit installed under.
+#
+# Special Case:
+#   {NAME}.{TYPE}: name must have the same suffix (type) as the unit filename
+#   {NAME}.mount: not supported
+#   {NAME}.slice: not supported
+#   {NAME}.swap: not supported
+#   {NAME}.automount: not supported
+#
+# Variable: alias | list of str
+#
+# Default: omit (system default).
+
+# Want dependencies for unit.
+#
+# Creates symbolic link in .wants/ directory of each listed unit when unit is
+# installed by systemctl enable. This creates a Wants= dependency on unit from
+# listed unit. See the description of the mentioned dependency types in the
+# [Unit] section for details.
+#
+# Variable: wanted_by | list of str
+#
+# Default: omit (system default).
+
+# Require dependencies for unit.
+#
+# Creates symbolic link in .requires/ directory of each listed unit when unit
+# is installed by systemctl enable. This creates a Requires= dependency on unit
+# from listed unit. See the description of the mentioned dependency types in
+# the [Unit] section for details.
+#
+# Variable: required_by | list of str
+#
+# Default: omit (system default).
+
+# Uphold dependencies for unit.
+#
+# Creates symbolic link in .upholds/ directory of each listed unit when unit
+# is installed by systemctl enable. This creates a Upholds= dependency on unit
+# from listed unit. See the description of the mentioned dependency types in
+# the [Unit] section for details.
+#
+# Variable: upheld_by | list of str
+#
+# Default: omit (system default).
+
+# Additional units to install/remove when unit is installed/removed.
+#
+# Variable: also | list of str
+#
+# Default: omit (system default).
+
+# Unit instance to enable if template name not specified.
+#
+# This option has no effect in non-template unit files. The specified string
+# must be usable as instance identifier.
+#
+# Variable: default_instance | str
+#
+# Default: omit (system default).

@@ -1,0 +1,169 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# Control Group Management
+###############################################################################
+# Name of the slice unit to place unit in.
+#
+# Used to arrange units in a hierarchy of slices. Templated service units with
+# default_dependencies: False should be handled with care (see setting).
+#
+# Special Case:
+#   slice: only accepted values for slice units is the parent slice. The name
+#          of a slice unit implies the parent slice - it is redundant to ever
+#          set this parameter directly for slice units.
+#
+# Values:
+#   {SLICE}: name of slice unit
+#    {OMIT}: system.slice; instance units placed in sub slice of system.slice
+#            named after template name. (default)
+#
+# Variable: slice | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+
+# Delegate resource control partitioning to unit.
+#
+# Units may create and manage their own private sub hierarchy of control groups
+# below the unit's control group. For unprivileged services (user) the unit's
+# control group will be made accessible to the relevant user. Any controllers
+# delegated will be enabled for the parent and sibling units of the unit.
+#
+# Service manager will refrain from manipulating control groups or moving
+# processes below the unit's control group so that clear ownership is
+# established: the control group tree at the level of the unit's control group
+# and above (i.e. towards the root control group) is owned and managed by the
+# service manager of the host, while the control group tree below the unit's
+# control group is owned and managed by the unit itself.
+#
+# Controller delegation to less privileged code is only safe on the unified
+# control group hierarchy. Access to specified controllers will not be granted
+# to unprivileged services on the legacy hierarchy even when requested.
+#
+# Values:
+#             True: all supported controllers enabled for unit
+#               []: enable delegation and reset controller list
+#   [{CONTROLLER}]: enable delegation and specify controllers to use
+#                       Values:
+#                                  cpu: cpu controller
+#                              cpuacct: cpuacct controller
+#                               cpuset: cpuset controller
+#                                   io: io controller
+#                                blkio: blkio controller
+#                               memory: memory controller
+#                              devices: devices controller
+#                                 pids: pids controller
+#                         bpf-firewall: bpf-firewall controller
+#                          bpf-devices: bpf-devices controller
+#            False: disable delegation (default)
+#    {OMIT}: False (default)
+#
+# Variable: delegate | list of str or bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://systemd.io/CGROUP_DELEGATION
+
+# Place unit processes in specified subgroup for unit control group.
+#
+# Requires delegate to be enabled. This setting only applies to main processes
+# for services to ExecStart, but not for ExecReload and similar. If delegation
+# is enabled, the latter are always placed inside a subgroup named .control.
+# The specified subgroup is automatically created (and potentially ownership is
+# passed to the unit's configured user/group) when a process is started in it.
+#
+# This option is useful to avoid manually moving the invoked process into a
+# subgroup after it has been started. Since no processes should live in inner
+# nodes of the control group tree it's almost always necessary to run the main
+# (supervising) process of a unit that has delegation turned on in a subgroup.
+#
+# Values:
+#   {NAME}: valid control group name (not a path), must be usable as filename
+#           and avoid kernel control group attribute file conflicts.
+#       '': disabled
+#   {OMIT}: disabled (default)
+#
+# Variable: delegate_subgroup | str
+#
+# Default: omit (system default).
+
+# Disables controllers from being enabled for a unit's children.
+#
+# If a controller listed is already in use in its subtree, the controller will
+# be removed from the subtree. Used to avoid configuration in child units from
+# being able to implicitly or explicitly enable a controller.
+#
+# It may not be possible to disable a controller after units have been started,
+# if the unit or any child of the unit in question delegates controllers to its
+# children, as any delegated subtree of the cgroup hierarchy is un-managed by
+# systemd.
+#
+# Values:
+#            cpu: cpu controller
+#        cpuacct: cpuacct controller
+#         cpuset: cpuset controller
+#             io: io controller
+#          blkio: blkio controller
+#         memory: memory controller
+#        devices: devices controller
+#           pids: pids controller
+#   bpf-firewall: bpf-firewall controller
+#    bpf-devices: bpf-devices controller
+#             '': no delegation
+#         {OMIT}: no delegation (default)
+#
+# disable_controllers:
+#   - 'cpu'
+#   - 'memory'
+#
+# Variable: disable_controllers | list of str
+#
+# Default: omit (system default).

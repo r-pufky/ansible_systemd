@@ -1,0 +1,16 @@
+---
+# yamllint disable rule:line-length
+- name: 'Default | verify | systemd directory not changed'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Default | verify | systemd directory not changed | snapsnot systemd directory'
+      ansible.builtin.stat:
+        path: '/etc/systemd/system'
+      register: _test_systemd_default_stat
+
+    - name: 'Default | verify | systemd directory not changed  | assert systemd directory same'
+      ansible.builtin.assert:
+        that:
+          - _test_systemd_default_stat == _test_systemd_cache_default_stat
+        fail_msg: '/etc/systemd/system directory modified during role execution.'

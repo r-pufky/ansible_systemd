@@ -1,0 +1,54 @@
+{# [Timer] section heading #}
+{% if 'timer' in systemd %}
+[Timer]
+{% if 'default_dependencies' in systemd.timer %}
+DefaultDependencies={{ systemd.timer.default_dependencies | string | lower }}
+{% endif %}
+{% if 'on_active_sec' in systemd.timer %}
+OnActiveSec={{ systemd.timer.on_active_sec }}
+{% endif %}
+{% if 'on_boot_sec' in systemd.timer %}
+OnBootSec={{ systemd.timer.on_boot_sec }}
+{% endif %}
+{% if 'on_startup_sec' in systemd.timer %}
+OnStartupSec={{ systemd.timer.on_startup_sec }}
+{% endif %}
+{% if 'on_unit_active_sec' in systemd.timer %}
+OnUnitActiveSec={{ systemd.timer.on_unit_active_sec }}
+{% endif %}
+{% if 'on_unit_inactive_sec' in systemd.timer %}
+OnUnitInactiveSec={{ systemd.timer.on_unit_inactive_sec }}
+{% endif %}
+{% if 'on_calendar' in systemd.timer %}
+{% for event in systemd.timer.on_calendar %}
+OnCalendar={{ event }}
+{% endfor %}
+{% endif %}
+{% if 'accuracy_sec' in systemd.timer %}
+AccuracySec={{ systemd.timer.accuracy_sec }}
+{% endif %}
+{% if 'randomized_delay_sec' in systemd.timer %}
+RandomizedDelaySec={{ systemd.timer.randomized_delay_sec }}
+{% endif %}
+{% if 'fixed_random_delay' in systemd.timer %}
+FixedRandomDelay={{ systemd.timer.fixed_random_delay | string | lower }}
+{% endif %}
+{% if 'on_clock_change' in systemd.timer %}
+OnClockChange={{ systemd.timer.on_clock_change | string | lower }}
+{% endif %}
+{% if 'on_timezone_change' in systemd.timer %}
+OnTimezoneChange={{ systemd.timer.on_timezone_change | string | lower }}
+{% endif %}
+{% if 'unit' in systemd.timer %}
+Unit={{ systemd.timer.unit }}
+{% endif %}
+{% if 'persistent' in systemd.timer %}
+Persistent={{ systemd.timer.persistent | string | lower }}
+{% endif %}
+{% if 'wake_system' in systemd.timer %}
+WakeSystem={{ systemd.timer.wake_system | string | lower }}
+{% endif %}
+{% if 'remain_after_elapse' in systemd.timer %}
+RemainAfterElapse={{ systemd.timer.remain_after_elapse | string | lower }}
+{% endif %}
+{% endif %}

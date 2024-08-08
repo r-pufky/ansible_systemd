@@ -1,0 +1,185 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# User/Group Identity
+###############################################################################
+# Set UNIX user for service.
+#
+# User must exist before service is started unless dynamic_user enabled. User
+# supplementary group list from user default group list; additional groups may
+# be configured supplementary_groups.
+#
+# Warnings are generated when constraints are violated to maintain portability.
+#
+# Constraints:
+# * at least 1 character
+# * 31 characters max
+# * first character: [a-z,A-Z,_]
+# * other characters: [a-z,A-Z,0-9,_,-]
+#
+# Values:
+#    {UID}: user ID
+#   {USER}: user name
+#   {OMIT}: root if system service, user if user service (default)
+#
+# Variable: user | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://systemd.io/USER_NAMES
+
+# Set UNIX group for service.
+#
+# Warnings are generated when constraints are violated to maintain portability.
+#
+# Constraints:
+# * at least 1 character
+# * 31 characters max
+# * first character: [a-z,A-Z,_]
+# * other characters: [a-z,A-Z,0-9,_,-]
+#
+# Values:
+#     {GID}: group ID
+#   {GROUP}: group name
+#    {OMIT}: user's default group (default)
+#
+# Variable: group | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://systemd.io/USER_NAMES
+
+# Enable dynamic user and group creation for service?
+#
+# Dynamically create user and group - they will not be added to /etc/passwd or
+# /etc/group, but are managed transiently during runtime. nss-systemd
+# integrates users/groups into system user and group databases. Allocated from
+# the UID/GID range 61184-65519.
+#
+# Automatically enables:
+# * remove_ipc
+# * private_tmp
+# * no_new_privileges
+# * restrict_suid_sgid
+# * protect_system: strict
+# * protect_home: read-only
+#
+# If user and group options are omitted, dynamic user/group is implicitly
+# derived from the unit name. If the unit name without the type suffix
+# qualifies as valid user name it is used directly, otherwise a name
+# incorporating a hash of it is used.
+#
+# Use runtime_directory to assign writable runtime directory to service, owned
+# by dynamic user/group and removed automatically when unit terminated.
+#
+# Use state_directory, cache_directory, logs_directory in order to assign a set
+# of writable directories to service that protects from UID reuse
+# vulnerabilities.
+#
+# If this option is enabled, care should be taken that the unit's processes do
+# not get access to directories outside of these explicitly configured and
+# managed ones. Do not use bind_paths, use caution with AF_UNIX file
+# descriptors (not subject to lifecycle and access guarantees of the service).
+#
+# Incompatible with D-Bus policies.
+#
+# Values:
+#     True: allocate UNIX user and group dynamically when the unit is started,
+#           and released as soon as it is stopped.
+#    False: do not dynamically allocate user and group
+#   {OMIT}: False (default)
+#
+# Variable: dynamic_user | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/nss-systemd.html
+
+# Sets supplementary UNIX groups for service.
+#
+# Extended groups in system group database for user.
+#
+# Values:
+#     {GID}: group ID
+#   {GROUP}: group name
+#    {OMIT}: no supplementary groups (default)
+#
+# Variable: supplementary_groups | list of str
+#
+# Default: omit (system default).
+
+# Set login environment?
+#
+# Values:
+#     True: set $HOME, $LOGNAME, and $SHELL environment variables
+#    False: do not set login environment
+#   {OMIT}: True if user, dynamic_user, pam_name set; False otherwise (default)
+#
+# Variable: set_login_environment | bool
+#
+# Default: omit (system default).
+
+# Set PAM service name.
+#
+# A PAM session handler process named (sd-pam) created and is an immediate
+# child process of the unit's main process while unit active.
+#
+# Not recommended with notify_access: all.
+#
+# Values:
+#   {NAME}: PAM service name to use
+#       '': no PAM session will be opened
+#   {OMIT}: '' (default)
+#
+# Variable: pam_name | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man8/pam.8.html

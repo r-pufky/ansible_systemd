@@ -1,0 +1,569 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Unit] Heading
+###############################################################################
+# Unit conditions section configuration.
+#
+# Encodes information about a process controlled and supervised by systemd.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * COMMAND LINES (service command lines)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#Command%20lines
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+
+###############################################################################
+# Conditions
+###############################################################################
+# Check system on specific architecture.
+#
+# Use 'systemd-analyze' for a complete list of accepted known values.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   native: test architecture system manager itself compiled for
+#      x86: test x86 (32bit) architecture
+#   x86-64: test x86-64 (64bit) architecture
+#      arm: test arm (32bit) architecture
+#    arm64: test arm64 (64bit) architecture
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_architecture | list of str
+#
+# Default: omit (system default).
+
+# Check system firmware type.
+#
+# Useful for implementation of generator tools that convert configuration from
+# an external configuration file format into native unit files. This
+# functionality should not be used in normal units.
+#
+# Values:
+#                                   uefi: matches systems with EFI
+#                            device-tree: matches systems with a device tree
+#        device-tree-compatible({VALUE}): matches systems with a device tree
+#                                         that are compatible with {VALUE}.
+#   smbios-field({FIELD OPERATOR VALUE}): matches systems with a SMBIOS field
+#                                         containing a certain value.
+#                                 {OMIT}: disabled (default)
+#
+# Variable: condition_firmware | list of str
+#
+# Default: omit (system default).
+
+# Check virtual environment / implementation.
+#
+# Only innermost virtual environment is considered. Use systemd-detect-virt for
+# all values and specific implementations.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#            True: test for any virtual environment
+#           False: test for any non-virtual environment
+#   private-users: test for running in user namespace
+#              vm: test for any virtual machine
+#       container: test for any container
+#          {TYPE}: test for virtualization type (systemd-detect-virt) for all
+#                  values and implementations.
+#          {OMIT}: disabled (default)
+#
+# Variable: condition_virtualization | list of str or bool
+#
+# Default: omit (system default).
+
+# Check host match against hostname or machine ID.
+#
+# Special Case:
+#   *: shell style globbing may be used for matching
+#   !: negates test
+#
+# Values:
+#     {HOSTNAME}: hostname string
+#   {MACHINE_ID}: machine ID string
+#         {OMIT}: disabled (default)
+#
+# Variable: condition_host | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man2/gethostname.2.html
+# * https://www.freedesktop.org/software/systemd/man/latest/machine-id.html
+
+# Check kernel command line option is set.
+#
+# Uses /proc/cmdline except when service manager is invoked as payload of a
+# container manager, in which case /proc/1/cmdline is used.
+#
+# Special Case:
+#               !: negates test
+#           {VAR}: check for variable
+#   {VAR}={VALUE}: check for specific assignment
+#
+# Values:
+#   {OPTION}: option specification per Special Case
+#     {OMIT}: disabled (default)
+#
+# Variable: condition_kernel_command_line | list of str
+#
+# Default: omit (system default).
+
+# Check kernel version.
+#
+# Using kernel version string is an unreliable way to determine which features
+# are supported by a kernel, because of the widespread practice of back porting
+# drivers, features, and fixes from newer upstream kernels into older versions
+# provided by distributions.
+#
+# Matched against 'uname -r'.
+#
+# Special Case:
+#    !: negates test
+#
+# Values:
+#                   ^={VERSION}: string equal comparison (=1.0)
+#   ^[<,<=,==,<>,>=,>]{VERSION}: version comparisons
+#                           ^$=: shell glob matching
+#                            '': implied matching against '$='
+#                        {OMIT}: '' (default)
+#
+# Variable: condition_kernel_version | list of str
+#
+# Default: omit (system default).
+
+# Check whether credential passed to service manager.
+#
+# System services may use this to conditionalize services based on credentials
+# passed in. User services may use to conditionalize services based on
+# credentials passed into unit@.service instance belonging to user.
+#
+# Values:
+#   {NAME}: valid credential name
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_credential | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://systemd.io/CREDENTIALS
+
+# Check environment variable is set.
+#
+# Useful for containerized environments or as per-user service manager. Checks
+# service manager itself, not any variables defined with environment or
+# environment_file.
+#
+# Special Case:
+#               !: negates test
+#           {VAR}: check for variable
+#   {VAR}={VALUE}: check for specific assignment
+#
+# Values:
+#   {OPTION}: option specification per Special Case
+#     {OMIT}: disabled (default)
+#
+# Variable: condition_environment | list of str
+#
+# Default: omit (system default).
+
+# Check if security technology is enabled.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#           selinux: selinux MAC
+#          apparmor: apparmor MAC
+#            tomoyo: tomoyo MAC
+#             smack: SMACK MAC
+#               ima: integrity measurement architecture (IMA)
+#             audit: linux audit framework
+#   uefi-secureboot: UEFI secureboot
+#              tpm2: trusted platform module 2.0 (TPM2)
+#               cvm: confidential virtual machine (SEV/TDX)
+#      measured-uki: unified kernel image with PCR 11 measurements per
+#                    systemd-stub.
+#            {OMIT}: disabled (default)
+#
+# Variable: condition_security | list of str
+#
+# Default: omit (system default).
+
+# Check capability exists in service manager.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {CAPABILITY}: capability name
+#         {OMIT}: disabled (default)
+#
+# Variable: condition_capability | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/capabilities.7.html
+
+# Check if on AC power?
+#
+#
+# Values:
+#    True: at least one AC connector is attached or no known AC connectors
+#   False: at least one know AC connector and all are disconnected
+#  {OMIT}: disabled (default)
+#
+# Variable: condition_ac_power | bool
+#
+# Default: omit (system default).
+
+# Check if specified directory requires an update.
+#
+# Triggered when /usr/ mod time newer than timestamp file.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#    /var/: /var/.updated timestamp file location
+#    /etc/: /etc/.updated timestamp file location
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_needs_update | str
+#
+# Default: omit (system default).
+
+# System booting for the first time?
+#
+# For robustness units should order before first-boot-complete.target and pull
+# in passive target with wants. This ensures that in a case of an aborted first
+# boot, these units will be re-run during the next system startup.
+#
+# If systemd.condition_first_boot= specified on kernel command line, it will
+# override the result of this condition check, taking precedence over
+# /etc/machine-id existence checks.
+#
+# Values:
+#     True: system first boot (/etc/ unpopulated when sysetm started)
+#    False: First boot finished (manager finished startup phase)
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_first_boot | bool
+#
+# Default: omit (system default).
+
+# Check for the existence of a file.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path to file
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_path_exists | list of str
+#
+# Default: omit (system default).
+
+# Check if absolute path (with globbing) exists (file or directory).
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path to file or directory (with globbing)
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_path_exists_glob | list of str
+#
+# Default: omit (system default).
+
+# Check if absolute path exists and is a directory.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path to directory
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_path_is_directory | list of str
+#
+# Default: omit (system default).
+
+# Check if absolute path exists and is a symlink.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path to symlink
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_path_is_symbolic_link | list of str
+#
+# Default: omit (system default).
+
+# Check if absolute path exists and is a mount point.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path to mount point
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_path_is_mount_point | list of str
+#
+# Default: omit (system default).
+
+# Check if underlying filesystem of absolute path is readable and writeable.
+#
+# Not mounted read-only.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path (anywhere on underlying file system)
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_path_is_read_write | list of str
+#
+# Default: omit (system default).
+
+# Check if underlying filesystem of path is encrypted using dm-crypt/LUKS.
+#
+# Only covers block-level encryption and not ext4 per-directory encryption. if
+# path resides on a file system on top of a loopback block device, only
+# encryption above loopback device is detected.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path (anywhere on underlying file system)
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_path_is_encrypted | list of str
+#
+# Default: omit (system default).
+
+# Check if absolute path exists and is a non-empty directory.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path to directory
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_directory_not_empty | list of str
+#
+# Default: omit (system default).
+
+# Check if absolute path exists and is a non-empty file.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path to file
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_file_not_empty | list of str
+#
+# Default: omit (system default).
+
+# Check if absolute path exists and is a regular file, and executable.
+#
+# Special Case:
+#   !: negates test
+#
+# Values:
+#   {PATH}: absolute path to file
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_file_is_executable | list of str
+#
+# Default: omit (system default).
+
+# Check if service manager is running as given user.
+#
+# Not useful for system services as the system manager exclusively runs as root
+# user.
+#
+# Values:
+#       UID: User ID
+#    {USER}: User name
+#   @system: user is within the system user range
+#    {OMIT}: disabled (default)
+#
+# Variable: condition_user | str
+#
+# Default: omit (system default).
+
+# Check if service manager is running as real, effective, or auxiliary group.
+#
+# Not useful for system services as the system manager exclusively runs as root
+# user.
+#
+# Values:
+#       UID: Group ID
+#   {GROUP}: Group name
+#    {OMIT}: disabled (default)
+#
+# Variable: condition_group | str
+#
+# Default: omit (system default).
+
+# Check if cgroup controllers are available or if v1/v2 cgroup hierarchy used.
+#
+# If multiple values are used all must exist.
+#
+# Values:
+#       v1: check for v1 legacy hierarchy (no other options)
+#       v2: check for v2 legacy hierarchy (no other options)
+#      cpu: CPU controller
+#       io: IO controller
+#   memory: memory controller
+#     pids: PIDs controller
+#   {OMIT}: disabled (default)
+#
+# Variable: condition_control_group_controller | list of str
+#
+# Default: omit (system default).
+
+# Check if SIZE memory is available.
+#
+# Bare-metal systems use physical memory; containers uses memory assigned.
+#
+# Values:
+#   [{COMPARISON}]{SIZE}: memory SIZE in bytes, optionally prefixed with
+#                         comparison operator (<, <=, =, ==, !=, <>, >=, >).
+#                 {OMIT}: disabled (default)
+#
+# Variable: condition_memory | list of str
+#
+# Default: omit (system default).
+
+# Check if number of CPUs are available via CPU affinity mask.
+#
+# Values:
+#   [{COMPARISON}]{CPU}: number of CPUs, optionally prefixed with comparison
+#                        operator (<, <=, =, ==, !=, <>, >=, >).
+#                {OMIT}: disabled (default)
+#
+# Variable: condition_cpus | list of str
+#
+# Default: omit (system default).
+
+# Check if given CPU feature is available via CPUID.
+#
+# Non i386, x86-64 processors assume no support. Checks leaves 1, 7,
+# 0x80000001, 0x80000007.
+#
+# Values:
+#   {VALUE}: CPU feature string (fpu, vme, de, pse, tsc, msr, pae, mce, cx8,
+#            apic, sep, mtrr, pge, mca, cmov, pat, pse36, clflush, mmx, fxsr,
+#            sse, sse2, ht, pni, pclmul, monitor, ssse3, fma3, cx16, sse4_1,
+#            sse4_2, movbe, popcnt, aes, xsave, osxsave, avx, f16c, rdrand,
+#            bmi1, avx2, bmi2, rdseed, adx, sha_ni, syscall, rdtscp, lm,
+#            lahf_lm, abm, constant_tsc).
+#    {OMIT}: disabled (default)
+#
+# Variable: condition_cpu_feature | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#ConditionCPUFeature=
+
+# Check matching os release.
+#
+# Values:
+#                {KEY}={VALUE}: key equals value
+#               {KEY}!={VALUE}: key not equals value
+#   {VERSION}{OPERATOR}{VALUE}: relative comparison for version parameters (<,
+#                               <=, ==, <>, >=, >).
+#                    $={VALUE}: match with shell wildcards (*,?,[])
+#                   !$={VALUE}: non-match with shell wildcards (*,?,[])
+#                       {OMIT}: disabled (default)
+#
+# Variable: condition_os_release | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/os-release.html
+
+# Check memory pressure <= threshold.
+#
+# 'Full' PSI will be checked first, and if not found 'some' will be checked.
+#
+# Values:
+#                 {#}%: percentage average over last 5 minutes
+#           {#}[%]/{#}: threshold or percentage average over specified
+#                       time limit (kernel time: 10sec, 1min, 5min);
+#                       e.g.: '10%/1min'.
+#   {SLICE}:{#}[%]/{#}: use specific slice unit to check pressure
+#               {OMIT}: disabled (default)
+#
+# Variable: condition_memory_pressure | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/accounting/psi.html
+
+# Check CPU pressure <= threshold.
+#
+# 'Full' PSI will be checked first, and if not found 'some' will be checked.
+#
+# Values:
+#                 {#}%: percentage average over last 5 minutes
+#           {#}[%]/{#}: threshold or percentage average over specified
+#                       time limit (kernel time: 10sec, 1min, 5min);
+#                       e.g.: '10%/1min'.
+#   {SLICE}:{#}[%]/{#}: use specific slice unit to check pressure
+#               {OMIT}: disabled (default)
+#
+# Variable: condition_cpu_pressure | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/accounting/psi.html
+
+# Check IO pressure <= threshold.
+#
+# 'Full' PSI will be checked first, and if not found 'some' will be checked.
+#
+# Values:
+#                 {#}%: percentage average over last 5 minutes
+#           {#}[%]/{#}: threshold or percentage average over specified
+#                       time limit (kernel time: 10sec, 1min, 5min);
+#                       e.g.: '10%/1min'.
+#   {SLICE}:{#}[%]/{#}: use specific slice unit to check pressure
+#               {OMIT}: disabled (default)
+#
+# Variable: condition_io_pressure | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/accounting/psi.html

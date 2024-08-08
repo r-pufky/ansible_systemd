@@ -1,0 +1,240 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Resource Control] Settings
+###############################################################################
+# Unit resource control configuration.
+#
+# Configuration options for resource control of spawned processes. Relies on
+# Linux Control Groups (cgroups) for organizing processes in a hierarchical
+# tree of named groups for the purpose of resource management.
+#
+# Controllers in the cgroup hierarchy are hierarchical, and resource control is
+# realized by distributing resource assignments between siblings in branches
+# of the cgroup hierarchy. There is no need to explicitly enable a cgroup
+# controller for a unit. systemd will instruct the kernel to enable a
+# controller for a given unit when this unit has configuration for a given
+# controller (e.g. cpu_weight enables the cpu controller, tasks_max enable the
+# PIDS controller).
+#
+# In addition, various controllers may be also be enabled explicitly via the
+# memory_accounting, tasks_accounting, io_accounting settings. Because of how
+# the cgroup hierarchy works, controllers will be automatically enabled for all
+# parent units and for any sibling units starting with the lowest level at
+# which a controller is enabled. Units for which a controller is enabled may be
+# subject to resource control even if they don't have any explicit
+# configuration.
+#
+# Options may be added to any systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+# * systemd.slice - slice
+# * systemd.scope - scope
+#
+# Slice units automatically gain a Requires=, After= dependency.
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+###############################################################################
+# IO Accounting and Control
+###############################################################################
+# Enable block I/O accounting.
+#
+# Turning on block I/O accounting for one unit will also implicitly turn it on
+# for all units contained in the same slice, all parent slices, and units
+# within.
+#
+# The system default for this setting may be controlled with
+# DefaultIOAccounting.
+#
+# Values:
+#    False: disable block IO accounting
+#     True: enable block IO accounting
+#   {OMIT}: False (default)
+#
+# Variable: io_accounting | bool
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+
+# Set default overall block I/O weight.
+#
+# Available I/O bandwidth is split up among all units within one slice relative
+# to their block I/O weight. A higher weight means more I/O bandwidth, a lower
+# weight means less.
+#
+# Applies to startup and shutdown phases of system if startup_io_weight is
+# unset.
+#
+# Values:
+#   1-10000: block I/O weight
+#    {OMIT}: 100 (default)
+#
+# Variable: io_weight | int
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#io-interface-files
+
+# Startup and shutdown default overall block I/O weight.
+#
+# Available I/O bandwidth is split up among all units within one slice relative
+# to their block I/O weight. A higher weight means more I/O bandwidth, a lower
+# weight means less.
+#
+# Values:
+#   1-10000: block I/O weight
+#    {OMIT}: 100 (default)
+#
+# Variable: startup_io_weight | int
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#io-interface-files
+
+# Set per device overall block I/O weight.
+#
+# The specified device node should reference a block device that has an I/O
+# scheduler associated, i.e. should not refer to partition or loopback block
+# devices, but to the originating, physical device. When a path to a regular
+# file or directory is specified it is attempted to discover the correct
+# originating device backing the file system of the specified path. This works
+# correctly only for simpler cases, where the file system is directly placed on
+# a partition or physical block device, or where simple 1:1 encryption using
+# dm-crypt/LUKS is used. This discovery does not cover complex storage and in
+# particular RAID and volume management storage devices.
+#
+# Values:
+#   - path: str - path (file or block device)
+#     weight: int - device block I/O weight
+#         Special Case:
+#           1-10000: weight range, higher more I/O bandwidth
+#   {OMIT}: all devices receive a weight of 100 (default)
+#
+# io_device_weight:
+#   - path: '/dev/sda1'
+#     weight: 500
+#
+# Variable: io_device_weight | list of dict
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#io-interface-files
+
+# Set per device overall block I/O read bandwidth maximum limit.
+#
+# This limit is not work-conserving and the executed processes are not allowed
+# to use more even if the device has idle capacity.
+#
+# Values:
+#   - path: str - path (file or block device)
+#     bandwidth: str - SIZE bandwidth limit
+#   {OMIT}: no limit (default)
+#
+# io_read_bandwidth_max:
+#   - path: '/dev/sda1'
+#     bandwidth: 15000
+#
+# Variable: io_read_bandwidth_max | list of dict
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#io-interface-files
+
+# Set per device overall block I/O write bandwidth maximum limit.
+#
+# This limit is not work-conserving and the executed processes are not allowed
+# to use more even if the device has idle capacity.
+#
+# Values:
+#   - path: str - path (file or block device)
+#     bandwidth: str - SIZE bandwidth limit
+#   {OMIT}: no limit (default)
+#
+# io_write_bandwidth_max:
+#   - path: '/dev/sda1'
+#     bandwidth: 15000
+#
+# Variable: io_write_bandwidth_max | list of dict
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#io-interface-files
+
+# Set per device overall block I/O read IOs-Per-Second maximum limit.
+#
+# This limit is not work-conserving and the executed processes are not allowed
+# to use more even if the device has idle capacity.
+#
+# Values:
+#   - path: str - path (file or block device)
+#     iops: str - SIZE IOPs bandwidth limit
+#   {OMIT}: no IOPs limit (default)
+#
+# io_read_iops_max:
+#   - path: '/dev/sda1'
+#     iops: 15000
+#
+# Variable: io_read_iops_max | list of dict
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#io-interface-files
+
+# Set per device overall block I/O write IOs-Per-Second maximum limit.
+#
+# This limit is not work-conserving and the executed processes are not allowed
+# to use more even if the device has idle capacity.
+#
+# Values:
+#   - path: str - path (file or block device)
+#     iops: str - SIZE IOPs bandwidth limit
+#   {OMIT}: no IOPs limit (default)
+#
+# io_write_iops_max:
+#   - path: '/dev/sda1'
+#     iops: 15000
+#
+# Variable: io_write_iops_max | list of dict
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#io-interface-files
+
+# Set per device average target I/O latency.
+#
+# Implies io_accounting: true.
+#
+# Values:
+#   - path: str - path (file or block device)
+#     latency: str - TIME specific latency target
+#   {OMIT}: no limit (default)
+#
+# io_device_latency_target_sec:
+#   - path: '/dev/sda1'
+#     latency: '25ms'
+#
+# Variable: io_device_latency_target_sec | list of dict
+#
+# Default: omit (system default).
+#
+# Reference
+# * https://docs.kernel.org/admin-guide/cgroup-v2.html#io-interface-files

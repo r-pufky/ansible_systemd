@@ -1,0 +1,17 @@
+---
+###############################################################################
+# Create a defined systemd service
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_services.
+
+- name: 'Systemd | load | service {{ systemd.name }}'
+  ansible.builtin.template:
+    src: 'service.j2'
+    dest: '{{ systemd_role_root }}/{{ systemd.name }}.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  when: systemd.state | lower == 'present'
+  notify: 'Handlers | reload systemd'

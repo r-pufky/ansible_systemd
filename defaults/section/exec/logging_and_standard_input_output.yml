@@ -1,0 +1,554 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# Logging and Standard Input/Output
+###############################################################################
+# Set standard input (STDIN).
+#
+# Controls where file descriptor 0 (STDIN) of executed processes is connected.
+#
+# Values:
+#          null: connect to /dev/null (read attempts result in immediate EOF)
+#           tty: connect to TTY from tty_path, executed process becomes
+#                controlling process of terminal. If already controlled by
+#                another process, executed process waits until current
+#                controlling process releases terminal.
+#     tty-force: tty but instead forcefully and immediately become controlling
+#                process of terminal, potentially removing previous controlling
+#                processes from terminal.
+#      tty-fail: tty but fail if terminal already controlled
+#          data: pass data via standard input to executed process. Data
+#                configured via standard_input_text, standard_input_data. File
+#                descriptor is read-only, returning data followed by EOF.
+#   file:{PATH}: connect file system object to standard input. Absolute path to
+#                a regular file, FIFO, or special file. If AF_UNIX socket a
+#                stream socket is connected to it. Useful to connect standard
+#                input of processes to arbitrary system services.
+#        socket: connect to socket acquired via socket activation. Valid in
+#                socket-activated services only, requires relevant socket unit
+#                file to have accept: true, or a single socket. Useful for
+#                compatibility with daemons designed for traditional inetd
+#                socket activation daemon ($LISTEN_FDS and related environment
+#                variables are not passed).
+#     fd:{NAME}: connect to a named file descriptor provided by a socket unit.
+#                At least one socket unit defining specified name must be
+#                provided via sockets option, and file descriptor name may
+#                differ from the name of its containing socket unit. If
+#                multiple matches, first will be used. If no name is specified,
+#                'stdin' is implied ('fd' == 'fd:stdin').
+#   {OMIT}: null (data if standard_input_text, standard_input_data set) (default)
+#
+# Variable: standard_input | str
+#
+# Default: omit (system default).
+
+# Set standard output (STDOUT).
+#
+# Controls where file descriptor 1 (STDOUT) of executed processes is connected.
+#
+# Implicitly gains After= systemd-journald.socket if journal, kmsg,
+# journal+console, kmsg+console. Will be an AF_UNIX stream socket instead of
+# pipe or FIFO that can be reopened. Executing shell scripts
+# 'echo "hello" > /dev/stderr' will not work. Use 'echo "hello" >&2'.
+#
+# Values:
+#          inherit: duplicates file descriptor of standard input
+#             null: connect to /dev/null (everything written will be lost)
+#              tty: connect to TTY from tty_path, if TTY used for output only,
+#                   executed process will not become controlling process of
+#                   terminal, and will not fail or wait for other processes to
+#                   release terminal.
+#          journal: connects to journal, accessible via journalctl. Everything
+#                   written to kmsg implicitly stored in journal.
+#             kmsg: connect to kernel log buffer which is accessible via dmesg,
+#                   and journal. No different from journal if journal daemon
+#                   configured to send all logs to kmsg.
+#  journal+console: journal and copy output to system console
+#     kmsg+console: kmsg and copy output to system console
+#      file:{PATH}: connect file system object to standard output. Absolute
+#                   path to a regular file, FIFO, or special file. If file,
+#                   opened (or created) for writing at beginning of file,
+#                   without truncating; with privileges of user. If standard
+#                   input and output are directed to same file, it is opened
+#                   only once for reading and writing, and duplicated. Useful
+#                   when AF_UNIX socket, as only a single stream connection
+#                   created for both.
+#    append:{PATH}: file:{PATH} but file opened in append mode
+#  truncate:{PATH}: file:{PATH} but truncates file when opened; units with
+#                   multiple command lines the file is reopened and truncated
+#                   for each command line. If truncated while another process
+#                   still has file open and process continues writing, space
+#                   between file pointers may be filled with NUL bytes,
+#                   producing a sparse file. Only useful for where one process
+#                   runs at a time.
+#           socket: connect to socket acquired via socket activation. Valid in
+#                   socket-activated services only, requires relevant socket
+#                   unit file to have accept: true, or a single socket. Useful
+#                   for compatibility with daemons designed for traditional
+#                   inetd socket activation daemon ($LISTEN_FDS and related
+#                   environment variables are not passed).
+#        fd:{NAME}: connect to a named file descriptor provided by socket unit.
+#                   At least one socket unit defining specified name must be
+#                   provided via sockets option, and file descriptor name may
+#                   differ from the name of its containing socket unit. If
+#                   multiple matches, first will be used. If no name is
+#                   specified, 'stdout' is implied ('fd' == 'fd:stdout').
+#           {OMIT}: inherit (if standard_input: tty, tty-force, tty-fail,
+#                   socket, fd:{NAME}); otherwise journal
+#                   (default_standard_output) (default)
+#
+# Variable: standard_output | str
+#
+# Default: omit (system default).
+
+# Set standard error (STDERR).
+#
+# Controls where file descriptor 2 (STDERR) of executed processes is connected.
+#
+# Implicitly gains After= systemd-journald.socket if journal, kmsg,
+# journal+console, kmsg+console. Will be an AF_UNIX stream socket instead of
+# pipe or FIFO that can be reopened. Executing shell scripts
+# 'echo "hello" > /dev/stderr' will not work. Use 'echo "hello" >&2'.
+#
+# Values:
+#          inherit: duplicates file descriptor of standard error
+#             null: connect to /dev/null (everything written will be lost)
+#              tty: connect to TTY from tty_path, if TTY used for output only,
+#                   executed process will not become controlling process of
+#                   terminal, and will not fail or wait for other processes to
+#                   release terminal.
+#          journal: connects to journal, accessible via journalctl. Everything
+#                   written to kmsg implicitly stored in journal.
+#             kmsg: connect to kernel log buffer which is accessible via dmesg,
+#                   and journal. No different from journal if journal daemon
+#                   configured to send all logs to kmsg.
+#  journal+console: journal and copy output to system console
+#     kmsg+console: kmsg and copy output to system console
+#      file:{PATH}: connect file system object to standard error. Absolute
+#                   path to a regular file, FIFO, or special file. If file,
+#                   opened (or created) for writing at beginning of file,
+#                   without truncating; with privileges of user. If standard
+#                   input and output are directed to same file, it is opened
+#                   only once for reading and writing, and duplicated. Useful
+#                   when AF_UNIX socket, as only a single stream connection
+#                   created for both.
+#    append:{PATH}: file:{PATH} but file opened in append mode
+#  truncate:{PATH}: file:{PATH} but truncates file when opened; units with
+#                   multiple command lines the file is reopened and truncated
+#                   for each command line. If truncated while another process
+#                   still has file open and process continues writing, space
+#                   between file pointers may be filled with NUL bytes,
+#                   producing a sparse file. Only useful for where one process
+#                   runs at a time.
+#           socket: connect to socket acquired via socket activation. Valid in
+#                   socket-activated services only, requires relevant socket
+#                   unit file to have accept: true, or a single socket. Useful
+#                   for compatibility with daemons designed for traditional
+#                   inetd socket activation daemon ($LISTEN_FDS and related
+#                   environment variables are not passed).
+#        fd:{NAME}: connect to a named file descriptor provided by socket unit.
+#                   At least one socket unit defining specified name must be
+#                   provided via sockets option, and file descriptor name may
+#                   differ from the name of its containing socket unit. If
+#                   multiple matches, first will be used. If no name is
+#                   specified, 'stderr' is implied ('fd' == 'fd:stderr').
+#           {OMIT}: inherit (default)
+#
+# Variable: standard_error | str
+#
+# Default: omit (system default).
+
+# Set standard input text data.
+#
+# Use this option to embed process input data directly in the unit file.
+#
+# Arbitrary text data to pass via file descriptor 0 (STDIN) to executed
+# processes. No effect unless standard_input: data.
+#
+# standard_input_text and standard_input_data operate on same data buffer, and
+# may be mixed in order to configure both binary and text data for same input
+# stream. Binary data last.
+#
+# Values:
+#   {TEXT}: text data, c-style escaping and %-SPECIFIERS are resolved; multiple
+#           text data will be appended with a newline, leading and trailing
+#           whitespace removed. Use '\n' to insert empty lines.
+#   {OMIT}: no text data (default)
+#
+# Variable: standard_input_text | list of str
+#
+# Default: omit (system default).
+
+# Set standard input binary data.
+#
+# Use this option to embed process input data directly in the unit file.
+#
+# Arbitrary binary data to pass via file descriptor 0 (STDIN) to executed
+# processes. No effect unless standard_input: data.
+#
+# standard_input_text and standard_input_data operate on same data buffer, and
+# may be mixed in order to configure both binary and text data for same input
+# stream. Binary data last.
+#
+# Values:
+#   {DATA}: binary data (base64 encoded)
+#   {OMIT}: no text data (default)
+#
+# Variable: standard_input_data | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://tools.ietf.org/html/rfc2045#section-6.8
+
+# Filter logs by log level.
+#
+# Drop log messages above specified level.
+#
+# Values:
+#     emerg: 0
+#     alert: 1
+#      crit: 2
+#       err: 3
+#   warning: 4
+#    notice: 5
+#      info: 6
+#     debug: 7
+#    {OMIT}: debug (default)
+#
+# Variable: log_level_max | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man3/syslog.3.html
+
+# Set extra log fields.
+#
+# Configures additional log metadata fields to include in all log records
+# generated by processes associated with unit, including systemd. Accepts only
+# valid UTF-8 values.
+#
+# Only available for system services.
+#
+# Values:
+#   - field: str - field name
+#     value: str - value
+#    {OMIT}: disabled (default)
+#
+# Variable: log_extra_fields | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.journal-fields.html
+
+# Log rate limit interval.
+#
+# If time interval log_rate_limit_interval_sec more messages than specified in
+# log_rate_limit_burst are logged, all further messages within interval are
+# dropped until the interval is over. A message about the number of dropped
+# messages is generated.
+#
+# Values:
+#   {TIME}: TIME interval (only s, min, h, ms, us supported)
+#        0: disable
+#   {OMIT}: 30s (default)
+#
+# Variable: log_rate_limit_interval_sec | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html
+
+# Log rate limit burst threshold.
+#
+# If time interval log_rate_limit_interval_sec more messages than specified in
+# log_rate_limit_burst are logged, all further messages within interval are
+# dropped until the interval is over. A message about the number of dropped
+# messages is generated.
+#
+# Values:
+#        #: number of messages per log_rate_limit_interval_sec
+#        0: disable
+#   {OMIT}: 10000 (default)
+#
+# Variable: log_rate_limit_burst | int
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/journald.conf.html
+
+# Filter logs based on regular expression.
+#
+# Regular expression to filter log messages based on MESSAGE= field of
+# structured message.
+#
+# Log messages are tested against denied patterns (~), then against allowed
+# patterns. Denied patterns discard message immediately. Matching against none
+# of allowed pattern are discarded.
+#
+# If no allowed patterns are defined, all messages are processed directly.
+#
+# Only available for system services.
+#
+# Values:
+#    {REGEX}: match regex pattern; prefix with '\x7e' (~) if needed for regex
+#             pattern (\x7efoobar -> ~foobar).
+#   ~{REGEX}: discard matching regex pattern
+#     {OMIT}: 10000 (default)
+#
+# Variable: log_filter_patterns | list of str
+#
+# Default: omit (system default).
+
+# Use specified journal namespace for logging.
+#
+# By default run in journal namespace systemd-journald.service. If used any log
+# data generated is processed by an instance of systemd-journald@.service
+# template unit, which manages specified namespace. Log data is stored in a
+# data store independent from default log namespace's data store.
+#
+# Journal namespaces may not be used for services that need to establish mount
+# points on host.
+#
+# Automatically gains ordering and requirement dependencies on two socket units
+# associated with systemd-journald@.service instance.
+#
+# Log output does not appear in regular journalctl output, unless --namespace=
+# is used.
+#
+# Only available for system services.
+#
+# Values:
+#   {NAMESPACE}: identification string
+#        {OMIT}: use default namespace (default)
+#
+# Variable: log_namespace | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd-journald.service.html
+
+# Set syslog identifier.
+#
+# Set process name syslog tag to prefix log lines sent to logging system or
+# kernel log buffer. Only useful when standard_output or standard_error are set
+# to journal, kmsg, journal+console, kmsg+console; only applies to log messages
+# written to stdout or stderr.
+#
+# Values:
+#   {NAMESPACE}: identification string
+#        {OMIT}: process name (default)
+#
+# Variable: syslog_identifier | str
+#
+# Default: omit (system default).
+
+# Set syslog facility.
+#
+# Set syslog facility identifier to use when logging. Only useful when
+# standard_output or standard_error are set to journal, kmsg, journal+console,
+# kmsg+console; only applies to log messages written to stdout or stderr.
+#
+# Values:
+#       kern: kernel messages
+#       user: user-level messages
+#       mail: mail subsystem
+#     daemon: system daemon messages (default)
+#       auth: security/authorization messages
+#     syslog: messages generated internally by syslogd
+#        lpr: line printer subsystem
+#       news: USENET news subsystem
+#       uucp: UUCP subsystem
+#       cron: clock daemon (cron and at)
+#   authpriv: security/authorization messages (private)
+#        ftp: ftp daemon
+#     local0: local use 0
+#     local1: local use 1
+#     local2: local use 2
+#     local3: local use 3
+#     local4: local use 4
+#     local5: local use 5
+#     local6: local use 6
+#     local7: local use 7
+#     {OMIT}: daemon (default)
+#
+# Variable: syslog_facility | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man3/syslog.3.html
+
+# Set default syslog level.
+#
+# Only useful when standard_output or standard_error are set to journal, kmsg,
+# journal+console, kmsg+console; only applies to log messages written to stdout
+# or stderr.
+#
+# Individual output by processes may be prefixed with a different log level
+# which can be used to override default log level specified here. Disable with
+# syslog_level_prefix
+#
+# Values:
+#     emerg: 0
+#     alert: 1
+#      crit: 2
+#       err: 3
+#   warning: 4
+#    notice: 5
+#      info: 6
+#     debug: 7
+#    {OMIT}: info (default)
+#
+# Variable: syslog_level | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man3/syslog.3.html
+# * https://www.freedesktop.org/software/systemd/man/latest/sd-daemon.html
+
+# Remove syslog prefix?
+#
+# Only useful when standard_output or standard_error are set to journal, kmsg,
+# journal+console, kmsg+console; log lines written by the executed process that
+# are prefixed with a log level.
+#
+# Values:
+#     True: remove log prefix and process at defined log level
+#    False: interpretation disabled (log lines passed as-is)
+#   {OMIT}: True (default)
+#
+# Variable: syslog_level_prefix | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/sd-daemon.html
+
+# Set TTY path.
+#
+# Terminal device node to use if standard input, output, or error are connected
+# to a TTY.
+#
+# Values:
+#   {PATH}: TTY path
+#   {OMIT}: /dev/console (default)
+#
+# Variable: tty_path | str
+#
+# Default: omit (system default).
+
+# Reset TTY?
+#
+# Reset terminal device specified with tty_path before and after execution.
+#
+# Values:
+#     True: reset TTY
+#    False: do not reset TTY
+#   {OMIT}: False (default)
+#
+# Variable: tty_reset | bool
+#
+# Default: omit (system default).
+
+# Hangup TTY?
+#
+# Disconnect all clients which have opened terminal device specified with
+# tty_path before and after execution.
+#
+# Values:
+#     True: hangup TTY
+#    False: do not hangup TTY
+#   {OMIT}: False (default)
+#
+# Variable: tty_v_hangup | bool
+#
+# Default: omit (system default).
+
+# Set TTY rows.
+#
+# Configure the size of the TTY rows specified with tty_path.
+#
+# Values:
+#        #: number of TTY rows
+#   {OMIT}: kernel default (default)
+#
+# Variable: tty_rows | int
+#
+# Default: omit (system default).
+
+# Set TTY columns.
+#
+# Configure the size of the TTY columns specified with tty_path.
+#
+# Values:
+#        #: number of TTY columns
+#   {OMIT}: kernel default (default)
+#
+# Variable: tty_columns | int
+#
+# Default: omit (system default).
+
+# Deallocate TTY before and after execution?
+#
+# If terminal device specified with tty_path is a virtual console terminal, try
+# to deallocate the TTY before and after execution. This ensures that the
+# screen and scrollback buffer is cleared.
+#
+# Values:
+#     True: clear TTY
+#    False: do not clear TTY
+#   {OMIT}: False (default)
+#
+# Variable: tty_v_t_disallocate | bool
+#
+# Default: omit (system default).

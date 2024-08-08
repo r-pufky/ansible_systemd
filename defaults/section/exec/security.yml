@@ -1,0 +1,88 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# Security
+###############################################################################
+# Ensure no new privileges?
+#
+# If SELinux is disabled all file systems mounted with MS_NOSUID flag.
+#
+# Only effects on unit processes (directly/indirectly forked). It has no effect
+# on processes through tools such as at, crontab, systemd-run, or IPC services.
+#
+# Values:
+#     True: ensures that the service process and all its children can never
+#           gain new privileges through execve (setuid, setgid, or filesystem
+#           capabilities). This is the simplest and most effective way to
+#           ensure that a process and its children can never elevate privileges
+#           again.
+#    False: no restrictions
+#   {OMIT}: False (default)
+#
+# Variable: no_new_privileges | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/userspace-api/no_new_privs.html
+
+# Controls the secure bits set for service.
+#
+# Values:
+#                keep-caps: SECBIT_KEEP_CAPS
+#         keep-caps-locked: SECBIT_KEEP_CAPS_LOCKED
+#          no-setuid-fixup: SECBIT_NO_SETUID_FIXUP
+#   no-setuid-fixup-locked: SECBIT_NO_SETUID_FIXUP_LOCKED
+#                   noroot: SECBIT_NOROOT
+#            noroot-locked: SECBIT_NOROOT_LOCKED
+#                   {OMIT}: no secure bits set (default)
+#
+# Variable: secure_bits | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/capabilities.7.html

@@ -1,0 +1,1272 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Exec] Settings
+###############################################################################
+# Unit Execution environment configuration.
+#
+# Automatic dependencies:
+# * Requires= and After= on all mount units required (equivalent to
+#   explicit requires_mounts_for):
+#   * working_directory
+#   * root_directory
+#   * root_image
+#   * runtime_directory
+#   * state_directory
+#   * cache_directory
+#   * logs_directory
+#   * configuration_directory
+# * Requires= and After= on all mount units to access /tmp, /var/tmp; and
+#   After= on systemd-tmpfiles-setup.service:
+#   * private_tmp
+# * After= on systemd-journald.socket:
+#   * standard error or output connected to journal or kmsg
+# * Ordering and Requirement dependencies on systemd-journald@.service:
+#   * log_namespace
+#
+# Options may be added to the following systemd units/variables:
+# * systemd_service - service
+# * systemd_socket - socket
+# * systemd_mount - mount
+# * systemd_swap - swap
+#
+# See reference sections for syntax formats:
+# * SIZE (syntax)
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+# * QUOTING (syntax quoting)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+
+###############################################################################
+# Sandboxing
+###############################################################################
+# Effective way to limit exposure of system towards unit processes. Recommended
+# to turn on as many for each unit as possible without negatively affecting
+# unit.
+#
+# Features are gracefully disabled on systems where underlying security
+# mechanism is not available. User services should enable private_users to
+# enable namespacing features.
+#
+# Options that set directories read-only do not affect programs ability to
+# communicate with AF_UNIX sockets. These options cannot be used to lock down
+# access to IPC services.
+
+# Protect filesystems.
+#
+# Recommend enabling for all long running services, unless for system updates
+# or modifying the operating system in other ways. Same limits as
+# read_only_paths which cannot ensure protection.
+#
+# Use private_devices, protect_kernel_tunables, protect_control_groups to
+# protect filesystems. Ensures any modification of vendor-supplied operating
+# system is prohibited.
+#
+# read_write_paths used to exclude specific directories from being made
+# read-only. state_directory, logs_directory, related directory settings also
+# exclude the specific directories. Setting is implied if dynamic_user set.
+#
+# Values:
+#    False: off
+#     full: mount /usr/, /boot, /efi, /etc/ read-only
+#   strict: entire file system mounted read-only, except API file system /dev/,
+#           /proc/, /sys/.
+#     True: mount /usr/, /boot, /efi read-only
+#   {OMIT}: False (default)
+#
+# Variable: protect_system | bool or str
+#
+# Default: omit (system default).
+
+# Protect home (/home/, /root, /run/user) directories.
+#
+# Recommended enable setting for all long-running services (in particular
+# network-facing), to ensure no access to private user data, unless needed
+# explicitly by service. Same limits as read_only_paths which cannot ensure
+# protection. Setting implied if dynamic_user set.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#    False: off
+#   read-only: read-only directories
+#       tmpfs: use tmpfs and mount directories read-only, useful to hide home
+#              directories not relevant to unit, while still allowing necessary
+#              directories to be made visible when listed in bind_paths or
+#              bind_read_only_paths.
+#        True: inaccessible and empty directories
+#      {OMIT}: default (default)
+#
+# Variable: protect_home | bool or str
+#
+# Default: omit (system default).
+
+# Automatic management of runtime directories.
+#
+# Used for unprivileged daemons that cannot create runtime directories ensure
+# automatically cleaned. More complex configurations should use tmpfiles.
+#
+# Management locations:
+#   System units: /run/
+#     User units: $XDG_RUNTIME_DIR
+#    Environment: $RUNTIME_DIRECTORY
+#
+# Innermost subdirectories:
+# * owned by user and group settings
+# * pre-existing directories will have ownership changed recursively if user
+#   and group are different
+# * pre-existing directories untouched if user and group are same
+# * removed when unit stopped unless runtime_directory_preserve: restart or yes
+# * access adjusted based on runtime_directory_mode
+#
+# Implies bind_paths. Use systemctl clean to manually remove directories.
+#
+# Values:
+#   - path: str - relative path without '..'
+#     link: str - destination path to symlink to {PATH}, created after
+#           bind_paths and temporary_file_system, making ephemeral symlinks
+#           possible. For multiple symlinks repeat {PATH} use different {LINK}.
+#           '' disables.
+#   {OMIT}: disabled (default)
+#
+# runtime_directory: (/run/foo, /run/my_link -> /run/foo)
+#   - path: 'foo'
+#     link: ''
+#   - path: 'foo'
+#     link: 'my_link'
+#
+#
+# Variable: runtime_directory | list of dict
+#
+# Default: omit (system default).
+
+# Automatic management of state directories.
+#
+# Used for unprivileged daemons that cannot create state directories. More
+# complex configurations should use tmpfiles.
+#
+# Management locations:
+#   System units: /var/lib/
+#     User units: $XDG_STATE_HOME
+#    Environment: $STATE_DIRECTORY
+#
+# Innermost subdirectories:
+# * owned by user and group settings
+# * pre-existing directories will have ownership changed recursively if user
+#   and group are different
+# * pre-existing directories untouched if user and group are same
+# * access adjusted based on state_directory_mode
+#
+# Implies bind_paths. Use systemctl clean to manually remove directories.
+#
+# Values:
+#   - path: str - relative path without '..'
+#     link: str - destination path to symlink to {PATH}, created after
+#           bind_paths and temporary_file_system, making ephemeral symlinks
+#           possible. For multiple symlinks repeat {PATH} use different {LINK}.
+#           '' disables.
+#   {OMIT}: disabled (default)
+#
+# state _directory:  (/var/lib/foo, /var/lib/my_link -> /var/lib/foo)
+#   - path: 'foo'
+#     link: 'my_link'
+#   - path: 'foo'
+#     link: ''
+#
+# Variable: state_directory | list of dict
+#
+# Default: omit (system default).
+
+# Automatic management of cache directories.
+#
+# Used for unprivileged daemons that cannot create cache directories. More
+# complex configurations should use tmpfiles.
+#
+# Management locations:
+#   System units: /var/cache/
+#     User units: $XDG_CACHE_HOME
+#    Environment: $CACHE_DIRECTORY
+#
+# Innermost subdirectories:
+# * owned by user and group settings
+# * pre-existing directories will have ownership changed recursively if user
+#   and group are different
+# * pre-existing directories untouched if user and group are same
+# * access adjusted based on cache_directory_mode
+#
+# Implies bind_paths. Use systemctl clean to manually remove directories.
+#
+# Values:
+#   - path: str - relative path without '..'
+#     link: str - destination path to symlink to {PATH}, created after
+#           bind_paths and temporary_file_system, making ephemeral symlinks
+#           possible. For multiple symlinks repeat {PATH} use different {LINK}.
+#           '' disables.
+#   {OMIT}: disabled (default)
+#
+# cache_directory:  (/var/cache/foo, /var/cache/my_link -> /var/cache/foo)
+#   - path: 'foo'
+#     link: 'my_link'
+#   - path: 'foo'
+#     link: ''
+#
+# Variable: cache_directory | list of dict
+#
+# Default: omit (system default).
+
+# Automatic management of logs directories.
+#
+# Used for unprivileged daemons that cannot create logs directories. More
+# complex configurations should use tmpfiles.
+#
+# Management locations:
+#   System units: /var/log/
+#     User units: $XDG_STATE_HOME/log/
+#    Environment: $LOGS_DIRECTORY
+#
+# Innermost subdirectories:
+# * owned by user and group settings
+# * pre-existing directories will have ownership changed recursively if user
+#   and group are different
+# * pre-existing directories untouched if user and group are same
+# * access adjusted based on logs_directory_mode
+#
+# Implies bind_paths. Use systemctl clean to manually remove directories.
+#
+# Values:
+#   - path: str - relative path without '..'
+#     link: str - destination path to symlink to {PATH}, created after
+#           bind_paths and temporary_file_system, making ephemeral symlinks
+#           possible. For multiple symlinks repeat {PATH} use different {LINK}.
+#           '' disables.
+#   {OMIT}: disabled (default)
+#
+# logs_directory:  (/var/log/foo, /var/log/my_link -> /var/log/foo)
+#   - path: 'foo'
+#     link: 'my_link'
+#   - path: 'foo'
+#     link: ''
+#
+# Variable: logs_directory | list of dict
+#
+# Default: omit (system default).
+
+# Automatic management of configuration directories.
+#
+# Used for unprivileged daemons that cannot create configuration directories.
+# More complex configurations should use tmpfiles.
+#
+# Management locations:
+#   System units: /etc/
+#     User units: $XDG_CONFIG_HOME
+#    Environment: $CONFIGURATION_DIRECTORY
+#
+# Innermost subdirectories access adjusted based on
+# configuration_directory_mode.
+#
+# Implies bind_paths. Use systemctl clean to manually remove directories.
+#
+# Values:
+#   {PATH}: str - relative path without '..'
+#   {OMIT}: disabled (default)
+#
+# configuration_directory:  (/etc/foo, /etc/bar)
+#   - 'foo'
+#   - 'bar'
+#
+# Variable: configuration_directory | list of str
+#
+# Default: omit (system default).
+
+# Access mode for runtime_directory.
+#
+# Values:
+#   {OCTAL}: octal access mode
+#    {OMIT}: '0755' (default)
+#
+# Variable: runtime_directory_mode | str
+#
+# Default: omit (system default).
+
+# Access mode for state_directory.
+#
+# Values:
+#   {OCTAL}: octal access mode
+#    {OMIT}: '0755' (default)
+#
+# Variable: state_directory_mode | str
+#
+# Default: omit (system default).
+
+# Access mode for cache_directory.
+#
+# Values:
+#   {OCTAL}: octal access mode
+#    {OMIT}: '0755' (default)
+#
+# Variable: cache_directory_mode | str
+#
+# Default: omit (system default).
+
+# Access mode for logs_directory.
+#
+# Values:
+#   {OCTAL}: octal access mode
+#    {OMIT}: '0755' (default)
+#
+# Variable: logs_directory_mode | str
+#
+# Default: omit (system default).
+
+# Access mode for configuration_directory.
+#
+# Values:
+#   {OCTAL}: octal access mode
+#    {OMIT}: '0755' (default)
+#
+# Variable: configuration_directory_mode | str
+#
+# Default: omit (system default).
+
+# Preserve runtime_directory when service stops?
+#
+# Values:
+#      True: directories not removed
+#   restart: preserve directories on automatic and manual restarts
+#     False: always removed directories (default)
+#    {OMIT}: False (default)
+#
+# Variable: runtime_directory_preserve | bool or str
+#
+# Default: omit (system default).
+
+# Set timeout clean-up operation requested through systemctl clean.
+#
+# Clean operation forcibly aborted when the timeout is reached, potentially
+# leaving resources on disk.
+#
+# Values:
+#     {TIME}: TIME clean up timeout
+#   infinity: no timeout
+#     {OMIT}: infinity (default)
+#
+# Variable: timeout_clean_sec | str
+#
+# Default: omit (system default).
+
+# Read write access paths within namespace.
+#
+# Nest read_write_paths inside of read_only_paths to provide writable
+# subdirectories within read-only directories. Allows write access if
+# protect_system: strict used. Does not override superblock read-only.
+#
+# Will disconnect propagation of mounts from unit processes to host.
+# Propagation from host to unit will result in unmodified mounts created in
+# unit namespace: writable mounts appearing on host will be writable in unit
+# namespace too, even when propagated below read_only_paths.
+#
+# Paths containing symlinks are resolved relative root_directory or root_image.
+#
+# Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
+# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#    {PATH}: access path
+#   -{PATH}: access path ignore errors if not existing (specify before +{PATH})
+#   +{PATH}: access path relative to root_directory or root_image (specify
+#            after -{PATH}).
+#    {OMIT}: no access paths (default)
+#
+# Variable: read_write_paths | list of str
+#
+# Default: omit (system default).
+
+# Read only access paths within namespace.
+#
+# Writing refused even if usual file access controls permit. Nest
+# read_write_paths inside of read_only_paths to provide writable
+# subdirectories within read-only directories.
+#
+# Will disconnect propagation of mounts from unit processes to host.
+# Propagation from host to unit will result in unmodified mounts created in
+# unit namespace: writable mounts appearing on host will be writable in unit
+# namespace too, even when propagated below read_only_paths.
+#
+# Paths containing symlinks are resolved relative root_directory or root_image.
+#
+# Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
+# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#    {PATH}: access path
+#   -{PATH}: access path ignore errors if not existing (specify before +{PATH})
+#   +{PATH}: access path relative to root_directory or root_image (specify
+#            after -{PATH}).
+#    {OMIT}: no access paths (default)
+#
+# Variable: read_only_paths | list of str
+#
+# Default: omit (system default).
+
+# Inaccessible access paths within namespace.
+#
+# Paths inaccessible for processes inside namespace along with everything below
+# them in file system hierarchy. Not possible to nest read_write_paths,
+# read_only_paths, bind_paths, bind_read_only_paths inside it.
+# temporary_file_system is more flexible.
+#
+# Will disconnect propagation of mounts from unit processes to host.
+# Propagation from host to unit will result in unmodified mounts created in
+# unit namespace: writable mounts appearing on host will be writable in unit
+# namespace too, even when propagated below read_only_paths.
+#
+# Paths containing symlinks are resolved relative root_directory or root_image.
+#
+# Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
+# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#    {PATH}: access path
+#   -{PATH}: access path ignore errors if not existing (specify before +{PATH})
+#   +{PATH}: access path relative to root_directory or root_image (specify
+#            after -{PATH}).
+#    {OMIT}: no access paths (default)
+#
+# Variable: inaccessible_paths | list of str
+#
+# Default: omit (system default).
+
+# Executable access paths within namespace.
+#
+# Files in no_exec_paths are not executable even if file access controls permit
+# this. Nest exec_paths inside of no_exec_paths in order to provide execution
+# in non-executable directories.
+#
+# Paths inaccessible for processes inside namespace along with everything below
+# them in file system hierarchy. Not possible to nest read_write_paths,
+# read_only_paths, bind_paths, bind_read_only_paths inside it.
+# temporary_file_system is more flexible.
+#
+# Will disconnect propagation of mounts from unit processes to host.
+# Propagation from host to unit will result in unmodified mounts created in
+# unit namespace: writable mounts appearing on host will be writable in unit
+# namespace too, even when propagated below read_only_paths.
+#
+# Paths containing symlinks are resolved relative root_directory or root_image.
+#
+# Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
+# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#    {PATH}: access path
+#   -{PATH}: access path ignore errors if not existing (specify before +{PATH})
+#   +{PATH}: access path relative to root_directory or root_image (specify
+#            after -{PATH}).
+#    {OMIT}: no access paths (default)
+#
+# Variable: exec_paths | list of str
+#
+# Default: omit (system default).
+
+# Executable access paths within namespace.
+#
+# Files in no_exec_paths are not executable even if file access controls permit
+# this. Nest exec_paths inside of no_exec_paths in order to provide execution
+# in non-executable directories.
+#
+# Paths inaccessible for processes inside namespace along with everything below
+# them in file system hierarchy. Not possible to nest read_write_paths,
+# read_only_paths, bind_paths, bind_read_only_paths inside it.
+# temporary_file_system is more flexible.
+#
+# Will disconnect propagation of mounts from unit processes to host.
+# Propagation from host to unit will result in unmodified mounts created in
+# unit namespace: writable mounts appearing on host will be writable in unit
+# namespace too, even when propagated below read_only_paths.
+#
+# Paths containing symlinks are resolved relative root_directory or root_image.
+#
+# Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
+# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#    {PATH}: access path
+#   -{PATH}: access path ignore errors if not existing (specify before +{PATH})
+#   +{PATH}: access path relative to root_directory or root_image (specify
+#            after -{PATH}).
+#    {OMIT}: no access paths (default)
+#
+# Variable: no_exec_paths | list of str
+#
+# Default: omit (system default).
+
+# Mount points for temporary file systems (tmpfs).
+#
+# New file system namespace set and temporary file system mounted on each mount
+# point (default nodev,strictatime,mode=0755).
+#
+# Useful to hide files or directories not relevant to processes invoked by unit
+# while necessary files or directories can be still accessed by combining with
+# bind_paths or bind_read_only_paths.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#   - mount: str - tmpfs mount point
+#     options: list of str - mount options
+#   {OMIT}: no tmpfs mounts (default)
+#
+# temporary_file_system:
+#   - path: '/var'
+#     options:
+#       - 'nodev'
+#       - 'strictatime'
+#       - 'mode=0755'
+#       - 'size=10%'
+#
+# Variable: temporary_file_system | list of dict
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://manpages.debian.org/bookworm/mount/mount.8.en.html
+
+# Mount /tmp and /var/tmp/ in private namespace?
+#
+# New file system namespace set and mounts private /tmp/ and /var/tmp/ inside
+# that are not shared by processes outside of namespace. Makes sharing between
+# processes via /tmp/ or /var/tmp/ impossible. Implied if dynamic_user set.
+# Adds Requires=, After= dependencies on units required for /tmp and /var/tmp,
+# after systemd-tmpfile-setup.service.
+#
+# Share private tmp between services using joins_namespace_of (implied if
+# dynamic_user set.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: enable private tmp; all files created are removed on service stop
+#    False: disable private tmp
+#   {OMIT}: False (default)
+#
+# Variable: private_tmp | bool
+#
+# Default: omit (system default).
+
+# Enable private physical devices?
+#
+# Installs system call filter blocking low-level I/O system calls grouped in
+# @raw-io, removes CAP_MKNOD, CAP_SYS_RAWIO, sets device_policy: closed. New
+# /dev/ is read-only and noexec.
+#
+# Disables mount propagation for service to host (host -> server still works).
+# Consider device_allow instead for accessing some system resources.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: create new /dev/ mount, with API pseudo devices (/dev/null,
+#           /dev/zero, /dev/random, pseudo TTYs); no physical devices, system
+#           memory, system ports, and others. Disables physical device access.
+#    False: disable private devices
+#   {OMIT}: False (default)
+#
+# Variable: private_devices | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+
+# Enable private network?
+#
+# When used on a socket unit any sockets bound on behalf of this unit will be
+# bound within a private network namespace.
+#
+# Implies private_mounts unless explicitly disabled (/sys remounted to new
+# network namespace).
+#
+# Share private network between services using joins_namespace_of.
+#
+# Disconnects all socket families, including AF_NETLINK, AF_UNIX. Device
+# configuration events received from systemd-udevd.service are not delivered.
+# Abstract socket namespace will become unavailable (file system sockets will
+# continue to work).
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: create new network namespace with only loopback 'lo'. No other
+#           network devices available. Disables network access.
+#    False: disable private network
+#   {OMIT}: False (default)
+#
+# Variable: private_network | bool
+#
+# Default: omit (system default).
+
+# Absolute path to linux network namespace pseudo-file.
+#
+# Processes added to network namespace referenced by path. Must point to valid
+# namespace file at fork moment.
+#
+# When used on a socket unit any sockets bound on behalf of this unit will be
+# bound within a private network namespace.
+#
+# Implies private_mounts unless explicitly disabled (/sys remounted to new
+# network namespace).
+#
+# If used private_network has no effect. If used with joins_namespace_of it
+# only has an effect if started before any units that have private_network
+# network_namespace_path.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#   {PATH}: absolute path to linux network namespace pseudo-file
+#           (/proc/$PID/ns/net, bind mount, or symlink).
+#   {OMIT}: default (default)
+#
+# Variable: network_namespace_path | str
+#
+# Default: omit (system default).
+
+# Enable private IPCs?
+#
+# Each IPC namespace has its own set of System V IPC identifiers and its own
+# POSIX message queue file system. This is useful to avoid name clash of IPC
+# identifiers. IPC namespace only effects SysV IPC (legacy) and POSIX message
+# queues (AF_UNIX/SOCK_SEQPACKET sockets are a better replacement). IPC
+# namespace has no effect on POSIX shared memory.
+#
+# Share private IPCs between services using joins_namespace_of.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: create new IPC namespace
+#    False: use default IPC namespace
+#   {OMIT}: False (default)
+#
+# Variable: private_ipc | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/ipc_namespaces.7.html
+
+# Absolute path to Linux IPC namespace pseudo-file.
+#
+# Add network namespace referenced by that path.  Must point to valid namespace
+# file at fork moment.
+#
+# If used private_ipc has no effect. If used with joins_namespace_of it
+# only has an effect if started before any units that have private_ipc or
+# ipc_namespace_path.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#   {PATH}: absolute path to Linux IPC namespace pseudo-file
+#           (/proc/$PID/ns/ipc, bind mount, or symlink).
+#   {OMIT}: default (default)
+#
+# Variable: ipc_namespace_path | str
+#
+# Default: omit (system default).
+
+# Enable kernel samepage merging (KSM)?
+#
+# KSM is a memory-saving de-duplication feature. Anonymous memory pages with
+# identical content can be replaced by a single write-protected page. This
+# feature should only be enabled for jobs that share the same security domain.
+#
+# Values:
+#     True: enable KSM
+#    False: disable KSM
+#   {OMIT}: False (default)
+#
+# Variable: MemoryKSM | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://docs.kernel.org/admin-guide/mm/ksm.html
+
+# Enable private users?
+#
+# Sets new user namespace with a minimal user and group mapping, that maps root
+# user and group and unit user and group to themselves; everything else maps to
+# nobody user and group. All unit processes are run without privileges on host
+# user namespace. Unit will have no process capabilities on host user
+# namespace, but full capabilities within service user namespace. no additional
+# capabilities may be set; capability_* settings will only affect user service.
+#
+# Creates an effective sandbox environment (securely detach user and group
+# databases). All files, directories, processes, IPC objects and other
+# resources owned by users/groups not equaling root or unit user will stay
+# visible from within the unit but appear owned by nobody user and group.
+#
+# Per-user service manager instances do not map root user and group unless user
+# is root. User namespace set before other namespaces. Using private_users with
+# other namespaces enables use of features not normally supported by per-user
+# service manager instances.
+#
+# Useful with root_directory, root_image.
+#
+# Values:
+#     True: enable private users
+#    False: disable private users
+#   {OMIT}: False (default)
+#
+# Variable: private_users | bool
+#
+# Default: omit (system default).
+
+# Enable hostname (UTS) protection?
+#
+# Create new UTS namespace and disable hostname, domain name changes. Changes
+# no longer propagate from host to service. Not suitable for services
+# monitoring system hostname changes.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: enable protect hostname (new UTS namespace, no hostname, domain
+#           name changes).
+#    False: disable protect hostname
+#   {OMIT}: False (default)
+#
+# Variable: protect_hostname | bool
+#
+# Default: omit (system default).
+
+# Enable clock protection?
+#
+# Effectively /dev/rtc0, /dev/rtc1, etc are made read-only to the service.
+# Recommend enabling for services that do not modify clock or check its state.
+#
+# Removes CAP_SYS_TIME, CAP_WAKE_ALARM from capability bounding set, installs
+# system call filter to block set clock calls, implies
+# device_allow: ['char-rtc', 'r'].
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: disable changes to hardware and system clock
+#    False: enable changes to hardware and system clock
+#   {OMIT}: False (default)
+#
+# Variable: protect_clock | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+
+# Enable kernel tunables protection?
+#
+# Tunable kernel variables only usually initialized at boot-time. Few services
+# need to write to these. Recommend enabling for most services.
+#
+# Kernel variables in /proc/sys/, /sys/, /proc/sysrq-trigger,
+# /proc/latency_stats, /proc/acpi, /proc/timer_stats, /proc/fs, /proc/irq are
+# made read-only; and /proc/kallsyms, /proc/kcore are inaccessible.
+#
+# Use inaccessible_paths to make relevant IPC file system objects inaccessible.
+#
+# Implies mount_api_vfs.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: enable kernel tunables protection
+#    False: disable kernel tunables protection
+#   {OMIT}: False (default)
+#
+# Variable: protect_kernel_tunables | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/sysctl.d.html
+
+# Enable kernel module protection?
+#
+# Enables module load/unload to be turned off. Explicit module loading will be
+# denied. Recommend enabling for services not needing special file systems or
+# extra kernel modules to work.
+#
+# Removes CAP_SYS_MODULE capability bounding set, installs system call filter
+# blocking module system calls, and /usr/lib/modules is inaccessible.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: enable kernel tunables protection
+#    False: disable kernel tunables protection
+#   {OMIT}: False (default)
+#
+# Variable: protect_kernel_modules | bool
+#
+# Default: omit (system default).
+
+# Enable kernel logs protection?
+#
+# Denies access to kernel log ring buffer. Recommend enabling for services not
+# needing to read or write to kernel log ring buffer.
+#
+# Removes CAP_SYSLOG from capability bounding set, installs system call filter
+# blocking syslog system call (not syslog userspace logging), /dev/kmsg,
+# /proc/kmsg made inaccessible.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: enable kernel logs protection
+#    False: disable kernel logs protection
+#   {OMIT}: False (default)
+#
+# Variable: protect_kernel_logs | bool
+#
+# Default: omit (system default).
+
+# Enable control group protection?
+#
+# Linux Control Groups (cgroups) via /sys/fs/cgroup/ made read-only. No service
+# should require write access to control groups unless container manager.
+# Recommend enabling for most services.
+#
+# mount_api_vfs implied.
+#
+# Only available for system services.
+#
+# Values:
+#     True: enable control group protection
+#    False: disable control group protection
+#   {OMIT}: False (default)
+#
+# Variable: protect_control_groups | bool
+#
+# Default: omit (system default).
+
+# Allow socket address families.
+#
+# Use to limit exposure of processes to remote access, via exotic and sensitive
+# network protocols. AF_UNIX address family should be included in allow list as
+# it is frequently used for local communication (including syslog).
+#
+# Allow set of socket address families via socket system call. Sockets passed
+# into the process by other means are unaffected. Sockets created with
+# socketpair are unaffected. No effect on 32-bit x86, s390, s390x, mips,
+# mips-le, ppc, ppc-le, ppc64, ppc64-le.
+#
+# Recommend disabling alternative service ABIs to prevent circumvention,
+# combine with system_call_architectures: native or similar.
+#
+#
+# Values:
+#   {SOCKET}: socket name (AF_UNIX, AF_INET, AF_INET6, etc)
+#       none: deny all address families
+#         '': allow all address families (default)
+#     {OMIT}: '' (default)
+#
+# Variable: restrict_address_families_allow | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man2/socket.2.html
+
+# Deny socket address families.
+#
+# Use to limit exposure of processes to remote access, via exotic and sensitive
+# network protocols. AF_UNIX address family should be included in allow list as
+# it is frequently used for local communication (including syslog).
+#
+# Allow set of socket address families via socket system call. Sockets passed
+# into the process by other means are unaffected. Sockets created with
+# socketpair are unaffected. No effect on 32-bit x86, s390, s390x, mips,
+# mips-le, ppc, ppc-le, ppc64, ppc64-le.
+#
+# Recommend disabling alternative service ABIs to prevent circumvention,
+# combine with system_call_architectures: native or similar.
+#
+#
+# Values:
+#   {SOCKET}: socket name (AF_UNIX, AF_INET, AF_INET6, etc)
+#       none: allow all address families
+#         '': allow all address families (default)
+#     {OMIT}: '' (default)
+#
+# Variable: restrict_address_families_deny | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man2/socket.2.html
+
+# Enable filesystem access.
+#
+# Filesystems service can open files on.
+#
+# Use systemd-analyze filesystems to get list of file systems.
+#
+# Special Case:
+#          @basic-api: basic filesystem API
+#      @auxiliary-api: auxiliary filesystem API
+#       @common-block: common block device filesystems
+#   @historical-block: historical block device filesystems
+#            @network: well-known network filesystems
+#     @privileged-api: privileged filesystem API
+#          @temporary: temporary filesystems: tmpfs, ramfs
+#              @known: all known filesystems defined by kernel based on systemd
+#                      version.
+#
+# Values:
+#   {FILESYSTEM}: filesystem name (ext4, tmpfs, etc)
+#             '': no restrictions (default)
+#         {OMIT}: '' (default)
+#
+# restrict_file_systems_allow: ['@temporary', 'ext4']
+#
+# Variable: restrict_file_systems_allow | list of str
+#
+# Default: omit (system default).
+
+# Deny filesystem access.
+#
+# Filesystems service cannot open files on.
+#
+# Use systemd-analyze filesystems to get list of file systems.
+#
+# Special Case:
+#          @basic-api: basic filesystem API
+#      @auxiliary-api: auxiliary filesystem API
+#       @common-block: common block device filesystems
+#   @historical-block: historical block device filesystems
+#            @network: well-known network filesystems
+#     @privileged-api: privileged filesystem API
+#          @temporary: temporary filesystems: tmpfs, ramfs
+#              @known: all known filesystems defined by kernel based on systemd
+#                      version.
+#
+# Values:
+#   {FILESYSTEM}: filesystem name (ext4, tmpfs, etc)
+#             '': no restrictions (default)
+#         {OMIT}: '' (default)
+#
+# restrict_file_systems_deny: ['@temporary', 'ext4']
+#
+# Variable: restrict_file_systems_deny | list of str
+#
+# Default: omit (system default).
+
+# Allow linux namespaces.
+#
+# Allow access to linux namespaces; limits access to unshare, clone, setns.
+#
+# Only supported on x86, x86-64, mips, mips-le, mips64, mips64-le, mips64-n32,
+# mips64-le-n32, ppc64, ppc64-le, s390, s390x; disabled otherwise.
+#
+# Values:
+#           True: prohibit any kind of namespace access
+#    {NAMESPACE}: namespace type identifier
+#                     Values:
+#                       cgroup: cgroup root directory
+#                          ipc: sysv IPC, POSIX message queues
+#                          net: network devices, stacks, ports
+#                          mnt: mount points
+#                          pid: process IDs
+#                         user: user and group IDs
+#                          uts: hostname, NIS domain name
+#          False: no restrictions on namespace creation and switching (default)
+#         {OMIT}: False (default)
+#
+# Variable: restrict_namespaces_allow | bool or list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/namespaces.7.html
+
+# Deny linux namespaces.
+#
+# Deny access to linux namespaces; limits access to unshare, clone, setns.
+#
+# Only supported on x86, x86-64, mips, mips-le, mips64, mips64-le, mips64-n32,
+# mips64-le-n32, ppc64, ppc64-le, s390, s390x; disabled otherwise.
+#
+# Values:
+#    {NAMESPACE}: namespace type identifier
+#                     Values:
+#                       cgroup: cgroup root directory
+#                          ipc: sysv IPC, POSIX message queues
+#                          net: network devices, stacks, ports
+#                          mnt: mount points
+#                          pid: process IDs
+#                         user: user and group IDs
+#                          uts: hostname, NIS domain name
+#         {OMIT}: allow all (default)
+#
+# Variable: restrict_namespaces_deny | list of str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/namespaces.7.html
+
+# Lock personality?
+#
+# Used to improve security, because odd personality emulations may be poorly
+# tested and source of vulnerabilities.
+#
+# Values:
+#     True: lock down personality system call; kernel execution domain may not
+#           change from default or personality: specified.
+#    False: do not lock down (default)
+#   {OMIT}: False (default)
+#
+# Variable: lock_personality | bool
+#
+# Default: omit (system default).
+
+# Deny writable and executable memory mappings?
+#
+# Improve service security by making it harder to change running code
+# dynamically. Incompatible with dynamic runtime code generation: JIT,
+# executable stacks, code 'trampoline' feature of various C compilers.
+#
+# Add system call filter (or prctl kernel check) rejecting:
+# * mmap with PROT_EXEC and PROT_WRITE set
+# * mprotect, pkey_mprotect with PROT_EXEC set
+# * shmat with SHM_EXEC set
+#
+# Protection can be bypassed if service can write to filesyystem not mounted
+# with noexec; use inaccessible_paths and system_call_filter_exclude:
+# ['memfd_create']. shmat protection is not available on x86. Turn off
+# alternative service ABIs, recommended use with system_call_architectures:
+# native or similar.
+#
+# Values:
+#     True: prohibit attempts to create memory mappings that are writable and
+#           executable at same time, or change existing memory mappings to
+#           become executable, or mapping shared memory segments as executable.
+#    False: do not prohibit (default)
+#   {OMIT}: False (default)
+#
+# Variable: memory_deny_write_execute | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# *
+
+# Disable realtime scheduling?
+#
+# Restrict access to realtime task scheduling policies (SCHED_FIFO, SCHED_RR,
+# SCHED_DEADLINE, etc). Realtime scheduling policies may be used to monopolize
+# CPU time for longer periods of time and may trigger Denial-of-Service.
+#
+# Recommend disabling realtime scheduling to services requiring it.
+#
+# Values:
+#     True: disable realtime scheduling
+#    False: enable realtime scheduling (default)
+#   {OMIT}: False (default)
+#
+# Variable: restrict_realtime | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/sched.7.html
+
+# Disable set-user-ID (SUID) or set-group-ID (SGID)?
+#
+# SUID/SGID bits are mechanisms to elevate privileges, and allow users to
+# acquire the identity of other users. Recommend disabling SUID/SGID to
+# services requiring it.
+#
+# Restricts marking of any type of file system object with these bits,
+# including both regular files and directories.
+#
+# Implied if dynamic_user set.
+#
+# Values:
+#     True: disable SUID, SGID
+#    False: enable SUID, SGID (default)
+#   {OMIT}: False (default)
+#
+# Variable: restrict_suid_sgid | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# *
+
+# Remove IPC objects when stopped?
+#
+# Remove all System V and POSIX IPC objects owned by unit user and group when
+# stopped. Only works if user, group, or dynamic_user used.
+#
+# It has no effect on IPC objects owned by the root user. Removes System V
+# semaphores, as well as System V and POSIX shared memory segments and message
+# queues. If multiple units use the same user or group the IPC objects are
+# removed when the last of these units is stopped.
+#
+# Implied if dynamic_user set.
+#
+# Only available for system services.
+#
+# Values:
+#     True: remove IPC objects
+#    False: keep IPC objects (default)
+#   {OMIT}: False (default)
+#
+# Variable: remove_ipc | bool
+#
+# Default: omit (system default).
+
+# Use private filesystem mounts?
+#
+# File system namespaces are set up individually for each process forked off by
+# service manager. Mounts established in namespace of processes created by
+# exec_start_pre and cleaned up automatically on exit; will not be available to
+# subsequent processes forked off from exec_start (and other exec_*). Useful if
+# no other namespacing options are used.
+#
+# For each process:
+# * create new CLONE_NEWNS namespace
+# * all existing mounts are remounted to MS_SLAVE (disables propagation from
+#   service -> host, leaving host -> service).
+# * mounts are remounted again with mount_flags.
+#
+# joins_namespace_of does not permit sharing kernel mount namespaces between
+# units, it only enables sharing of the /tmp/ and /var/tmp/ directories.
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#     True: run unit processes in private file system (mount) namespace with
+#           all mount propagation towards host main file system namespace
+#           disabled (any file system mount points established or removed will
+#           be private to process and not visible to host). Mount points
+#           established or removed on host will propagate to unit processes.
+#    False: do not use private mounts (default)
+#   {OMIT}: False (default)
+#
+# Variable: private_mounts | bool
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man7/mount_namespaces.7.html
+
+# Set mount propagation from other system namespaces.
+#
+# Controls final propagation setting in effect on all mount points of the file
+# system namespace created for each process of this unit.
+#
+# Use higher level file system namespacing options (like private_mounts).
+#
+# Only available for system services, or per-user services with private_users
+# implicitly enabled (requires unprivileged user namespaces support
+# sysctl kernel.unprivileged_userns_clone=1).
+#
+# Values:
+#    shared: make mount shared, mount/unmount events immediately under this
+#            mount will propagate to other mounts that are members of this
+#            mount's peer group. Propagation here means the same mount/unmount
+#            will automatically occur under all other mounts in peer group.
+#            Mount/unmount events that take place under peer mounts will
+#            propagate to this mount.
+#
+#            Other file system namespacing unit settings will implicitly
+#            disable mount and unmount propagation from unit processes towards
+#            host by changing propagation setting of all mount points in the
+#            unit's file system namespace to slave first. Setting this option
+#            to shared does not reestablish propagation in that case.
+#
+#     slave: convert shared mount that is a member of a peer group containing
+#            other members to a slave mount. If shared mount is a member of a
+#            peer group that contains no other members, convert it to a private
+#            mount. Otherwise, the propagation type of the mount is left
+#            unchanged.
+#
+#            Mount/unmount events propagate into this mount from master shared
+#            peer group of which it was formerly a member. Mount/unmount events
+#            under this mount do not propagate to any peer.
+#
+#            A mount can be the slave of another peer group while at the same
+#            time sharing mount and unmount events with a peer group of which
+#            it is a member.
+#   private: make mount private, mount/unmount events do not propagate into or
+#            out of this mount. It is not recommended as temporary mounts of
+#            host will stay mounted and indefinitely busy in forked off
+#            processes.
+#        '': If file system namespaces are enabled through another file system
+#            namespace unit setting, apply slave first, then shared;
+#            propagation from unit's processes to host is turned off.
+#    {OMIT}: '' (default)
+#
+# Variable: mount_flags | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man2/mount.2.html

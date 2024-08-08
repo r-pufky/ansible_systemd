@@ -1,0 +1,14 @@
+---
+###############################################################################
+# Remove a defined systemd service
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_services.
+
+- name: 'Systemd | unload | service {{ systemd.name }}'
+  ansible.builtin.file:
+    dest: '{{ systemd_role_root }}/{{ systemd.name }}.service'
+    state: 'absent'
+  when: systemd.state | lower == 'absent'
+  notify: 'Handlers | reload systemd'
