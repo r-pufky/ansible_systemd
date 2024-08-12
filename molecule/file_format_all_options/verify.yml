@@ -21,7 +21,6 @@
           - not _test_systemd_service_all_options.changed
         fail_msg: '/etc/systemd/system/reboot.service is not in expected format: {{ _test_systemd_service_all_options.diff }}.'
 
-
 - name: 'File format all options | verify | timer file format'
   hosts: 'all'
   gather_facts: false

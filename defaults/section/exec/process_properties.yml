@@ -430,7 +430,7 @@
 #   {OCTAL}: umask octal
 #    {OMIT}: '0022' (default)
 #
-# Variable: umask | str
+# Variable: u_mask | str
 #
 # Default: omit (system default).
 #

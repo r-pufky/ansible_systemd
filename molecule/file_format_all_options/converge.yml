@@ -243,7 +243,7 @@
               limit_nice: {soft: 'infinity', hard: 'infinity'}
               limit_rtprio: {soft: 'infinity', hard: ''}
               limit_rttime: {soft: 'infinity', hard: ''}
-              umask: '0022'
+              u_mask: '0022'
               coredump_filter: ['private-anonymous', 'shared-anonymous']
               keyring_mode: 'inherit'
               oom_score_adjust: 1000

@@ -183,8 +183,8 @@ LimitRTPRIO={{ systemd.exec.limit_rtprio.soft }}{% if systemd.exec.limit_rtprio.
 {% if 'limit_rttime' in systemd.exec %}
 LimitRTTIME={{ systemd.exec.limit_rttime.soft }}{% if systemd.exec.limit_rttime.hard | length > 0 %}:{{ systemd.exec.limit_rttime.hard }}{% endif +%}
 {% endif %}
-{% if 'umask' in systemd.exec %}
-UMask={{ systemd.exec.umask }}
+{% if 'u_mask' in systemd.exec %}
+UMask={{ systemd.exec.u_mask }}
 {% endif %}
 {% if 'coredump_filter' in systemd.exec %}
 {% for capability in systemd.exec.coredump_filter %}
