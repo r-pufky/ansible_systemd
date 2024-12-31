@@ -138,7 +138,6 @@
 # Reference:
 # * https://man7.org/linux/man-pages/man3/errno.3.html
 
-
 # List of architecture identifiers to include in system call filters.
 #
 # Processes only permitted to call native system calls, and system calls of

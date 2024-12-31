@@ -7,9 +7,11 @@
 #   systemd: dict containing one element from systemd_timers.
 
 - name: 'Systemd | enable | timer {{ systemd.name }}'
+  when: >
+    systemd.state | lower == 'present' and
+    not (systemd_testing_enable | default(false))
+  notify: 'Handlers | reload systemd'
   ansible.builtin.service:
     name: '{{ systemd.name }}.timer'
     enabled: true
     state: 'restarted'
-  when: systemd.state | lower == 'present' and not systemd_testing_enable
-  notify: 'Handlers | reload systemd'

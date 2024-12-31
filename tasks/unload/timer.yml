@@ -7,8 +7,8 @@
 #   systemd: dict containing one element from systemd_timers.
 
 - name: 'Systemd | unload | timer {{ systemd.name }}'
+  when: systemd.state | lower == 'absent'
+  notify: 'Handlers | reload systemd'
   ansible.builtin.file:
     dest: '{{ systemd_role_root }}/{{ systemd.name }}.timer'
     state: 'absent'
-  when: systemd.state | lower == 'absent'
-  notify: 'Handlers | reload systemd'

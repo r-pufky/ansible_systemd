@@ -43,7 +43,7 @@
 #     resource_control: dict - section/resource_control/*.yml unit definition
 #     kill: dict - section/kill.yml unit definition
 #     install: dict - section/install.yml install definition
-#     state: str - timer started
+#     state: str - service install state
 #         Values:
 #           present: manage configuration
 #            absent: remove configuration
@@ -80,7 +80,7 @@ systemd_services: []
 #     unit: dict - section/unit/*.yml unit definition
 #     timer: dict - section/timer.yml timer definition
 #     install: dict - section/install.yml install definition
-#     state: str - timer started
+#     state: str - timer install state
 #         Values:
 #           present: manage configuration
 #            absent: remove configuration

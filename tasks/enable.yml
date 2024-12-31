@@ -20,8 +20,8 @@
         mode: '0644'
 
     - name: 'Systemd | service | enable'
+      when: not (systemd_testing_enable | default(false))
       ansible.builtin.service:
         name: '{{ systemd.name }}.service'
         enabled: true
         state: 'reloaded'
-      when: not systemd_testing_enable

@@ -1,4 +1,5 @@
 ---
+# Create a real timer service (e.g. a cronjob).
 dependency:
   name: 'galaxy'
 driver:
@@ -11,14 +12,45 @@ provisioner:
       callback_whitelist: 'profile_tasks, timer, yaml'
     ssh_connection:
       pipelining: false
+  inventory:
+    group_vars:
+      all:
+        systemd_testing_enable: false
+        systemd_services:
+          - name: 'test'
+            state: 'present'
+            unit:
+              description: 'test timer service'
+              requires: ['test.timer']
+            service:
+              type: 'simple'
+              exec_start: ['echo "this is a test service"']
+            exec:
+              user: 'root'
+              group: 'root'
+        systemd_timers:
+          - name: 'test'
+            state: 'present'
+            unit:
+              description: 'test timer'
+            timer:
+              unit: 'test.service'
+              on_boot_sec: '1year'
+            install:
+              wanted_by: ['timers.target']
 platforms:
-  - name: 'debian-12'
+  - name: 'debian-12-timer_service'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-    capabilities:
-      - 'SYS_ADMIN'
+    command: '/lib/systemd/systemd'
+    pre_build_image: true
+  - name: 'debian-12-timer_service-remove'
+    image: 'ghcr.io/hifis-net/debian-systemd:12'
+    systemd: 'always'
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
 verifier:
@@ -27,3 +59,17 @@ lint: |
   set -e
   yamllint .
   ansible-lint .
+scenario:
+  test_sequence:
+    # - 'dependency'
+    # - 'cleanup'
+    - 'destroy'
+    - 'syntax'
+    - 'create'
+    # - 'prepare'
+    - 'converge'
+    # - 'idempotence'  # Service created only once.
+    # - 'side_effect'
+    - 'verify'
+    # - 'cleanup'
+    - 'destroy'

@@ -12,11 +12,11 @@
   notify: 'Handlers | reload systemd'
   block:
     - name: 'Systemd | service | disable'
+      when: not (systemd_testing_enable | default(false))
       ansible.builtin.service:
         name: '{{ systemd.name }}.service'
         enabled: false
         state: 'stopped'
-      when: not systemd_testing_enable
 
     - name: 'Systemd | service | remove {{ systemd.name }}'
       ansible.builtin.file:
