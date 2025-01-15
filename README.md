@@ -26,6 +26,8 @@ host_vars/client.example.com/vars/systemd.yml
 ``` yaml
 systemd_services:
   - name: 'reboot'
+    state: 'present'
+    override: false
     unit:
       description: 'periodic system reboot service'
       requires:
@@ -36,9 +38,10 @@ systemd_services:
     exec:
       user: 'root'
       group: 'root'
-    state: 'present'
 systemd_timers:
   - name: 'reboot'
+    state: 'present'
+    override: false
     unit:
       description: 'periodic system reboot timer'
     timer:
@@ -47,7 +50,6 @@ systemd_timers:
     install:
       wanted_by:
         - 'timers.target'
-    state: 'present'
 ```
 
 Apply the role
@@ -66,9 +68,11 @@ host_vars/client.example.com/vars/systemd.yml
 systemd_services:
   - name: 'my_service'
     state: 'absent'
+    override: false
 systemd_timers:
   - name: 'my_timer'
     state: 'absent'
+    override: false
 ```
 
 Apply the role
@@ -76,6 +80,27 @@ Apply the role
 - name: 'Manage systemd'
   ansible.builtin.include_role:
     name: 'r_pufky.srv.systemd'
+```
+
+## Override existing systemd units
+Using unit overrides are possible, allowing for tweaking of existing systemd
+services without re-defining the entire configuration. This is supported for
+all supported units. Overrides are stored in `systemd/{UNIT}.d/override.conf`.
+
+Override NFS server and disable V3
+``` yaml
+- name: 'Manage systemd'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.systemd'
+  vars:
+    systemd_services:
+      - name: 'nfs-server'
+        state: 'present'
+        override: true
+        service:
+          exec_start:
+            - ''
+            - '/usr/bin/rpc.nfsd --no-nfs-version 3'
 ```
 
 ### Manage normally with `ansible.builtin.service`

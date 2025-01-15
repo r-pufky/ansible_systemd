@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:line-length
 ###############################################################################
 # Create a defined systemd timer.
 ###############################################################################
@@ -7,7 +8,7 @@
 #   systemd: dict containing one element from systemd_timers.
 
 - name: 'Systemd | load | timer {{ systemd.name }}'
-  when: systemd.state | lower == 'present'
+  when: systemd.state | lower == 'present' and not systemd.override
   notify: 'Handlers | reload systemd'
   ansible.builtin.template:
     src: 'timer.j2'
@@ -15,3 +16,24 @@
     owner: 'root'
     group: 'root'
     mode: '0644'
+
+- name: 'Systemd | load | override'
+  when: systemd.state | lower == 'present' and systemd.override
+  block:
+    - name: 'Systemd | load | override | create {{ systemd_role_root }}/{{ systemd.name }}.timer.d'  # noqa name[template] directory structure
+      ansible.builtin.file:
+        path: '{{ systemd_role_root }}/{{ systemd.name }}.timer.d'
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
+        recurse: true
+        state: 'directory'
+
+    - name: 'Systemd | load | override | timer {{ systemd.name }}'
+      notify: 'Handlers | reload systemd'
+      ansible.builtin.template:
+        src: 'timer.j2'
+        dest: '{{ systemd_role_root }}/{{ systemd.name }}.timer.d/override.conf'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'

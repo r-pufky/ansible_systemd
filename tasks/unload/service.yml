@@ -7,8 +7,15 @@
 #   systemd: dict containing one element from systemd_services.
 
 - name: 'Systemd | unload | service {{ systemd.name }}'
-  when: systemd.state | lower == 'absent'
+  when: systemd.state | lower == 'absent' and not systemd.override
   notify: 'Handlers | reload systemd'
   ansible.builtin.file:
     dest: '{{ systemd_role_root }}/{{ systemd.name }}.service'
+    state: 'absent'
+
+- name: 'Systemd | unload | override | service {{ systemd.name }}'
+  when: systemd.state | lower == 'absent' and systemd.override
+  notify: 'Handlers | reload systemd'
+  ansible.builtin.file:
+    dest: '{{ systemd_role_root }}/{{ systemd.name }}.service.d'
     state: 'absent'

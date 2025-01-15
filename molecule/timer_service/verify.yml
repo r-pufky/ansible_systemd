@@ -1,7 +1,7 @@
 ---
 # yamllint disable rule:line-length
 - name: 'Timer service | verify | test.service'
-  hosts: 'debian-12-timer_service'
+  hosts: 'systemd-debian-12-timer_service'
   gather_facts: false
   tasks:
     - name: 'Timer service | verify | test.service | gather service status'
@@ -31,7 +31,7 @@
         fail_msg: '/etc/systemd/system/test.service is not in expected format: {{ _test_systemd_timer_service.diff }}.'
 
 - name: 'Timer service | verify | test.timer'
-  hosts: 'debian-12-timer_service'
+  hosts: 'systemd-debian-12-timer_service'
   gather_facts: false
   tasks:
     - name: 'Timer service | verify | test.timer | gather timer status'
@@ -64,7 +64,7 @@
         fail_msg: '/etc/systemd/system/test.timer is not in expected format: {{ _test_systemd_timer_service.diff }}.'
 
 - name: 'Timer service | verify | test.service remove'
-  hosts: 'debian-12-timer_service-remove'
+  hosts: 'systemd-debian-12-timer_service-remove'
   gather_facts: false
   tasks:
     - name: 'Timer service | verify | test.service remove | gather service status'
@@ -88,7 +88,7 @@
         fail_msg: '/etc/systemd/system/test.service should not exist.'
 
 - name: 'Timer service removal | verify | test.timer'
-  hosts: 'debian-12-timer_service-remove'
+  hosts: 'systemd-debian-12-timer_service-remove'
   gather_facts: false
   tasks:
     - name: 'Timer service | verify | test.timer remove | gather timer status'

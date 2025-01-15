@@ -1,0 +1,9 @@
+---
+- name: 'Restart instead of reload | converge'
+  hosts: 'all'
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Restart instead of reload | converge | apply r_pufky.srv.systemd'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.systemd'

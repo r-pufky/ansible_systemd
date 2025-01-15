@@ -2,16 +2,14 @@
 - name: 'Timer service | converge'
   hosts: 'all'
   gather_facts: false
-  tags: 'molecule-idempotence-notest'
   tasks:
     - name: 'Timer service | converge | create'
       ansible.builtin.include_role:
         name: 'r_pufky.srv.systemd'
 
 - name: 'Timer service | converge | remove'
-  hosts: 'debian-12-timer_service-remove'
+  hosts: 'systemd-debian-12-timer_service-remove'
   gather_facts: false
-  tags: 'molecule-idempotence-notest'
   tasks:
     - name: 'Timer service | converge | remove'
       ansible.builtin.include_role:
@@ -21,6 +19,7 @@
     systemd_services:
       - name: 'test'
         state: 'present'
+        override: false
         unit:
           description: 'test timer service'
           requires: ['test.timer']
@@ -32,9 +31,11 @@
           group: 'root'
       - name: 'test'
         state: 'absent'
+        override: false
     systemd_timers:
       - name: 'test'
         state: 'present'
+        override: false
         unit:
           description: 'test timer'
         timer:
@@ -44,3 +45,4 @@
           wanted_by: ['timers.target']
       - name: 'test'
         state: 'absent'
+        override: false

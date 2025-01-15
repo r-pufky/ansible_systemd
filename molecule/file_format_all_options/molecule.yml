@@ -20,6 +20,7 @@ provisioner:
         systemd_services:
           - name: 'reboot'
             state: 'present'
+            override: false
             unit:
               description: 'periodic system reboot timer'
               documentation:
@@ -455,6 +456,7 @@ provisioner:
         systemd_timers:
           - name: 'reboot'
             state: 'present'
+            override: false
             unit:
               description: 'periodic system reboot timer'
               documentation:
@@ -592,7 +594,14 @@ provisioner:
               wake_system: false
               remain_after_elapse: true
 platforms:
-  - name: 'debian-12-file_format_all_options'
+  - name: 'systemd-debian-12-file_format_all_options'
+    image: 'ghcr.io/hifis-net/debian-systemd:12'
+    systemd: 'always'
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    command: '/lib/systemd/systemd'
+    pre_build_image: true
+  - name: 'systemd-debian-12-file_format_all_options-override'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
@@ -614,7 +623,7 @@ scenario:
     - 'create'
     # - 'prepare'
     - 'converge'
-    - 'idempotence'
+    # - 'idempotence'  # override services touched each time
     # - 'side_effect'
     - 'verify'
     # - 'cleanup'

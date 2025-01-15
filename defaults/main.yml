@@ -37,29 +37,43 @@
 #            {NAME}: service name (name.service)
 #           {NAME}@: template service name (name@.service); may be referenced
 #                    using SPECIFIERS (%i, etc) in definitions.
+#     state: str - service install state
+#         Values:
+#           present: manage configuration
+#            absent: remove configuration
+#         Default: 'present'.
+#     override: bool - manage service using systemd/{SERVICE}.d/override.conf
+#           instead of service unit itself (systemd/{SERVICE}).
+#         Special Case:
+#           *: add an empty value before settings to clear previous definition
+#              exec_start: ['', 'new_exec_options'].
 #     unit: dict - section/unit/*.yml unit definition
 #     service: dict - section/service.yml unit definition
 #     exec: dict - section/exec/*.yml unit definition
 #     resource_control: dict - section/resource_control/*.yml unit definition
 #     kill: dict - section/kill.yml unit definition
 #     install: dict - section/install.yml install definition
-#     state: str - service install state
-#         Values:
-#           present: manage configuration
-#            absent: remove configuration
-#         Default: 'present'.
+
 #
 # systemd_services:
 #   - name: 'reboot'
+#     state: 'present'
+#     override: false
 #     unit:
 #       description: 'periodic system reboot service'
 #       requires:
 #         - 'reboot.timer'
 #     service:
 #       type: 'simple'
-#       exec_start: 'perl -e "sleep(rand(30))";/sbin/reboot'
+#       exec_start: ['perl -e "sleep(rand(30))";/sbin/reboot']
 #       user: 'root'
+#   - name: 'nfs-server'
 #     state: 'present'
+#     override: true
+#     service:
+#       exec_start:
+#         - ''
+#         - '/usr/sbin/rpc.nfsd --no-nfs-version 3'
 #
 # Default: [].
 systemd_services: []
@@ -77,14 +91,20 @@ systemd_services: []
 #            {NAME}: timer name (name.timer)
 #           {NAME}@: template timer name (name@.timer); may be referenced using
 #                    SPECIFIERS (%i, etc) in definitions.
-#     unit: dict - section/unit/*.yml unit definition
-#     timer: dict - section/timer.yml timer definition
-#     install: dict - section/install.yml install definition
 #     state: str - timer install state
 #         Values:
 #           present: manage configuration
 #            absent: remove configuration
 #         Default: 'present'.
+#     override: bool - manage timer using systemd/{TIMER}.d/override.conf
+#           instead of service unit itself (systemd/{TIMER}).
+#         Special Case:
+#           *: add an empty value before settings to clear previous definition
+#              on_calendar: ['', 'weekly'].
+#     unit: dict - section/unit/*.yml unit definition
+#     timer: dict - section/timer.yml timer definition
+#     install: dict - section/install.yml install definition
+
 #
 # systemd_timers:
 #   - name: 'reboot'

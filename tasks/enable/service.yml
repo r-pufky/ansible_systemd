@@ -11,7 +11,19 @@
     systemd.state | lower == 'present' and
     not (systemd_testing_enable | default(false))
   notify: 'Handlers | reload systemd'
-  ansible.builtin.service:
-    name: '{{ systemd.name }}.service'
-    enabled: true
-    state: 'reloaded'
+  block:
+    # reload or restart is not supported; check results and start manually.
+    - name: 'Systemd | enable | reload {{ systemd.name }}'
+      ansible.builtin.service:
+        name: '{{ systemd.name }}.service'
+        enabled: true
+        state: 'reloaded'
+      register: _system_enable
+      failed_when: false
+
+    - name: 'Systemd | enable | start (fallback) {{ systemd.name }}'
+      when: '"enabled" not in _system_enable'
+      ansible.builtin.service:
+        name: '{{ systemd.name }}.service'
+        enabled: true
+        state: 'started'

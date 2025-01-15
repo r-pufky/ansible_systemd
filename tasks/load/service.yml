@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:line-length
 ###############################################################################
 # Create a defined systemd service
 ###############################################################################
@@ -7,7 +8,7 @@
 #   systemd: dict containing one element from systemd_services.
 
 - name: 'Systemd | load | service {{ systemd.name }}'
-  when: systemd.state | lower == 'present'
+  when: systemd.state | lower == 'present' and not systemd.override
   notify: 'Handlers | reload systemd'
   ansible.builtin.template:
     src: 'service.j2'
@@ -15,3 +16,24 @@
     owner: 'root'
     group: 'root'
     mode: '0644'
+
+- name: 'Systemd | load | override'
+  when: systemd.state | lower == 'present' and systemd.override
+  block:
+    - name: 'Systemd | load | override | create {{ systemd_role_root }}/{{ systemd.name }}.service.d'  # noqa name[template] directory structure
+      ansible.builtin.file:
+        path: '{{ systemd_role_root }}/{{ systemd.name }}.service.d'
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
+        recurse: true
+        state: 'directory'
+
+    - name: 'Systemd | load | override | service {{ systemd.name }}'
+      notify: 'Handlers | reload systemd'
+      ansible.builtin.template:
+        src: 'service.j2'
+        dest: '{{ systemd_role_root }}/{{ systemd.name }}.service.d/override.conf'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'

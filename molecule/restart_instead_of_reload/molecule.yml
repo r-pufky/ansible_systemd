@@ -1,0 +1,64 @@
+---
+# Certain services only support restarting. Ensure those services correctly
+# fallback to restart when reload fails.
+#
+#   TASK [r_pufky.srv.systemd : Systemd | enable | reload nfs-mountd]
+#   TASK [r_pufky.srv.systemd : Systemd | enable | start (fallback) nfs-mountd]
+#
+dependency:
+  name: 'galaxy'
+driver:
+  name: 'vagrant'
+  provider:
+    name: 'virtualbox'
+    config_options:
+      ssh.keep_alive: true
+      ssh.remote_user: 'root'
+    options:
+      append_platform_to_hostname: false
+provisioner:
+  name: 'ansible'
+  config_options:
+    defaults:
+      interpreter_python: 'auto_silent'  # suppress warnings
+      callback_whitelist: 'profile_tasks, timer, yaml'  # output profiling info
+  inventory:
+    group_vars:
+      all:
+        systemd_services:
+          - name: 'nfs-mountd'
+            state: 'present'
+            override: true
+            service:
+              exec_start:
+                - ''
+                - '/usr/sbin/rpc.mountd --no-nfs-version 2 --no-nfs-version 3'
+platforms:
+  - name: 'systemd-debian-12-vm-restart-instead-of-reload'
+    box: 'debian/bookworm64'
+    memory: 4096
+    cpus: 2
+    interfaces:
+      - network_name: private_network  # network_name required
+        auto_config: true
+        type: 'dhcp'
+verifier:
+  name: 'ansible'
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+scenario:
+  test_sequence:
+    # - 'dependency'
+    # - 'cleanup'
+    - 'destroy'
+    - 'syntax'
+    - 'create'
+    - 'prepare'
+    - 'converge'
+    # - 'idempotence'  # overrides always created
+    # - 'side_effect'
+    - 'verify'
+    # - 'cleanup'
+    - 'destroy'

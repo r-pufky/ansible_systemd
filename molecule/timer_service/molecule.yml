@@ -19,6 +19,7 @@ provisioner:
         systemd_services:
           - name: 'test'
             state: 'present'
+            override: false
             unit:
               description: 'test timer service'
               requires: ['test.timer']
@@ -31,6 +32,7 @@ provisioner:
         systemd_timers:
           - name: 'test'
             state: 'present'
+            override: false
             unit:
               description: 'test timer'
             timer:
@@ -39,14 +41,14 @@ provisioner:
             install:
               wanted_by: ['timers.target']
 platforms:
-  - name: 'debian-12-timer_service'
+  - name: 'systemd-debian-12-timer_service'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'debian-12-timer_service-remove'
+  - name: 'systemd-debian-12-timer_service-remove'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
