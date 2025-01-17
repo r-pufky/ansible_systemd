@@ -1,0 +1,8 @@
+[Unit]
+Description=automount configuration test
+
+[Automount]
+Where=/mnt/test
+
+[Install]
+WantedBy=multi-user.target

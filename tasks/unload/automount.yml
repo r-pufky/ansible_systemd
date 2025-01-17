@@ -1,0 +1,21 @@
+---
+###############################################################################
+# Remove a defined systemd automount
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_automounts.
+
+- name: 'Systemd | unload | mount {{ systemd.name }}'
+  when: systemd.state | lower == 'absent' and not systemd.override
+  notify: 'Handlers | reload systemd'
+  ansible.builtin.file:
+    dest: '{{ systemd_role_root }}/{{ systemd.name }}.automount'
+    state: 'absent'
+
+- name: 'Systemd | unload | override | mount {{ systemd.name }}'
+  when: systemd.state | lower == 'absent' and systemd.override
+  notify: 'Handlers | reload systemd'
+  ansible.builtin.file:
+    dest: '{{ systemd_role_root }}/{{ systemd.name }}.automount.d'
+    state: 'absent'

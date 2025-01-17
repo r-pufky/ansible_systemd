@@ -1,0 +1,39 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Create a defined systemd mount
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_mounts.
+
+- name: 'Systemd | load | mount {{ systemd.name }}'
+  when: systemd.state | lower == 'present' and not systemd.override
+  notify: 'Handlers | reload systemd'
+  ansible.builtin.template:
+    src: 'mount.j2'
+    dest: '{{ systemd_role_root }}/{{ systemd.name }}.mount'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
+- name: 'Systemd | load | override'
+  when: systemd.state | lower == 'present' and systemd.override
+  block:
+    - name: 'Systemd | load | override | create {{ systemd_role_root }}/{{ systemd.name }}.mount.d'  # noqa name[template] directory structure
+      ansible.builtin.file:
+        path: '{{ systemd_role_root }}/{{ systemd.name }}.mount.d'
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
+        recurse: true
+        state: 'directory'
+
+    - name: 'Systemd | load | override | mount {{ systemd.name }}'
+      notify: 'Handlers | reload systemd'
+      ansible.builtin.template:
+        src: 'mount.j2'
+        dest: '{{ systemd_role_root }}/{{ systemd.name }}.mount.d/override.conf'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'

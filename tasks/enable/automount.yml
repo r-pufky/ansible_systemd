@@ -1,0 +1,31 @@
+---
+###############################################################################
+# Enable a defined systemd automount
+###############################################################################
+# Automounts must stop associated mount before enabling, otherwise it will fail
+# to start with the following log:
+#
+# {MOUNT}.automount: Path {MOUNT} is already a mount point, refusing start.
+#
+# Args:
+#   systemd: dict containing one element from systemd_automounts.
+#
+# Reference:
+# * https://wiki.archlinux.org/title/NFS
+
+- name: 'Systemd | enable | automount {{ systemd.name }}'
+  when: >
+    systemd.state | lower == 'present' and
+    not (systemd_testing_enable | default(false))
+  notify: 'Handlers | reload systemd'
+  block:
+    - name: 'Systemd | enable | stop associated mount {{ systemd.name }}'
+      ansible.builtin.service:
+        name: '{{ systemd.name }}.mount'
+        state: 'stopped'
+      failed_when: false
+
+    - name: 'Systemd | enable | reload {{ systemd.name }}'
+      ansible.builtin.service:
+        name: '{{ systemd.name }}.automount'
+        enabled: true

@@ -1,0 +1,92 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Automount] Heading
+###############################################################################
+# Unit automount section configuration.
+#
+# Encodes information about a file system automount point controlled and
+# supervised by systemd. Used to implement on-demand mounting and parallelized
+# mounting of file systems.
+#
+# Automount units must be named after the mount point directories they control.
+# /home/lennart -> home-lennart.automount. A matching mount unit must exist
+# (home-lennart.automount activates home-lennart.mount). Cannot be templated,
+# symlinked, or nested.
+#
+# Use systemd-escape -p /mount/path to generate an appropriate name.
+#
+# Automount units are separate from mount itself; do not set After=, Requires=
+# for mount dependencies. Not available for unprivileged user service managers.
+#
+# Requirement and ordering dependencies are automatically created if mounted
+# below another unit. Implicit Before= dependency created between automount and
+# mount unit. Block devices receive Requires=, StopPropagatedFrom=, After= on
+# device unit. Quotas receive Wants=, Before= dependencies on
+# systemd-quotacheck.service and quotaon.service.
+#
+# Automatic dependencies (unless default_dependencies: False):
+# * Before=, Conflicts= on umount.target
+# * Local filesystems
+#   * After= on local-fs-pre.target
+#   * Before= on local-fs.target
+#
+# Decision: fstab section not implmented - used for importing existing fstab
+#     into system units (systemd-fstab-generator); not used for creating
+#     individual units.
+#
+# See reference sections for syntax formats:
+# * TIME (time)   # not used
+# * SPECIFIERS (unit specifiers)   # not used
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.automount.html#
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+# Where to auto mount resource (absolute path).
+#
+# Required.
+#
+# Destination cannot be a symbolic link. Automount point is created if it does
+# not exist.
+#
+# Must reflect the unit name; where: '/home/lennart' -> home-lennart.automount.
+#
+# Variable: where | str
+#
+# Default: N/A (required).
+
+# Extra mount options when creating mountpoint.
+#
+# Specifiers may be used.
+#
+# Special Case:
+#   %%: literal percent (%) character
+#
+# Variable: extra_options | list of str
+#
+# Default: omit (system default).
+
+# Directory mode (octal).
+#
+# Directory permissions used when automatically creating needed directories.
+#
+# Variable: directory_mode | str
+#
+# Default: '0755' (octal).
+
+# Umount filesystem after idle time (seconds).
+#
+# Mount considered failed and shutdown if not mounted within this time. All
+# commands terminated via SIGTERM and SIGKILL after timeout_sec elapses again.
+#
+# Values:
+#        0: disables
+#        #: time in seconds
+#   {TIME}: TIME time
+#   {OMIT}: 0 (default)
+#
+# Variable: timeout_idle_sec | str
+#
+# Default: omit (system default).

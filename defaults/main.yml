@@ -17,6 +17,12 @@
 #
 # Actively migrate cronjobs to systemd (use timers, see reference).
 #
+# Units are managed in the following order:
+#    load: mount, automount, service, timer
+#  enable: mount, automount, service, timer
+# disable: service, timer, automount, mount
+#  unload: service, timer, automount, mount
+#
 # Reference:
 # * section/*.yml
 # * https://unix.stackexchange.com/questions/278564/cron-vs-systemd-timers
@@ -53,7 +59,6 @@
 #     resource_control: dict - section/resource_control/*.yml unit definition
 #     kill: dict - section/kill.yml unit definition
 #     install: dict - section/install.yml install definition
-
 #
 # systemd_services:
 #   - name: 'reboot'
@@ -104,10 +109,11 @@ systemd_services: []
 #     unit: dict - section/unit/*.yml unit definition
 #     timer: dict - section/timer.yml timer definition
 #     install: dict - section/install.yml install definition
-
 #
 # systemd_timers:
 #   - name: 'reboot'
+#     state: 'present'
+#     override: false
 #     unit:
 #       description: 'periodic system reboot timer'
 #     timer:
@@ -116,7 +122,142 @@ systemd_services: []
 #     install:
 #       wanted_by:
 #         - 'timers.target'
-#     state: 'present'
 #
 # Default: [].
 systemd_timers: []
+
+# Mount definitions.
+#
+# Managed files are placed in systemd_role_root with root:root 0644.
+#
+# systemd_mounts:
+#     list of dict - mounts to manage for systemd
+#   - name: str - mount name
+#         Special Case:
+#           [a-z,A-Z,:,-,_,.,\]: acceptable characters, max length 255.
+#                             *: MUST BE NAMED AFTER mount.where; all mount
+#                                names must reflect the mount point translated
+#                                to acceptable systemd mount names (e.g.
+#                                /mnt/dir -> mnt-dir). Use
+#                                systemd-escape -p /mount/path to generate an
+#                                appropriate name.
+#         Values:
+#            {NAME}: mount name (name.mount)
+#     state: str - timer install state
+#         Values:
+#           present: manage configuration
+#            absent: remove configuration
+#         Default: 'present'.
+#     override: bool - manage mount using systemd/{MOUNT}.d/override.conf
+#           instead of service unit itself (systemd/{MOUNT}).
+#         Special Case:
+#           *: add an empty value before settings to clear previous definition
+#              options: ['', 'noauto'].
+#     unit: dict - section/unit/*.yml unit definition
+#     mount: dict - section/mount.yml unit definition
+#     exec: dict - section/exec/*.yml unit definition
+#     resource_control: dict - section/resource_control/*.yml unit definition
+#     kill: dict - section/kill.yml unit definition
+#     install: dict - section/install.yml install definition
+#
+# systemd_mounts:
+#   - name: 'data-pictures'
+#     state: 'present'
+#     override: false
+#     unit:
+#       description: 'mount /data/pictures'
+#     mount:
+#       what: '172.16.24.192:/home'
+#       where: '/data/pictures'
+#       options:
+#         - 'vers=4'
+#         - 'minorversion=2'
+#       type: 'nfs'
+#       timeout_sec: 30
+#     install:
+#       wanted_by:
+#         - 'multi-user.target'
+#   - name: 'mnt-test'
+#     state: 'present'
+#     override: false
+#     unit:
+#       description: 'test mount tmpfs'
+#     mount:
+#       what: 'tmpfs'
+#       where: '/mnt/test'
+#       type: 'tmpfs'
+#       options:
+#         - 'noatime'
+#         - 'nosuid'
+#         - 'nodev'
+#         - 'noexec'
+#         - 'mode=1777'
+#     install:
+#       wanted_by:
+#         - 'multi-user.target'
+#   - name: 'tmp'
+#     state: 'present'
+#     override: true
+#     unit:
+#       description: 'override default tmpfs mode'
+#     mount:
+#       options:
+#         - 'mode=1222'
+#
+# Default: [].
+systemd_mounts: []
+
+# Automount definitions.
+#
+# Managed files are placed in systemd_role_root with root:root 0644. Automount
+# will automatically stop the associate mount so it can be enabled.
+#
+# systemd_automounts:
+#     list of dict - automounts to manage for systemd
+#   - name: str - mount name
+#         Special Case:
+#           [a-z,A-Z,:,-,_,.,\]: acceptable characters, max length 255.
+#                             *: MUST BE NAMED AFTER mount.where; all mount
+#                                names must reflect the mount point translated
+#                                to acceptable systemd mount names (e.g.
+#                                /mnt/dir -> mnt-dir). Use
+#                                systemd-escape -p /mount/path to generate an
+#                                appropriate name.
+#         Values:
+#            {NAME}: mount name (name.mount)
+#     state: str - timer install state
+#         Values:
+#           present: manage configuration
+#            absent: remove configuration
+#         Default: 'present'.
+#     override: bool - manage mount using systemd/{MOUNT}.d/override.conf
+#           instead of service unit itself (systemd/{MOUNT}).
+#         Special Case:
+#           *: add an empty value before settings to clear previous definition
+#              options: ['', 'noauto'].
+#     unit: dict - section/unit/*.yml unit definition
+#     automount: dict - section/automount.yml unit definition
+#     exec: dict - section/exec/*.yml unit definition
+#     resource_control: dict - section/resource_control/*.yml unit definition
+#     kill: dict - section/kill.yml unit definition
+#     install: dict - section/install.yml install definition
+#
+# systemd_automounts:
+#   - name: 'mnt-test'
+#     state: 'present'
+#     override: false
+#     unit:
+#       description: 'automount configuration test'
+#     automount:
+#       where: '/mnt/test'
+#     install:
+#       wanted_by:
+#         - 'multi-user.target'
+#   - name: 'mnt-test'
+#     state: 'present'
+#     override: true
+#     unit:
+#       description: 'override automount configuration test'
+#
+# Default: [].
+systemd_automounts: []

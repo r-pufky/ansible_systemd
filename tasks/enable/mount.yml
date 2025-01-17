@@ -1,0 +1,19 @@
+---
+###############################################################################
+# Enable a defined systemd mount
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_mounts.
+
+- name: 'Systemd | enable | mount {{ systemd.name }}'
+  when: >
+    systemd.state | lower == 'present' and
+    not (systemd_testing_enable | default(false))
+  notify: 'Handlers | reload systemd'
+  block:
+    # reload or restart is not supported; check results and start manually.
+    - name: 'Systemd | enable | reload {{ systemd.name }}'
+      ansible.builtin.service:
+        name: '{{ systemd.name }}.mount'
+        enabled: true

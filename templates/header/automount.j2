@@ -1,0 +1,16 @@
+{# [Automount] section heading #}
+{% if 'automount' in systemd %}
+[Automount]
+{% if 'where' in systemd.automount %}
+Where={{ systemd.automount.where }}
+{% endif %}
+{% if 'extra_options' in systemd.automount %}
+ExtraOptions={{ systemd.automount.extra_options | join(',') }}
+{% endif %}
+{% if 'directory_mode' in systemd.automount %}
+DirectoryMode={{ systemd.automount.directory_mode }}
+{% endif %}
+{% if 'timeout_idle_sec' in systemd.automount %}
+TimeoutIdleSec={{ systemd.automount.timeout_idle_sec }}
+{% endif %}
+{% endif %}

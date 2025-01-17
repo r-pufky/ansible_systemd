@@ -1,0 +1,9 @@
+---
+- name: 'Mount | converge'
+  hosts: 'all'
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Mount | converge | apply r_pufky.srv.systemd'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.systemd'

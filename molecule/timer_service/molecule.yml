@@ -15,7 +15,6 @@ provisioner:
   inventory:
     group_vars:
       all:
-        systemd_testing_enable: false
         systemd_services:
           - name: 'test'
             state: 'present'

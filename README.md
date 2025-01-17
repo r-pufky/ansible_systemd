@@ -15,9 +15,14 @@ Part of the [r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv)
 collection.
 
 ## Example Playbook
-Standard ansible built-ins may be used after configuration (stop, start,
-reload, etc). Systemd will be force reloaded on role completion to ensure unit
-availability after role application.
+Standard ansible built-ins may be used **after** configuration. Systemd will be
+force reloaded on role completion to ensure unit availability.
+
+Currently supported units are:
+* mount
+* automount
+* service
+* timer
 
 ### Systemd cronjob example
 Create a systemd timer that periodically reboots a system (e.g. cronjob).
@@ -50,6 +55,74 @@ systemd_timers:
     install:
       wanted_by:
         - 'timers.target'
+```
+
+Apply the role
+``` yaml
+- name: 'Manage systemd'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.systemd'
+```
+
+## Systemd mount / automount example
+Create filesystem mounts and automounts for NFS shares.
+
+host_vars/client.example.com/vars/systemd.yml
+``` yaml
+systemd_mounts:
+  - name: 'data-pictures'
+    state: 'present'
+    override: false
+    unit:
+      description: 'mount NFS share /data/pictures'
+    mount:
+      what: '172.16.24.192:/home'
+      where: '/data/pictures'
+      options:
+        - 'vers=4'
+        - 'minorversion=2'
+      type: 'nfs'
+      timeout_sec: 30
+    install:
+      wanted_by:
+        - 'multi-user.target'
+  - name: 'mnt-test'
+    state: 'present'
+    override: false
+    unit:
+      description: 'mount a new tmpfs filesystem to /mnt/test'
+    mount:
+      what: 'tmpfs'
+      where: '/mnt/test'
+      type: 'tmpfs'
+      options:
+        - 'noatime'
+        - 'nosuid'
+        - 'nodev'
+        - 'noexec'
+        - 'mode=1777'
+    install:
+      wanted_by:
+        - 'multi-user.target'
+  - name: 'tmp'
+    state: 'present'
+    override: true
+    unit:
+      description: 'override default /tmp tmpfs mode'
+    mount:
+      options:
+        - 'mode=1222'
+systemd_automounts:
+  - name: 'mnt-test'
+    state: 'present'
+    override: false
+    unit:
+      description: 'automount /mnt/test instead of static mount'
+    automount:
+      where: '/mnt/test'
+    install:
+      wanted_by:
+        - 'multi-user.target'
 ```
 
 Apply the role

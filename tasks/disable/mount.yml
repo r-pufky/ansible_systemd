@@ -1,0 +1,17 @@
+---
+###############################################################################
+# Disable a defined systemd mount
+###############################################################################
+#
+# Args:
+#   systemd: dict containing one element from systemd_mounts.
+
+- name: 'Systemd | disable | mount {{ systemd.name }}'
+  when: >
+    systemd.state | lower == 'absent' and
+    not (systemd_testing_enable | default(false))
+  notify: 'Handlers | reload systemd'
+  ansible.builtin.service:
+    name: '{{ systemd.name }}.mount'
+    enabled: false
+    state: 'stopped'

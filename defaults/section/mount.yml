@@ -1,0 +1,174 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Systemd [Mount] Heading
+###############################################################################
+# Unit mount section configuration.
+#
+# Encodes information about a file system mount point controlled and supervised
+# by systemd.
+#
+# Mount units must be named after the mount point directories they control.
+# /home/lennart -> home-lennart.mount. Cannot be templated or symlinked.
+#
+# Use systemd-escape -p /mount/path to generate an appropriate name.
+#
+# An automount unit with the same name will allow on-demand or parallelized
+# mounting.
+#
+# Requirement and ordering dependencies are automatically created if mounted
+# below another unit. Block devices receive Requires=, StopPropagatedFrom=,
+# After= on device unit. Quotas receive Wants=, Before= dependencies on
+# systemd-quotacheck.service and quotaon.service.
+#
+# Automatic dependencies (unless default_dependencies: False):
+# * Before=, Conflicts= on umount.target
+# * Local filesystems
+#   * After= on local-fs-pre.target
+#   * Before= on local-fs.target
+# * After= on swap.target when tmpfs
+# * Network filesystems
+#   * After= on remote-fs-pre.target
+#   * After=, Wants= on network-online.target
+#   * Before= on remote-fs.target
+#
+# Add _netdev mount option to force systemd to consider mount a network mount.
+#
+# Decision: fstab section not implemented - used for importing existing fstab
+#     into system units (systemd-fstab-generator); not used for creating
+#     individual units.
+#
+# See reference sections for syntax formats:
+# * TIME (time)
+# * SPECIFIERS (unit specifiers)
+#
+# Reference:
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.mount.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+
+# What resource to mount (absolute path or fstab identifier).
+#
+# Specifiers may be used. Bind mounts will automatically create directory if it
+# does not exist.
+#
+# Special Case:
+#   %%: literal percent (%) character
+#
+# Variable: what | str
+#
+# Default: N/A (required).
+
+# Where to mount resource (absolute path).
+#
+# Required.
+#
+# Destination cannot be a symbolic link. Mount point is created if it does not
+# exist.
+#
+# Must reflect the unit name; where: '/home/lennart' -> home-lennart.mount.
+#
+# Variable: where | str
+#
+# Default: N/A (required).
+
+# Type of filesystem to mount.
+#
+# Special Case:
+#    overlay: directory automatically created if it does not exist
+#   upperdir: directory automatically created if it does not exist
+#    workdir: directory automatically created if it does not exist
+#
+# Variable: type | str
+#
+# Default: omit (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man8/mount.8.html
+
+# Mount options.
+#
+# Specifiers may be used.
+#
+# Special Case:
+#   %%: literal percent (%) character
+#
+# Variable: options | list of str
+#
+# Default: omit (system default).
+
+# Enable sloppy mount options?
+#
+# Uses relaxed mount option parsing ignoring unknown options. corresponds to
+# mount -s.
+#
+# Variable: sloppy_options | bool
+#
+# Default: False (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man8/mount.8.html
+
+# Enable lazy unmounting?
+#
+# Detach filesystem from filesystem hierarchy at time of unmount operation,
+# clean up all references to filesystem as soon as they are not busy anymore.
+# Corresponds to mount -l
+#
+# Variable: lazy_unmount | bool
+#
+# Default: False (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man8/mount.8.html
+
+# Enable mount read/write only?
+#
+# Corresponds to mount -w
+#
+# Values:
+#    True: fail immediately if mounting read/write fails
+#   False: automatically attempt to remount read-only (default)
+#
+# Variable: read_write_only | bool
+#
+# Default: False (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man8/mount.8.html
+
+
+# Enable force unmount?
+#
+# Force unmount for unreachable filesystems (like unreachable NFS shares).
+# Corresponds to mount -f.
+#
+# Variable: force_unmount | bool
+#
+# Default: False (system default).
+#
+# Reference:
+# * https://man7.org/linux/man-pages/man8/mount.8.html
+
+# Directory mode (octal).
+#
+# Directory permissions used when automatically creating needed directories.
+#
+# Variable: directory_mode | str
+#
+# Default: '0755' (octal).
+
+# Time to wait for mount command to finish.
+#
+# Mount considered failed and shutdown if not mounted within this time. All
+# commands terminated via SIGTERM and SIGKILL after timeout_sec elapses again.
+#
+# Values:
+#        0: disables
+#        #: time in seconds
+#   {TIME}: TIME time
+#   {OMIT}: default_timeout_start_sec (default)
+#
+# Variable: timeout_sec | str
+#
+# Default: omit (system default).

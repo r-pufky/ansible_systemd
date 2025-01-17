@@ -1,0 +1,92 @@
+---
+# Filesystem mount operations require VM.
+# # Create a mount, mount override, automount, automount override.
+dependency:
+  name: 'galaxy'
+driver:
+  name: 'vagrant'
+  provider:
+    name: 'virtualbox'
+    config_options:
+      ssh.keep_alive: true
+      ssh.remote_user: 'root'
+    options:
+      append_platform_to_hostname: false
+provisioner:
+  name: 'ansible'
+  config_options:
+    defaults:
+      interpreter_python: 'auto_silent'  # suppress warnings
+      callback_whitelist: 'profile_tasks, timer, yaml'  # output profiling info
+  inventory:
+    group_vars:
+      all:
+        systemd_mounts:
+          - name: 'mnt-test'
+            state: 'present'
+            override: false
+            unit:
+              description: 'test mount tmpfs'
+            mount:
+              what: 'tmpfs'
+              where: '/mnt/test'
+              type: 'tmpfs'
+              options:
+                - 'noatime'
+                - 'nosuid'
+                - 'nodev'
+                - 'noexec'
+                - 'mode=1777'
+            install:
+              wanted_by:
+                - 'multi-user.target'
+          - name: 'mnt-test'
+            state: 'present'
+            override: true
+            unit:
+              description: 'override configuration test'
+        systemd_automounts:
+          - name: 'mnt-test'
+            state: 'present'
+            override: false
+            unit:
+              description: 'automount configuration test'
+            automount:
+              where: '/mnt/test'
+            install:
+              wanted_by:
+                - 'multi-user.target'
+          - name: 'mnt-test'
+            state: 'present'
+            override: true
+            unit:
+              description: 'override automount configuration test'
+platforms:
+  - name: 'systemd-debian-12-vm-mount-automount'
+    box: 'debian/bookworm64'
+    memory: 4096
+    cpus: 2
+    interfaces:
+      - network_name: private_network  # network_name required
+        auto_config: true
+        type: 'dhcp'
+verifier:
+  name: 'ansible'
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+scenario:
+  test_sequence:
+    # - 'dependency'
+    # - 'cleanup'
+    - 'destroy'
+    - 'syntax'
+    - 'create'
+    # - 'prepare'
+    - 'converge'
+    # - 'idempotence'  # overrides always created
+    # - 'side_effect'
+    - 'verify'
+    # - 'cleanup'
+    - 'destroy'

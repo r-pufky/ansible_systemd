@@ -1,0 +1,86 @@
+---
+- name: 'Mount | verify | mount'
+  hosts: 'all'
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Mount | verify | mount | query tmp-test.mount'
+      ansible.builtin.copy:
+        src: 'files/mnt-test.mount'
+        dest: '/etc/systemd/system/mnt-test.mount'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_systemd_mount
+
+    - name: 'Mount | verify | mount | assert mnt-test.mount'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_mount.changed
+        fail_msg: >
+          /etc/systemd/system/mnt-test.mount is not in expected format:
+          {{ _test_systemd_mount.diff }}.
+
+    - name: 'Mount | verify | mount | query mnt-test.mount override'
+      ansible.builtin.copy:
+        src: 'files/override.mount'
+        dest: '/etc/systemd/system/mnt-test.mount.d/override.conf'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_systemd_mount_override
+
+    - name: 'Mount | verify | mount | assert mnt-test.mount override'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_mount_override.changed
+        fail_msg: >
+          /etc/systemd/system/mnt-test.mount.d/override.conf is not in expected
+          format: {{ _test_systemd_mount_override.diff }}.
+
+- name: 'Mount | verify | automount'
+  hosts: 'all'
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Mount | verify | automount | query tmp-test.automount'
+      ansible.builtin.copy:
+        src: 'files/mnt-test.automount'
+        dest: '/etc/systemd/system/mnt-test.automount'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_systemd_automount
+
+    - name: 'Mount | verify | automount | assert mnt-test.automount'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_automount.changed
+        fail_msg: >
+          /etc/systemd/system/mnt-test.automount is not in expected format:
+          {{ _test_systemd_automount.diff }}.
+
+    - name: 'Mount | verify | automount | query mnt-test.automount override'
+      ansible.builtin.copy:
+        src: 'files/override.automount'
+        dest: '/etc/systemd/system/mnt-test.automount.d/override.conf'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_systemd_automount_override
+
+    - name: 'Mount | verify | automount | assert mnt-test.automount override'
+      ansible.builtin.assert:
+        that:
+          - not _test_systemd_automount_override.changed
+        fail_msg: >
+          /etc/systemd/system/mnt-test.automount.d/override.conf is not in
+          expected format: {{ _test_systemd_automount_override.diff }}.

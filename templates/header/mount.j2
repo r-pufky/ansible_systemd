@@ -1,0 +1,34 @@
+{# [Mount] section heading #}
+{% if 'mount' in systemd %}
+[Mount]
+{% if 'what' in systemd.mount %}
+What={{ systemd.mount.what }}
+{% endif %}
+{% if 'where' in systemd.mount %}
+Where={{ systemd.mount.where }}
+{% endif %}
+{% if 'type' in systemd.mount %}
+Type={{ systemd.mount.type | string | lower }}
+{% endif %}
+{% if 'options' in systemd.mount %}
+Options={{ systemd.mount.options | join(',') }}
+{% endif %}
+{% if 'sloppy_options' in systemd.mount %}
+SloppyOptions={{ systemd.mount.sloppy_options | string | lower }}
+{% endif %}
+{% if 'lazy_unmount' in systemd.mount %}
+LazyUnmount={{ systemd.mount.lazy_unmount | string | lower }}
+{% endif %}
+{% if 'read_write_only' in systemd.mount %}
+ReadWriteOnly={{ systemd.mount.read_write_only | string | lower }}
+{% endif %}
+{% if 'force_unmount' in systemd.mount %}
+ForceUnmount={{ systemd.mount.force_unmount | string | lower }}
+{% endif %}
+{% if 'directory_mode' in systemd.mount %}
+DirectoryMode={{ systemd.mount.directory_mode }}
+{% endif %}
+{% if 'timeout_sec' in systemd.mount %}
+TimeoutSec={{ systemd.mount.timeout_sec }}
+{% endif %}
+{% endif %}

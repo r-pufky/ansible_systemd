@@ -15,7 +15,6 @@
       ansible.builtin.include_role:
         name: 'r_pufky.srv.systemd'
   vars:
-    systemd_testing_enable: false
     systemd_services:
       - name: 'test'
         state: 'present'

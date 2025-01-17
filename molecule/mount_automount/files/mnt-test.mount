@@ -1,0 +1,11 @@
+[Unit]
+Description=test mount tmpfs
+
+[Mount]
+What=tmpfs
+Where=/mnt/test
+Type=tmpfs
+Options=noatime,nosuid,nodev,noexec,mode=1777
+
+[Install]
+WantedBy=multi-user.target
