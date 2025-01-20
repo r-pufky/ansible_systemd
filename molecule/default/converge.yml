@@ -16,8 +16,8 @@
 
     - name: 'Default | converge | export snapshot to cache for verification'
       ansible.builtin.set_fact:
-        cacheable: true
         _test_systemd_cache_default_stat: '{{ _test_systemd_default_stat }}'
+        cacheable: true
 
     - name: 'Default | converge | apply r_pufky.srv.systemd'
       ansible.builtin.include_role:

@@ -3,6 +3,12 @@
   hosts: 'all'
   gather_facts: false
   tasks:
+    - name: 'Default | verify | assert fact_caching not expired'
+      ansible.builtin.assert:
+        that:
+          - '_test_systemd_cache_default_stat is defined'
+        fail_msg: 'fact_caching has expired; re-run prepare.'
+
     - name: 'Default | verify | snapsnot systemd directory'
       ansible.builtin.stat:
         path: '/etc/systemd/system'
