@@ -16,7 +16,7 @@
 - name: 'Systemd | enable | automount {{ systemd.name }}'
   when: >
     systemd.state | lower == 'present' and
-    not (systemd_testing_enable | default(false))
+    (systemd_daemon_reload_enable | default(true))
   notify: 'Handlers | reload systemd'
   block:
     - name: 'Systemd | enable | stop associated mount {{ systemd.name }}'

@@ -16,7 +16,7 @@ provisioner:
   inventory:
     group_vars:
       all:
-        systemd_testing_enable: true
+        systemd_daemon_reload_enable: false
         systemd_services:
           - name: 'reboot'
             state: 'present'

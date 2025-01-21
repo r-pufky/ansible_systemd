@@ -4,6 +4,6 @@
 ###############################################################################
 
 - name: 'Handlers | reload systemd'
-  when: not (systemd_testing_enable | default(false))
+  when: (systemd_daemon_reload_enable | default(true))
   ansible.builtin.systemd_service:
     daemon_reload: true

@@ -430,7 +430,7 @@ SystemCallLog=~{{ call }}
 {# environment #}
 {% if 'environment' in systemd.exec %}
 {% for env in systemd.exec.environment %}
-Environment="{{ env.var }}={{ env.value}}"
+Environment="{{ env.var }}={{ env.value }}"
 {% endfor %}
 {% endif %}
 {% if 'environment_file' in systemd.exec %}

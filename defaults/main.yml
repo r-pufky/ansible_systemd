@@ -261,3 +261,14 @@ systemd_mounts: []
 #
 # Default: [].
 systemd_automounts: []
+
+# Enable systemctl daemon-reload when applying role?
+#
+# In certain situations, systemd daemon cannot be reloaded (if override.conf is
+# required before the service exists as with certain package installations or
+# for systems where it is not supported, such as containers).
+#
+# Unless explicitly needed, this should always be enabled.
+#
+# Default: True.
+systemd_daemon_reload_enable: true
