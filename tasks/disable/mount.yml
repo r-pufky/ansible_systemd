@@ -15,3 +15,4 @@
     name: '{{ systemd.name }}.mount'
     enabled: false
     state: 'stopped'
+  failed_when: false  # non-existing mounts can still be marked absent

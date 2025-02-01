@@ -1,0 +1,8 @@
+---
+- name: 'Absent nonexistent | converge'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Absent nonexistent | converge | create'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.systemd'

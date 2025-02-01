@@ -15,3 +15,4 @@
     name: '{{ systemd.name }}.automount'
     enabled: false
     state: 'stopped'
+  failed_when: false  # non-existing services can still be marked absent
