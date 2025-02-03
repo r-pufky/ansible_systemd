@@ -28,7 +28,7 @@ provisioner:
         systemd_services:
           - name: 'nfs-mountd'
             state: 'present'
-            override: true
+            drop_in: true
             service:
               exec_start:
                 - ''
@@ -57,7 +57,7 @@ scenario:
     - 'create'
     - 'prepare'
     - 'converge'
-    # - 'idempotence'  # overrides always created
+    # - 'idempotence'  # drop-ins always created
     # - 'side_effect'
     - 'verify'
     # - 'cleanup'

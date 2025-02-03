@@ -35,9 +35,11 @@
 #     into system units (systemd-fstab-generator); not used for creating
 #     individual units.
 #
+# Special Case:
+#   automount: {} - will create the [Automount] header only.
+#
 # See reference sections for syntax formats:
-# * TIME (time)   # not used
-# * SPECIFIERS (unit specifiers)   # not used
+# * TIME (time)
 #
 # Reference:
 # * https://www.freedesktop.org/software/systemd/man/latest/systemd.automount.html#

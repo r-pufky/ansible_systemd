@@ -32,7 +32,7 @@ host_vars/client.example.com/vars/systemd.yml
 systemd_services:
   - name: 'reboot'
     state: 'present'
-    override: false
+    drop_in: false
     unit:
       description: 'periodic system reboot service'
       requires:
@@ -46,7 +46,7 @@ systemd_services:
 systemd_timers:
   - name: 'reboot'
     state: 'present'
-    override: false
+    drop_in: false
     unit:
       description: 'periodic system reboot timer'
     timer:
@@ -72,7 +72,7 @@ host_vars/client.example.com/vars/systemd.yml
 systemd_mounts:
   - name: 'data-pictures'
     state: 'present'
-    override: false
+    drop_in: false
     unit:
       description: 'mount NFS share /data/pictures'
     mount:
@@ -88,7 +88,7 @@ systemd_mounts:
         - 'multi-user.target'
   - name: 'mnt-test'
     state: 'present'
-    override: false
+    drop_in: false
     unit:
       description: 'mount a new tmpfs filesystem to /mnt/test'
     mount:
@@ -106,7 +106,7 @@ systemd_mounts:
         - 'multi-user.target'
   - name: 'tmp'
     state: 'present'
-    override: true
+    drop_in: true
     unit:
       description: 'override default /tmp tmpfs mode'
     mount:
@@ -115,7 +115,7 @@ systemd_mounts:
 systemd_automounts:
   - name: 'mnt-test'
     state: 'present'
-    override: false
+    drop_in: false
     unit:
       description: 'automount /mnt/test instead of static mount'
     automount:
@@ -141,11 +141,11 @@ host_vars/client.example.com/vars/systemd.yml
 systemd_services:
   - name: 'my_service'
     state: 'absent'
-    override: false
+    drop_in: false
 systemd_timers:
   - name: 'my_timer'
     state: 'absent'
-    override: false
+    drop_in: false
 ```
 
 Apply the role
@@ -155,10 +155,12 @@ Apply the role
     name: 'r_pufky.srv.systemd'
 ```
 
-## Override existing systemd units
-Using unit overrides are possible, allowing for tweaking of existing systemd
-services without re-defining the entire configuration. This is supported for
-all supported units. Overrides are stored in `systemd/{UNIT}.d/override.conf`.
+## Override existing systemd units (drop-ins)
+Using unit drop-ins (overrides) are possible, allowing for tweaking of existing
+systemd services without re-defining the entire configuration. This is
+supported for all supported units. Overrides are stored in
+`systemd/{UNIT}.d/override.conf`.
+
 
 Override NFS server and disable V3
 ``` yaml
@@ -169,11 +171,31 @@ Override NFS server and disable V3
     systemd_services:
       - name: 'nfs-server'
         state: 'present'
-        override: true
+        drop_in: true
         service:
           exec_start:
             - ''
             - '/usr/bin/rpc.nfsd --no-nfs-version 3'
+```
+
+Sections may be created without values to render headers only; enabling
+extremely targeted drop-in use. See [headers](https://github.com/r-pufky/ansible_systemd/tree/main/templates/header)
+for complete list.
+
+Override User/Group for Service
+``` yaml
+- name: 'Manage systemd'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.systemd'
+  vars:
+    systemd_services:
+      - name: 'nfs-server'
+        state: 'present'
+        drop_in: true
+        service: {}  # service header only
+        exec:
+          user: 'nfs'
+          group: 'nfs'
 ```
 
 ### Manage normally with `ansible.builtin.service`

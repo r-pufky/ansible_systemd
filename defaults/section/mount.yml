@@ -38,6 +38,9 @@
 #     into system units (systemd-fstab-generator); not used for creating
 #     individual units.
 #
+# Special Case:
+#   mount: {} - will create the [Mount] header only.
+#
 # See reference sections for syntax formats:
 # * TIME (time)
 # * SPECIFIERS (unit specifiers)

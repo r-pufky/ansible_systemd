@@ -42,11 +42,11 @@
           - not _test_systemd_timer_all_options.changed
         fail_msg: '/etc/systemd/system/reboot.timer is not in expected format: {{ _test_systemd_timer_all_options.diff }}.'
 
-- name: 'File format all options | verify | service override'
-  hosts: 'systemd-debian-12-file_format_all_options-override'
+- name: 'File format all options | verify | service drop-in'
+  hosts: 'systemd-debian-12-file_format_all_options-drop-in'
   gather_facts: false
   tasks:
-    - name: 'File format all options | verify | service override | query file'
+    - name: 'File format all options | verify | service drop-in | query file'
       ansible.builtin.copy:
         src: 'files/reboot.service.override'
         dest: '/etc/systemd/system/reboot.service.d/override.conf'
@@ -57,17 +57,17 @@
       diff: true
       register: _test_systemd_service_override
 
-    - name: 'File format all options | verify | service override | assert expected file'
+    - name: 'File format all options | verify | service drop-in | assert expected file'
       ansible.builtin.assert:
         that:
           - not _test_systemd_service_override.changed
         fail_msg: '/etc/systemd/system/reboot.service.d/override.conf is not in expected format: {{ _test_systemd_service_override.diff }}.'
 
-- name: 'File format all options | verify | timer override'
-  hosts: 'systemd-debian-12-file_format_all_options-override'
+- name: 'File format all options | verify | timer drop-in'
+  hosts: 'systemd-debian-12-file_format_all_options-drop-in'
   gather_facts: false
   tasks:
-    - name: 'File format all options | verify | timer override | query file'
+    - name: 'File format all options | verify | timer drop-in | query file'
       ansible.builtin.copy:
         src: 'files/reboot.timer.override'
         dest: '/etc/systemd/system/reboot.timer.d/override.conf'
@@ -78,7 +78,7 @@
       diff: true
       register: _test_systemd_timer_override
 
-    - name: 'File format all options | verify | timer override | assert expected file'
+    - name: 'File format all options | verify | timer drop-in | assert expected file'
       ansible.builtin.assert:
         that:
           - not _test_systemd_timer_override.changed

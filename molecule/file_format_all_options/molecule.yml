@@ -20,7 +20,7 @@ provisioner:
         systemd_services:
           - name: 'reboot'
             state: 'present'
-            override: false
+            drop_in: false
             unit:
               description: 'periodic system reboot timer'
               documentation:
@@ -456,7 +456,7 @@ provisioner:
         systemd_timers:
           - name: 'reboot'
             state: 'present'
-            override: false
+            drop_in: false
             unit:
               description: 'periodic system reboot timer'
               documentation:
@@ -601,7 +601,7 @@ platforms:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'systemd-debian-12-file_format_all_options-override'
+  - name: 'systemd-debian-12-file_format_all_options-drop-in'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
@@ -623,7 +623,7 @@ scenario:
     - 'create'
     # - 'prepare'
     - 'converge'
-    # - 'idempotence'  # override services touched each time
+    # - 'idempotence'  # drop-in services touched each time
     # - 'side_effect'
     - 'verify'
     # - 'cleanup'

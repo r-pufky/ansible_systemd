@@ -18,19 +18,19 @@ provisioner:
         systemd_services:
           - name: 'test'
             state: 'absent'
-            override: false
+            drop_in: false
         systemd_timers:
           - name: 'test'
             state: 'absent'
-            override: false
+            drop_in: false
         systemd_mounts:
           - name: 'mnt-test'
             state: 'absent'
-            override: false
+            drop_in: false
         systemd_automounts:
           - name: 'mnt-test'
             state: 'absent'
-            override: false
+            drop_in: false
 platforms:
   - name: 'systemd-debian-12-absent_nonexistent'
     image: 'ghcr.io/hifis-net/debian-systemd:12'

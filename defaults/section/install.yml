@@ -22,6 +22,9 @@
 # * systemd.slice - slice
 # * systemd.scope - scope
 #
+# Special Case:
+#   install: {} - will create the [Install] header only.
+#
 # See reference sections for syntax formats:
 # * SPECIFIERS (unit specifiers): install only supports the following: %a, %b,
 #   %B, %g, %G, %H, %i, %j, %l, %m, %n, %N, %o, %p, %u, %U, %v, %w, %W, %%.

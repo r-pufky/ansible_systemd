@@ -7,14 +7,14 @@
 #   systemd: dict containing one element from systemd_timers.
 
 - name: 'Systemd | unload | timer {{ systemd.name }}'
-  when: systemd.state | lower == 'absent' and not systemd.override
+  when: systemd.state | lower == 'absent' and not systemd.drop_in
   notify: 'Handlers | reload systemd'
   ansible.builtin.file:
     dest: '{{ systemd_role_root }}/{{ systemd.name }}.timer'
     state: 'absent'
 
-- name: 'Systemd | unload | override | timer {{ systemd.name }}'
-  when: systemd.state | lower == 'absent' and systemd.override
+- name: 'Systemd | unload | drop-in | timer {{ systemd.name }}'
+  when: systemd.state | lower == 'absent' and systemd.drop_in
   notify: 'Handlers | reload systemd'
   ansible.builtin.file:
     dest: '{{ systemd_role_root }}/{{ systemd.name }}.timer.d'

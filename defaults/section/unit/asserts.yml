@@ -7,6 +7,9 @@
 #
 # Encodes information about a process controlled and supervised by systemd.
 #
+# Special Case:
+#   unit: {} - will create the [Unit] header only.
+#
 # See reference sections for syntax formats:
 # * SIZE (syntax)
 # * TIME (time)

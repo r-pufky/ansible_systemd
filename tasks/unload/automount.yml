@@ -7,14 +7,14 @@
 #   systemd: dict containing one element from systemd_automounts.
 
 - name: 'Systemd | unload | mount {{ systemd.name }}'
-  when: systemd.state | lower == 'absent' and not systemd.override
+  when: systemd.state | lower == 'absent' and not systemd.drop_in
   notify: 'Handlers | reload systemd'
   ansible.builtin.file:
     dest: '{{ systemd_role_root }}/{{ systemd.name }}.automount'
     state: 'absent'
 
-- name: 'Systemd | unload | override | mount {{ systemd.name }}'
-  when: systemd.state | lower == 'absent' and systemd.override
+- name: 'Systemd | unload | drop-in | mount {{ systemd.name }}'
+  when: systemd.state | lower == 'absent' and systemd.drop_in
   notify: 'Handlers | reload systemd'
   ansible.builtin.file:
     dest: '{{ systemd_role_root }}/{{ systemd.name }}.automount.d'

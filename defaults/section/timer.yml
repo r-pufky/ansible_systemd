@@ -17,6 +17,9 @@
 # Timers do not necessarily expire at the precise time configured with these
 # settings.
 #
+# Special Case:
+#   timer: {} - will create the [Timer] header only.
+#
 # See reference sections for syntax formats:
 # * TIME (time)
 # * SPECIFIERS (unit specifiers)

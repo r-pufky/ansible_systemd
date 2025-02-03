@@ -18,7 +18,7 @@ provisioner:
         systemd_services:
           - name: 'test'
             state: 'present'
-            override: false
+            drop_in: false
             unit:
               description: 'test timer service'
               requires: ['test.timer']
@@ -31,7 +31,7 @@ provisioner:
         systemd_timers:
           - name: 'test'
             state: 'present'
-            override: false
+            drop_in: false
             unit:
               description: 'test timer'
             timer:

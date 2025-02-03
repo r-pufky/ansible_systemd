@@ -23,7 +23,7 @@
           /etc/systemd/system/mnt-test.mount is not in expected format:
           {{ _test_systemd_mount.diff }}.
 
-    - name: 'Mount | verify | mount | query mnt-test.mount override'
+    - name: 'Mount | verify | mount | query mnt-test.mount drop-in'
       ansible.builtin.copy:
         src: 'files/override.mount'
         dest: '/etc/systemd/system/mnt-test.mount.d/override.conf'
@@ -34,7 +34,7 @@
       diff: true
       register: _test_systemd_mount_override
 
-    - name: 'Mount | verify | mount | assert mnt-test.mount override'
+    - name: 'Mount | verify | mount | assert mnt-test.mount drop-in'
       ansible.builtin.assert:
         that:
           - not _test_systemd_mount_override.changed
@@ -66,7 +66,7 @@
           /etc/systemd/system/mnt-test.automount is not in expected format:
           {{ _test_systemd_automount.diff }}.
 
-    - name: 'Mount | verify | automount | query mnt-test.automount override'
+    - name: 'Mount | verify | automount | query mnt-test.automount drop-in'
       ansible.builtin.copy:
         src: 'files/override.automount'
         dest: '/etc/systemd/system/mnt-test.automount.d/override.conf'
@@ -77,7 +77,7 @@
       diff: true
       register: _test_systemd_automount_override
 
-    - name: 'Mount | verify | automount | assert mnt-test.automount override'
+    - name: 'Mount | verify | automount | assert mnt-test.automount drop-in'
       ansible.builtin.assert:
         that:
           - not _test_systemd_automount_override.changed

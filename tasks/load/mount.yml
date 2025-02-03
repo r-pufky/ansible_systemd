@@ -8,7 +8,7 @@
 #   systemd: dict containing one element from systemd_mounts.
 
 - name: 'Systemd | load | mount {{ systemd.name }}'
-  when: systemd.state | lower == 'present' and not systemd.override
+  when: systemd.state | lower == 'present' and not systemd.drop_in
   notify: 'Handlers | reload systemd'
   ansible.builtin.template:
     src: 'mount.j2'
@@ -17,10 +17,10 @@
     group: 'root'
     mode: '0644'
 
-- name: 'Systemd | load | override'
-  when: systemd.state | lower == 'present' and systemd.override
+- name: 'Systemd | load | drop-in'
+  when: systemd.state | lower == 'present' and systemd.drop_in
   block:
-    - name: 'Systemd | load | override | create {{ systemd_role_root }}/{{ systemd.name }}.mount.d'  # noqa name[template] directory structure
+    - name: 'Systemd | load | drop-in | create {{ systemd_role_root }}/{{ systemd.name }}.mount.d'  # noqa name[template] directory structure
       ansible.builtin.file:
         path: '{{ systemd_role_root }}/{{ systemd.name }}.mount.d'
         owner: 'root'
@@ -29,7 +29,7 @@
         recurse: true
         state: 'directory'
 
-    - name: 'Systemd | load | override | mount {{ systemd.name }}'
+    - name: 'Systemd | load | drop-in | mount {{ systemd.name }}'
       notify: 'Handlers | reload systemd'
       ansible.builtin.template:
         src: 'mount.j2'

@@ -8,18 +8,18 @@
       ansible.builtin.include_role:
         name: 'r_pufky.srv.systemd'
 
-- name: 'File format all options | converge | override'
-  hosts: 'systemd-debian-12-file_format_all_options-override'
+- name: 'File format all options | converge | drop-in'
+  hosts: 'systemd-debian-12-file_format_all_options-drop-in'
   gather_facts: false
   tasks:
-    - name: 'File format all options | coverge | override | apply r_pufky.srv.systemd'
+    - name: 'File format all options | coverge | drop-in | apply r_pufky.srv.systemd'
       ansible.builtin.include_role:
         name: 'r_pufky.srv.systemd'
       vars:
         systemd_services:
           - name: 'reboot'
             state: 'present'
-            override: true
+            drop_in: true
             service:
               exec_start:
                 - ''
@@ -27,7 +27,7 @@
         systemd_timers:
           - name: 'reboot'
             state: 'present'
-            override: true
+            drop_in: true
             timer:
               on_calendar:
                 - ''

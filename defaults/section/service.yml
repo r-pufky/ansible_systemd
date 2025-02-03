@@ -22,6 +22,9 @@
 #
 # Services lacking both exec_start and exec_stop are not valid.
 #
+# Special Case:
+#   service: {} - will create the [Service] header only.
+#
 # See reference sections for syntax formats:
 # * SIZE (syntax)
 # * TIME (time)

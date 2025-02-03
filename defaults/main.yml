@@ -48,8 +48,9 @@
 #           present: manage configuration
 #            absent: remove configuration
 #         Default: 'present'.
-#     override: bool - manage service using systemd/{SERVICE}.d/override.conf
-#           instead of service unit itself (systemd/{SERVICE}).
+#     drop_in: bool - manage service using systemd drop-in at
+#           systemd/{SERVICE}.d/override.conf instead of service unit itself
+#           (systemd/{SERVICE}).
 #         Special Case:
 #           *: add an empty value before settings to clear previous definition
 #              exec_start: ['', 'new_exec_options'].
@@ -63,7 +64,7 @@
 # systemd_services:
 #   - name: 'reboot'
 #     state: 'present'
-#     override: false
+#     drop_in: false
 #     unit:
 #       description: 'periodic system reboot service'
 #       requires:
@@ -74,7 +75,7 @@
 #       user: 'root'
 #   - name: 'nfs-server'
 #     state: 'present'
-#     override: true
+#     drop_in: true
 #     service:
 #       exec_start:
 #         - ''
@@ -101,8 +102,9 @@ systemd_services: []
 #           present: manage configuration
 #            absent: remove configuration
 #         Default: 'present'.
-#     override: bool - manage timer using systemd/{TIMER}.d/override.conf
-#           instead of service unit itself (systemd/{TIMER}).
+#     drop_in: bool - manage timer using systemd drop-in at
+#           systemd/{TIMER}.d/override.conf instead of service unit itself
+#           (systemd/{TIMER}).
 #         Special Case:
 #           *: add an empty value before settings to clear previous definition
 #              on_calendar: ['', 'weekly'].
@@ -113,7 +115,7 @@ systemd_services: []
 # systemd_timers:
 #   - name: 'reboot'
 #     state: 'present'
-#     override: false
+#     drop_in: false
 #     unit:
 #       description: 'periodic system reboot timer'
 #     timer:
@@ -148,8 +150,9 @@ systemd_timers: []
 #           present: manage configuration
 #            absent: remove configuration
 #         Default: 'present'.
-#     override: bool - manage mount using systemd/{MOUNT}.d/override.conf
-#           instead of service unit itself (systemd/{MOUNT}).
+#     drop_in: bool - manage mount using systemd drop-in at
+#           systemd/{MOUNT}.d/override.conf instead of service unit itself
+#           (systemd/{MOUNT}).
 #         Special Case:
 #           *: add an empty value before settings to clear previous definition
 #              options: ['', 'noauto'].
@@ -163,7 +166,7 @@ systemd_timers: []
 # systemd_mounts:
 #   - name: 'data-pictures'
 #     state: 'present'
-#     override: false
+#     drop_in: false
 #     unit:
 #       description: 'mount /data/pictures'
 #     mount:
@@ -179,7 +182,7 @@ systemd_timers: []
 #         - 'multi-user.target'
 #   - name: 'mnt-test'
 #     state: 'present'
-#     override: false
+#     drop_in: false
 #     unit:
 #       description: 'test mount tmpfs'
 #     mount:
@@ -197,7 +200,7 @@ systemd_timers: []
 #         - 'multi-user.target'
 #   - name: 'tmp'
 #     state: 'present'
-#     override: true
+#     drop_in: true
 #     unit:
 #       description: 'override default tmpfs mode'
 #     mount:
@@ -230,8 +233,9 @@ systemd_mounts: []
 #           present: manage configuration
 #            absent: remove configuration
 #         Default: 'present'.
-#     override: bool - manage mount using systemd/{MOUNT}.d/override.conf
-#           instead of service unit itself (systemd/{MOUNT}).
+#     drop_in: bool - manage mount using systemd drop-in at
+#           systemd/{MOUNT}.d/override.conf instead of service unit itself
+#           (systemd/{MOUNT}).
 #         Special Case:
 #           *: add an empty value before settings to clear previous definition
 #              options: ['', 'noauto'].
@@ -245,7 +249,7 @@ systemd_mounts: []
 # systemd_automounts:
 #   - name: 'mnt-test'
 #     state: 'present'
-#     override: false
+#     drop_in: false
 #     unit:
 #       description: 'automount configuration test'
 #     automount:
@@ -255,7 +259,7 @@ systemd_mounts: []
 #         - 'multi-user.target'
 #   - name: 'mnt-test'
 #     state: 'present'
-#     override: true
+#     drop_in: true
 #     unit:
 #       description: 'override automount configuration test'
 #
@@ -264,7 +268,7 @@ systemd_automounts: []
 
 # Enable systemctl daemon-reload when applying role?
 #
-# In certain situations, systemd daemon cannot be reloaded (if override.conf is
+# In certain situations, systemd daemon cannot be reloaded (if drop-in is
 # required before the service exists as with certain package installations or
 # for systems where it is not supported, such as containers).
 #
