@@ -154,7 +154,7 @@
 # Subject to timer slack in systemd-system.conf TimerSlackNSec= setting.
 #
 # Values:
-#    '1us': recommended for best accuracy
+#      1us: recommended for best accuracy
 #   {TIME}: TIME timer relative to next calendar event (make as high as
 #           possible and as low as necessary to reduce power consumption).
 #   {OMIT}: '1min' (default)

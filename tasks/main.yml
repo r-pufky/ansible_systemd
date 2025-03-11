@@ -8,93 +8,109 @@
   loop: '{{ systemd_mounts | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Load automount'
   ansible.builtin.include_tasks: 'load/automount.yml'
   loop: '{{ systemd_automounts | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Load service'
   ansible.builtin.include_tasks: 'load/service.yml'
   loop: '{{ systemd_services | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Load timer'
   ansible.builtin.include_tasks: 'load/timer.yml'
   loop: '{{ systemd_timers | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Enable mount'
   ansible.builtin.include_tasks: 'enable/mount.yml'
   loop: '{{ systemd_mounts | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Enable automount'
   ansible.builtin.include_tasks: 'enable/automount.yml'
   loop: '{{ systemd_automounts | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Enable service'
   ansible.builtin.include_tasks: 'enable/service.yml'
   loop: '{{ systemd_services | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Enable timer'
   ansible.builtin.include_tasks: 'enable/timer.yml'
   loop: '{{ systemd_timers | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Disable service'
   ansible.builtin.include_tasks: 'disable/service.yml'
   loop: '{{ systemd_services | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Disable timer'
   ansible.builtin.include_tasks: 'disable/timer.yml'
   loop: '{{ systemd_timers | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Disable automount'
   ansible.builtin.include_tasks: 'disable/automount.yml'
   loop: '{{ systemd_automounts | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Disable mount'
   ansible.builtin.include_tasks: 'disable/mount.yml'
   loop: '{{ systemd_mounts | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Unload service'
   ansible.builtin.include_tasks: 'unload/service.yml'
   loop: '{{ systemd_services | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Unload timer'
   ansible.builtin.include_tasks: 'unload/timer.yml'
   loop: '{{ systemd_timers | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Unload automount'
   ansible.builtin.include_tasks: 'unload/automount.yml'
   loop: '{{ systemd_automounts | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
 
 - name: 'Unload mount'
   ansible.builtin.include_tasks: 'unload/mount.yml'
   loop: '{{ systemd_mounts | default([]) }}'
   loop_control:
     loop_var: 'systemd'
+    label: '{{ systemd.name }}'
