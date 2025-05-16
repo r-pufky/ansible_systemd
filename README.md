@@ -11,8 +11,8 @@ Use `section` in defaults to reference specific systemd variables, datatypes,
 and usage for variables.
 
 ## Dependencies
-Part of the [r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv)
-collection.
+**galaxy-ng** roles cannot be used independently. Part of
+[r_pufky.deb](https://github.com/r-pufky/ansible_collection_deb) collection.
 
 ## Example Playbook
 Standard ansible built-ins may be used **after** configuration. Systemd will be
@@ -61,7 +61,7 @@ Apply the role
 ``` yaml
 - name: 'Manage systemd'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.systemd'
+    name: 'r_pufky.deb.systemd'
 ```
 
 ## Systemd mount / automount example
@@ -129,7 +129,7 @@ Apply the role
 ``` yaml
 - name: 'Manage systemd'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.systemd'
+    name: 'r_pufky.deb.systemd'
 ```
 
 ### Remove systemd units
@@ -152,7 +152,7 @@ Apply the role
 ``` yaml
 - name: 'Manage systemd'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.systemd'
+    name: 'r_pufky.deb.systemd'
 ```
 
 ## Override existing systemd units (drop-ins)
@@ -166,7 +166,7 @@ Override NFS server and disable V3
 ``` yaml
 - name: 'Manage systemd'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.systemd'
+    name: 'r_pufky.deb.systemd'
   vars:
     systemd_services:
       - name: 'nfs-server'
@@ -186,7 +186,7 @@ Override User/Group for Service
 ``` yaml
 - name: 'Manage systemd'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.systemd'
+    name: 'r_pufky.deb.systemd'
   vars:
     systemd_services:
       - name: 'nfs-server'
@@ -210,7 +210,7 @@ normally with ansible.
 ```
 
 ## Development
-Configure [environment](https://github.com/r-pufky/ansible_collection_srv/blob/main/docs/dev/environment/README.md)
+Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/dev/environment/README.md)
 
 Run all unit tests:
 ``` bash

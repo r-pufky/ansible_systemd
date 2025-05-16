@@ -4,6 +4,6 @@
   gather_facts: false
   become: true
   tasks:
-    - name: 'Restart instead of reload | converge | apply r_pufky.srv.systemd'
+    - name: 'Restart instead of reload | converge | apply r_pufky.deb.systemd'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.systemd'
+        name: 'r_pufky.deb.systemd'

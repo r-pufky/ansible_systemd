@@ -5,7 +5,7 @@
   tasks:
     - name: 'Timer service | converge | create'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.systemd'
+        name: 'r_pufky.deb.systemd'
 
 - name: 'Timer service | converge | remove'
   hosts: 'systemd-debian-12-timer_service-remove'
@@ -13,7 +13,7 @@
   tasks:
     - name: 'Timer service | converge | remove'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.systemd'
+        name: 'r_pufky.deb.systemd'
   vars:
     systemd_services:
       - name: 'test'

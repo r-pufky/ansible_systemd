@@ -1,6 +1,12 @@
 ---
-# Role applied with no settings should not change anything. Use directory
-# stat to ensure no changes are applied to systemd.
+###############################################################################
+# Default
+###############################################################################
+# Role applied with no settings should not change anything.
+#
+# Tests:
+# * Use directory stat to ensure no changes are applied to systemd.
+
 dependency:
   name: 'galaxy'
 driver:
@@ -11,7 +17,7 @@ provisioner:
     defaults:
       interpreter_python: 'auto_silent'
       callback_whitelist: 'profile_tasks, timer, yaml'
-      fact_caching: 'jsonfile'  # systemd default services snapshot
+      fact_caching: 'jsonfile'  # Systemd default services snapshot.
       fact_caching_connection: '/tmp/facts_cache'
       fact_caching_timeout: 7200
     ssh_connection:

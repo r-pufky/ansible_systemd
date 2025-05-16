@@ -9,9 +9,10 @@
 
     - name: 'Restart instead of reload | verify | assert nfs mountd started'
       ansible.builtin.assert:
+        quiet: true
         that:
           - ansible_facts.services["nfs-mountd.service"].state == 'running'
         fail_msg: |
-          nfs-server.service should have been started, not reloaded.
+          ✘ nfs-server.service should have been started, not reloaded.
 
           {{ ansible_facts.services["nfs-mountd.service"] }}

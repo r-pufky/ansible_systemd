@@ -1,6 +1,7 @@
 ---
-# Role applied with no settings should not change anything. Use directory
-# stat to ensure no changes are applied to systemd.
+###############################################################################
+# Converge
+###############################################################################
 #
 # Generates:
 #   _test_systemd_cache_default_stat: stat /etc/systemd/system
@@ -19,6 +20,6 @@
         _test_systemd_cache_default_stat: '{{ _test_systemd_default_stat }}'
         cacheable: true
 
-    - name: 'Default | converge | apply r_pufky.srv.systemd'
+    - name: 'Default | converge | apply r_pufky.deb.systemd'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.systemd'
+        name: 'r_pufky.deb.systemd'

@@ -1,5 +1,12 @@
 ---
+###############################################################################
+# Absent Nonexistent
+###############################################################################
 # Setting non-existent units absent should execute without failures.
+#
+# Tests:
+# * Ensure role completes without errors.
+
 dependency:
   name: 'galaxy'
 driver:

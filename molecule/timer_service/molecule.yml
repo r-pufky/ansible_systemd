@@ -1,5 +1,13 @@
 ---
+###############################################################################
+# Timer Service
+###############################################################################
 # Create a real timer service (e.g. a cronjob).
+#
+# Tests:
+# * Test timer service is created.
+# * Test timer service is removed correctly.
+
 dependency:
   name: 'galaxy'
 driver:

@@ -1,8 +1,12 @@
 ---
+###############################################################################
+# Main
+###############################################################################
 # Always load everything before removing to prevent dependency failures.
 #
 # TODO(role): Add remaining units as implementation requires: socket device
 #     swap target path slice scope.
+
 - name: 'Load mount'
   ansible.builtin.include_tasks: 'load/mount.yml'
   loop: '{{ systemd_mounts | default([]) }}'

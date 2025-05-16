@@ -1,20 +1,21 @@
 ---
-# yamllint disable rule:line-length
 - name: 'File format all options | converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'File format all options | converge | apply r_pufky.srv.systemd'
+    - name: 'File format all options | converge | apply r_pufky.deb.systemd'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.systemd'
+        name: 'r_pufky.deb.systemd'
 
 - name: 'File format all options | converge | drop-in'
   hosts: 'systemd-debian-12-file_format_all_options-drop-in'
   gather_facts: false
   tasks:
-    - name: 'File format all options | coverge | drop-in | apply r_pufky.srv.systemd'
+    - name: >
+        File format all options | coverge | drop-in |
+        apply r_pufky.deb.systemd
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.systemd'
+        name: 'r_pufky.deb.systemd'
       vars:
         systemd_services:
           - name: 'reboot'

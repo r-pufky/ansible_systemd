@@ -5,9 +5,10 @@
   tasks:
     - name: 'Default | verify | assert fact_caching not expired'
       ansible.builtin.assert:
+        quiet: true
         that:
           - '_test_systemd_cache_default_stat is defined'
-        fail_msg: 'fact_caching has expired; re-run prepare.'
+        fail_msg: '⚠ fact_caching has expired; re-run prepare.'
 
     - name: 'Default | verify | snapsnot systemd directory'
       ansible.builtin.stat:
@@ -16,7 +17,8 @@
 
     - name: 'Default | verify | assert systemd directory same'
       ansible.builtin.assert:
+        quiet: true
         that:
-          - _test_systemd_default_stat == _test_systemd_cache_default_stat
+          - _test_systemd_default_stat.stat == _test_systemd_cache_default_stat.stat  # yamllint disable-line rule:line-length
         fail_msg: >
-          '/etc/systemd/system directory modified during role execution.'
+          '✘ /etc/systemd/system directory modified during role execution.'

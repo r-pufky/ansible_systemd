@@ -1,85 +1,38 @@
 ---
-# yamllint disable rule:line-length
-- name: 'File format all options | verify | service file format'
+- name: 'File format all options | verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'File format all options | verify | service file format | query file'
-      ansible.builtin.copy:
-        src: 'files/reboot.service'
-        dest: '/etc/systemd/system/reboot.service'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_systemd_service_all_options
+    - name: 'File format all options | verify | unit'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'copy.yml'
+      vars:
+        test_name: 'File format all options | verify | unit | {{ item }}'
+        test_src: 'files/{{ item }}'
+        test_file: '/etc/systemd/system/{{ item }}'
+        test_owner: 'root'
+        test_group: 'root'
+        test_mode: '0644'
+      loop:
+        - 'reboot.service'
+        - 'reboot.timer'
 
-    - name: 'File format all options | verify | service file format | assert expected file'
-      ansible.builtin.assert:
-        that:
-          - not _test_systemd_service_all_options.changed
-        fail_msg: '/etc/systemd/system/reboot.service is not in expected format: {{ _test_systemd_service_all_options.diff }}.'
-
-- name: 'File format all options | verify | timer file format'
-  hosts: 'all'
-  gather_facts: false
-  tasks:
-    - name: 'File format all options | verify | timer file format | query file'
-      ansible.builtin.copy:
-        src: 'files/reboot.timer'
-        dest: '/etc/systemd/system/reboot.timer'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_systemd_timer_all_options
-
-    - name: 'File format all options | verify | timer file format | assert expected file'
-      ansible.builtin.assert:
-        that:
-          - not _test_systemd_timer_all_options.changed
-        fail_msg: '/etc/systemd/system/reboot.timer is not in expected format: {{ _test_systemd_timer_all_options.diff }}.'
-
-- name: 'File format all options | verify | service drop-in'
+- name: 'File format all options | verify'
   hosts: 'systemd-debian-12-file_format_all_options-drop-in'
   gather_facts: false
   tasks:
-    - name: 'File format all options | verify | service drop-in | query file'
-      ansible.builtin.copy:
-        src: 'files/reboot.service.override'
-        dest: '/etc/systemd/system/reboot.service.d/override.conf'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_systemd_service_override
-
-    - name: 'File format all options | verify | service drop-in | assert expected file'
-      ansible.builtin.assert:
-        that:
-          - not _test_systemd_service_override.changed
-        fail_msg: '/etc/systemd/system/reboot.service.d/override.conf is not in expected format: {{ _test_systemd_service_override.diff }}.'
-
-- name: 'File format all options | verify | timer drop-in'
-  hosts: 'systemd-debian-12-file_format_all_options-drop-in'
-  gather_facts: false
-  tasks:
-    - name: 'File format all options | verify | timer drop-in | query file'
-      ansible.builtin.copy:
-        src: 'files/reboot.timer.override'
-        dest: '/etc/systemd/system/reboot.timer.d/override.conf'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_systemd_timer_override
-
-    - name: 'File format all options | verify | timer drop-in | assert expected file'
-      ansible.builtin.assert:
-        that:
-          - not _test_systemd_timer_override.changed
-        fail_msg: '/etc/systemd/system/reboot.timer.d/override.conf is not in expected format: {{ _test_systemd_timer_override.diff }}.'
+    - name: 'File format all options | verify | drop-in'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'copy.yml'
+      vars:
+        test_name: 'File format all options | verify | drop-in | {{ item }}'
+        test_src: 'files/{{ item }}.override'
+        test_file: '/etc/systemd/system/{{ item }}.d/override.conf'
+        test_owner: 'root'
+        test_group: 'root'
+        test_mode: '0644'
+      loop:
+        - 'reboot.service'
+        - 'reboot.timer'

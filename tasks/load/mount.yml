@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Create a defined systemd mount
 ###############################################################################
@@ -20,8 +19,10 @@
 - name: 'Systemd | load | drop-in'
   when: systemd.state | lower == 'present' and systemd.drop_in
   block:
-    - name: 'Systemd | load | drop-in | create {{ systemd_role_root }}/{{ systemd.name }}.mount.d'  # noqa name[template] directory structure
-      ansible.builtin.file:
+    - name: >
+        Systemd | load | drop-in |
+        create {{ systemd_role_root }}/{{ systemd.name }}.mount.d
+      ansible.builtin.file:  # noqa name[template] directory structure
         path: '{{ systemd_role_root }}/{{ systemd.name }}.mount.d'
         owner: 'root'
         group: 'root'
@@ -33,7 +34,10 @@
       notify: 'Handlers | reload systemd'
       ansible.builtin.template:
         src: 'mount.j2'
-        dest: '{{ systemd_role_root }}/{{ systemd.name }}.mount.d/override.conf'
+        dest: '{{
+            systemd_role_root ~ "/" ~
+            systemd.name ~ ".mount.d/override.conf"
+          }}'
         owner: 'root'
         group: 'root'
         mode: '0644'

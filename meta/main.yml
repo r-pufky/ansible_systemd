@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: 'systemd'
   author: 'r_pufky'
   description: 'Manage systemd configuration.'
   company: 'N/A'

@@ -15,4 +15,4 @@
     name: '{{ systemd.name }}.timer'
     enabled: false
     state: 'stopped'
-  failed_when: false  # non-existing timers can still be marked absent
+  failed_when: false  # non-existing timers can still be marked absent.

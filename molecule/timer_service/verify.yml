@@ -1,115 +1,84 @@
 ---
-# yamllint disable rule:line-length
-- name: 'Timer service | verify | test.service'
+- name: 'Timer service | verify'
   hosts: 'systemd-debian-12-timer_service'
   gather_facts: false
   tasks:
-    - name: 'Timer service | verify | test.service | gather service status'
+    - name: 'Timer service | verify | unit'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'copy.yml'
+      vars:
+        test_name: 'Timer service | verify | unit | {{ item }}'
+        test_src: 'files/{{ item }}'
+        test_file: '/etc/systemd/system/{{ item }}'
+        test_owner: 'root'
+        test_group: 'root'
+        test_mode: '0644'
+      loop:
+        - 'test.service'
+        - 'test.timer'
+
+    - name: 'Timer service | verify | gather service status'
       ansible.builtin.service_facts:
 
-    - name: 'Timer service | verify | test.service | query file'
-      ansible.builtin.copy:
-        src: 'files/test.service'
-        dest: '/etc/systemd/system/test.service'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_systemd_timer_service
-
-    - name: 'Timer service | verify | test.service | assert service active'
+    - name: 'Timer service | verify | assert service active'
       ansible.builtin.assert:
+        quiet: true
         that:
           - '"test.service" in ansible_facts.services'
-        fail_msg: 'test.service should be enabled.'
+        fail_msg: '✘ test.service should be enabled.'
 
-    - name: 'Timer service | verify | test.service | assert expected file'
-      ansible.builtin.assert:
-        that:
-          - not _test_systemd_timer_service.changed
-        fail_msg: '/etc/systemd/system/test.service is not in expected format: {{ _test_systemd_timer_service.diff }}.'
-
-- name: 'Timer service | verify | test.timer'
-  hosts: 'systemd-debian-12-timer_service'
-  gather_facts: false
-  tasks:
-    - name: 'Timer service | verify | test.timer | gather timer status'
+    - name: 'Timer service | verify | gather timer status'
       ansible.builtin.command: 'systemctl status test.timer'
       register: _test_systemd_timer_status
       changed_when: false
 
-    - name: 'Timer service | verify | test.timer | query file'
-      ansible.builtin.copy:
-        src: 'files/test.timer'
-        dest: '/etc/systemd/system/test.timer'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_systemd_timer_service
-
-    - name: 'Timer service | verify | test.timer | assert timer active'
+    - name: 'Timer service | verify | assert timer active'
       ansible.builtin.assert:
+        quiet: true
         that:
           - _test_systemd_timer_status.rc == 0
           - '"Active: active" in _test_systemd_timer_status.stdout'
-        fail_msg: 'test.timer should be enabled.'
+        fail_msg: '✘ test.timer should be enabled.'
 
-    - name: 'Timer service | verify | test.timer | assert expected file'
-      ansible.builtin.assert:
-        that:
-          - not _test_systemd_timer_service.changed
-        fail_msg: '/etc/systemd/system/test.timer is not in expected format: {{ _test_systemd_timer_service.diff }}.'
-
-- name: 'Timer service | verify | test.service remove'
+- name: 'Timer service | verify | remove'
   hosts: 'systemd-debian-12-timer_service-remove'
   gather_facts: false
   tasks:
-    - name: 'Timer service | verify | test.service remove | gather service status'
+    - name: 'Timer service | verify | remove | absent'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'file.yml'
+      vars:
+        test_name: 'Timer service | verify remove | absent | {{ item }}'
+        test_file: '/etc/systemd/system/{{ item }}'
+        test_owner: '{{ omit }}'
+        test_group: '{{ omit }}'
+        test_mode: '{{ omit }}'
+        test_state: 'absent'
+      loop:
+        - 'test.service'
+        - 'test.timer'
+
+    - name: 'Timer service | verify | remove | gather service status'
       ansible.builtin.service_facts:
 
-    - name: 'Timer service | verify | test.service remove | query file'
-      ansible.builtin.stat:
-        path: '/etc/systemd/system/test.service'
-      register: _test_systemd_test_service_remove
-
-    - name: 'Timer service | verify | test.service remove | assert service inactive'
+    - name: 'Timer service | verify | remove | assert service inactive'
       ansible.builtin.assert:
+        quiet: true
         that:
           - '"test.service" not in ansible_facts.services'
         fail_msg: 'test.service should not be enabled.'
 
-    - name: 'Timer service | verify | test.service remove | assert file removed'
-      ansible.builtin.assert:
-        that:
-          - not _test_systemd_test_service_remove.stat.exists
-        fail_msg: '/etc/systemd/system/test.service should not exist.'
-
-- name: 'Timer service removal | verify | test.timer'
-  hosts: 'systemd-debian-12-timer_service-remove'
-  gather_facts: false
-  tasks:
-    - name: 'Timer service | verify | test.timer remove | gather timer status'
+    - name: 'Timer service | verify | remove | gather timer status'
       ansible.builtin.command: 'systemctl status test.timer'
       register: _test_systemd_timer_status
       changed_when: false
       failed_when: _test_systemd_timer_status.rc != 4
 
-    - name: 'Timer service | verify | test.timer remove | query file'
-      ansible.builtin.stat:
-        path: '/etc/systemd/system/test.timer'
-      register: _test_systemd_test_timer_remove
-
-    - name: 'Timer service | verify | test.timer remove | assert timer inactive'
+    - name: 'Timer service | verify | remove | assert timer inactive'
       ansible.builtin.assert:
+        quiet: true
         that:
           - _test_systemd_timer_status.rc == 4
-        fail_msg: 'test.timer should not be enabled.'
-
-    - name: 'Timer service | verify | test.timer remove | assert file removed'
-      ansible.builtin.assert:
-        that:
-          - not _test_systemd_test_timer_remove.stat.exists
-        fail_msg: '/etc/systemd/system/test.timer should not exist.'
+        fail_msg: '✘ test.timer should not be enabled.'

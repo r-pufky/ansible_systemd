@@ -1,6 +1,16 @@
 ---
+###############################################################################
+# File Format All Options
+###############################################################################
 # Verify systemd unit files are rendered correctly (syntax only, not for valid
 # configurations).
+#
+# Tests:
+# * service file has no static errors.
+# * service drop-in has no static errors.
+# * timer file has no static errors.
+# * timer drop-in has no static errors.
+
 dependency:
   name: 'galaxy'
 driver:
