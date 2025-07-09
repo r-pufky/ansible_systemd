@@ -118,3 +118,6 @@
   loop_control:
     loop_var: 'systemd'
     label: '{{ systemd.name }}'
+
+- name: 'Flush handlers'
+  ansible.builtin.meta: 'flush_handlers'
