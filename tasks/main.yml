@@ -35,6 +35,9 @@
     loop_var: 'systemd'
     label: '{{ systemd.name }}'
 
+- name: 'Flush handlers'
+  ansible.builtin.meta: 'flush_handlers'
+
 - name: 'Enable mount'
   ansible.builtin.include_tasks: 'enable/mount.yml'
   loop: '{{ systemd_mounts | default([]) }}'
@@ -63,6 +66,9 @@
     loop_var: 'systemd'
     label: '{{ systemd.name }}'
 
+- name: 'Flush handlers'
+  ansible.builtin.meta: 'flush_handlers'
+
 - name: 'Disable service'
   ansible.builtin.include_tasks: 'disable/service.yml'
   loop: '{{ systemd_services | default([]) }}'
@@ -90,6 +96,9 @@
   loop_control:
     loop_var: 'systemd'
     label: '{{ systemd.name }}'
+
+- name: 'Flush handlers'
+  ansible.builtin.meta: 'flush_handlers'
 
 - name: 'Unload service'
   ansible.builtin.include_tasks: 'unload/service.yml'
