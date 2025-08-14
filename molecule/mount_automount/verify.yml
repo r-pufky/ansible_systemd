@@ -1,53 +1,57 @@
 ---
-- name: 'Mount | verify | mount'
+- name: 'Verify | mount'
   hosts: 'all'
   gather_facts: false
   become: true
   tasks:
-    - name: 'Mount | verify | unit'
+    - name: 'Verify | unit'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Mount | verify | unit | mnt-test.mount'
+        test_name: 'Verify | unit | mnt-test.mount'
         test_src: 'files/mnt-test.mount'
         test_file: '/etc/systemd/system/mnt-test.mount'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true
 
-    - name: 'Mount | verify | drop-in'
+    - name: 'Verify | drop-in'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Mount | verify | drop-in | mnt-test.mount'
+        test_name: 'Verify | drop-in | mnt-test.mount'
         test_src: 'files/override.mount'
         test_file: '/etc/systemd/system/mnt-test.mount.d/override.conf'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true
 
-    - name: 'Mount | verify | unit'
+    - name: 'Verify | unit'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Mount | verify | unit | mnt-test.automount'
+        test_name: 'Verify | unit | mnt-test.automount'
         test_src: 'files/mnt-test.automount'
         test_file: '/etc/systemd/system/mnt-test.automount'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true
 
-    - name: 'Mount | verify | drop-in'
+    - name: 'Verify | drop-in'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Mount | verify | drop-in | mnt-test.automount'
+        test_name: 'Verify | drop-in | mnt-test.automount'
         test_src: 'files/override.automount'
         test_file: '/etc/systemd/system/mnt-test.automount.d/override.conf'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true

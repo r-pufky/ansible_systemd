@@ -1,10 +1,10 @@
 ---
-- name: 'Restart instead of reload | prepare'
+- name: 'Prepare'
   hosts: 'all'
   gather_facts: false
   become: true
   tasks:
-    - name: 'Restart instead of reload | prepare | add nfs-kernel-server'
+    - name: 'Prepare | add nfs-kernel-server'
       ansible.builtin.apt:
         name: 'nfs-kernel-server'  # Does not support reloading, only restart.
         update_cache: true

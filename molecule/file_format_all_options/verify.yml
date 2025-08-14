@@ -1,38 +1,40 @@
 ---
-- name: 'File format all options | verify'
+- name: 'Verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'File format all options | verify | unit'
+    - name: 'Verify | unit'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'File format all options | verify | unit | {{ item }}'
+        test_name: 'Verify | unit | {{ item }}'
         test_src: 'files/{{ item }}'
         test_file: '/etc/systemd/system/{{ item }}'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true
       loop:
         - 'reboot.service'
         - 'reboot.timer'
 
-- name: 'File format all options | verify'
+- name: 'Verify'
   hosts: 'systemd-debian-12-file_format_all_options-drop-in'
   gather_facts: false
   tasks:
-    - name: 'File format all options | verify | drop-in'
+    - name: 'Verify | drop-in'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'File format all options | verify | drop-in | {{ item }}'
+        test_name: 'Verify | drop-in | {{ item }}'
         test_src: 'files/{{ item }}.override'
         test_file: '/etc/systemd/system/{{ item }}.d/override.conf'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true
       loop:
         - 'reboot.service'
         - 'reboot.timer'

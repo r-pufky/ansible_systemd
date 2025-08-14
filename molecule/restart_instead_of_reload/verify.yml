@@ -1,13 +1,13 @@
 ---
-- name: 'Restart instead of reload | verify | nfs-server reloaded'
+- name: 'Verify | nfs-server reloaded'
   hosts: 'all'
   gather_facts: false
   become: true
   tasks:
-    - name: 'Restart instead of reload | verify | query services'
+    - name: 'Verify | query services'
       ansible.builtin.service_facts:
 
-    - name: 'Restart instead of reload | verify | assert nfs mountd started'
+    - name: 'Verify | assert nfs mountd started'
       ansible.builtin.assert:
         quiet: true
         that:

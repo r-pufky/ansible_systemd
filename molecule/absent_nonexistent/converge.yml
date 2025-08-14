@@ -1,8 +1,8 @@
 ---
-- name: 'Absent nonexistent | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Absent nonexistent | converge | create'
+    - name: 'Converge | create'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.systemd'

@@ -1,11 +1,13 @@
 ---
-- name: 'Absent nonexistent | verify'
+- name: 'Verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Absent nonexistent | verify | assert role success'
-      ansible.builtin.assert:
-        quiet: true
-        that:
-          - 0 == 0
-        fail_msg: '✘ Role should execute without any errors.'
+    - name: 'Verify | PASS'
+      ansible.builtin.debug:
+        msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                   Tests PASSED during converge.                   │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯

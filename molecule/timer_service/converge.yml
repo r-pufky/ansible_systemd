@@ -1,17 +1,17 @@
 ---
-- name: 'Timer service | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Timer service | converge | create'
+    - name: 'Converge | create'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.systemd'
 
-- name: 'Timer service | converge | remove'
+- name: 'Converge | remove'
   hosts: 'systemd-debian-12-timer_service-remove'
   gather_facts: false
   tasks:
-    - name: 'Timer service | converge | remove'
+    - name: 'Converge | remove'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.systemd'
   vars:

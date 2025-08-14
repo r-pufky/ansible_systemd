@@ -6,20 +6,20 @@
 # Generates:
 #   _test_systemd_cache_default_stat: stat /etc/systemd/system
 
-- name: 'Default | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | converge | snapsnot systemd directory'
+    - name: 'Converge | snapsnot systemd directory'
       ansible.builtin.stat:
         path: '/etc/systemd/system'
       register: _test_systemd_default_stat
 
-    - name: 'Default | converge | export snapshot to cache for verification'
+    - name: 'Converge | export snapshot to cache for verification'
       ansible.builtin.set_fact:
         _test_systemd_cache_default_stat: '{{ _test_systemd_default_stat }}'
         cacheable: true
 
-    - name: 'Default | converge | apply r_pufky.deb.systemd'
+    - name: 'Converge | apply r_pufky.deb.systemd'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.systemd'

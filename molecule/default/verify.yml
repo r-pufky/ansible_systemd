@@ -1,21 +1,21 @@
 ---
-- name: 'Default | verify'
+- name: 'Verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | verify | assert fact_caching not expired'
+    - name: 'Verify | assert fact_caching not expired'
       ansible.builtin.assert:
         quiet: true
         that:
           - '_test_systemd_cache_default_stat is defined'
         fail_msg: '⚠ fact_caching has expired; re-run prepare.'
 
-    - name: 'Default | verify | snapsnot systemd directory'
+    - name: 'Verify | snapsnot systemd directory'
       ansible.builtin.stat:
         path: '/etc/systemd/system'
       register: _test_systemd_default_stat
 
-    - name: 'Default | verify | assert systemd directory same'
+    - name: 'Verify | assert systemd directory same'
       ansible.builtin.assert:
         quiet: true
         that:

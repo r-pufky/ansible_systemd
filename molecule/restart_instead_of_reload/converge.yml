@@ -1,9 +1,9 @@
 ---
-- name: 'Restart instead of reload | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   become: true
   tasks:
-    - name: 'Restart instead of reload | converge | apply r_pufky.deb.systemd'
+    - name: 'Converge | apply r_pufky.deb.systemd'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.systemd'
