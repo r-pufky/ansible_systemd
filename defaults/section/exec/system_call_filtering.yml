@@ -25,23 +25,23 @@
 #   * log_namespace
 #
 # Options may be added to the following systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * QUOTING (syntax quoting)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * QUOTING (syntax quoting).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 
 ###############################################################################
 # System Call Filtering
@@ -75,11 +75,11 @@
 # Use system_call_error_number to change default action.
 #
 # Values:
-#    {SET}: special case system call set, use systemd-analyze syscall-filter to
+#    {SET}: Special case system call set, use systemd-analyze syscall-filter to
 #           generate list of current sets.
-#   {CALL}: system call to allow
-#       '': no system call filtering
-#   {OMIT}: '' (default)
+#   {CALL}: System call to allow.
+#       '': No system call filtering.
+#   {OMIT}: '' (default).
 #
 # system_call_filter_allow: ['@system-service']
 #
@@ -88,7 +88,7 @@
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#SystemCallFilter=
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html#SystemCallFilter=
 
 # Deny specific system calls.
 #
@@ -101,14 +101,14 @@
 # Use system_call_error_number to change default action.
 #
 # Values:
-#   - set: str - special case system call set, use
+#   - set: str - Special case system call set, use
 #          systemd-analyze syscall-filter to generate list of current sets.
-#     error: int or str - error to return for specific system call set
+#     error: int or str - Error to return for specific system call set.
 #            Values:
-#               0-4095: error number
-#              {ERRNO}: error name
-#                 kill: explicitly kill
-#   {OMIT}: no system call filtering (default)
+#               0-4095: Error number.
+#              {ERRNO}: Error name.
+#                 kill: Explicitly kill.
+#   {OMIT}: No system call filtering (default).
 #
 # system_call_filter_deny:
 #   - set: '@system-service'
@@ -120,16 +120,16 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man3/errno.3.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#SystemCallFilter=
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html#SystemCallFilter=
 
 # Default system call error number.
 #
 # Values:
-#    0-4095: error number
-#   {ERRNO}: error name
-#      kill: explicitly kill
-#        '': kill
-#    {OMIT}: kill (default)
+#    0-4095: Error number.
+#   {ERRNO}: Error name.
+#      kill: Explicitly kill.
+#        '': Kill.
+#    {OMIT}: Kill (default).
 #
 # Variable: system_call_error_number | int or str
 #
@@ -148,29 +148,30 @@
 # system_call_architectures: native.
 #
 # Values:
-#          {ARCH}: architecture identifier to include in system call filter.
+#          {ARCH}: Architecture identifier to include in system call filter.
 #                  Use 'systemd-analyze' for a complete list of accepted known
 #                  values.
-#             x32: x32 architecture is treated as including x86-64 system calls
-#      mips64-n32: 64bit, 32bit, big endian MIPS
-#   mips64-le-n32: 64bit, 32bit, little endian MIPS
-#          native: use native architecture to system manager
-#              '': no filtering (default)
-#          {OMIT}: '' (default)
+#             x32: x32 architecture is treated as including x86-64 system
+#                  calls.
+#      mips64-n32: 64bit, 32bit, big endian MIPS.
+#   mips64-le-n32: 64bit, 32bit, little endian MIPS.
+#          native: Use native architecture to system manager.
+#              '': No filtering (default).
+#          {OMIT}: '' (default).
 #
 # Variable: system_call_architectures | list of str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html
 
 # Log all specified system calls.
 #
 # Values:
-#   {CALL}: system call to log
-#       '': no system call filtering
-#   {OMIT}: '' (default)
+#   {CALL}: System call to log.
+#       '': No system call filtering.
+#   {OMIT}: '' (default).
 #
 # Variable: system_call_log_match | list of str
 #
@@ -181,9 +182,9 @@
 # May affect system_call_log_match.
 #
 # Values:
-#   {CALL}: system call to exclude from logging
-#       '': no system call filtering
-#   {OMIT}: '' (default)
+#   {CALL}: System call to exclude from logging.
+#       '': No system call filtering.
+#   {OMIT}: '' (default).
 #
 # Variable: system_call_log_exclusions | list of str
 #

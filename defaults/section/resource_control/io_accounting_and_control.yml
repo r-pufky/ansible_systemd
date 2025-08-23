@@ -26,23 +26,23 @@
 # configuration.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Slice units automatically gain a Requires=, After= dependency.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * SPECIFIERS (unit specifiers)
+# * SIZE (syntax).
+# * SPECIFIERS (unit specifiers).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 ###############################################################################
 # IO Accounting and Control
@@ -57,16 +57,16 @@
 # DefaultIOAccounting.
 #
 # Values:
-#    False: disable block IO accounting
-#     True: enable block IO accounting
-#   {OMIT}: False (default)
+#    False: Disable block IO accounting.
+#     True: Enable block IO accounting.
+#   {OMIT}: False (default).
 #
 # Variable: io_accounting | bool
 #
 # Default: omit (system default).
 #
 # Reference
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set default overall block I/O weight.
 #
@@ -78,8 +78,8 @@
 # unset.
 #
 # Values:
-#   1-10000: block I/O weight
-#    {OMIT}: 100 (default)
+#   1-10000: Block I/O weight.
+#    {OMIT}: 100 (default).
 #
 # Variable: io_weight | int
 #
@@ -95,8 +95,8 @@
 # weight means less.
 #
 # Values:
-#   1-10000: block I/O weight
-#    {OMIT}: 100 (default)
+#   1-10000: Block I/O weight.
+#    {OMIT}: 100 (default).
 #
 # Variable: startup_io_weight | int
 #
@@ -118,11 +118,12 @@
 # particular RAID and volume management storage devices.
 #
 # Values:
-#   - path: str - path (file or block device)
-#     weight: int - device block I/O weight
+#     list of dict - Device block I/O weight definitions.
+#   - path: str - Path (file or block device).
+#     weight: int - Device block I/O weight.
 #         Special Case:
-#           1-10000: weight range, higher more I/O bandwidth
-#   {OMIT}: all devices receive a weight of 100 (default)
+#           1-10000: Weight range, higher more I/O bandwidth.
+#   {OMIT}: All devices receive a weight of 100 (default).
 #
 # io_device_weight:
 #   - path: '/dev/sda1'
@@ -141,9 +142,10 @@
 # to use more even if the device has idle capacity.
 #
 # Values:
-#   - path: str - path (file or block device)
-#     bandwidth: str - SIZE bandwidth limit
-#   {OMIT}: no limit (default)
+#     list of dict - Device block I/O read bandwidth definitions.
+#   - path: str - Path (file or block device).
+#     bandwidth: str - SIZE bandwidth limit.
+#   {OMIT}: No limit (default).
 #
 # io_read_bandwidth_max:
 #   - path: '/dev/sda1'
@@ -162,9 +164,10 @@
 # to use more even if the device has idle capacity.
 #
 # Values:
-#   - path: str - path (file or block device)
-#     bandwidth: str - SIZE bandwidth limit
-#   {OMIT}: no limit (default)
+#     list of dict - Device block I/O write bandwidth definitions.
+#   - path: str - Path (file or block device).
+#     bandwidth: str - SIZE bandwidth limit.
+#   {OMIT}: No limit (default).
 #
 # io_write_bandwidth_max:
 #   - path: '/dev/sda1'
@@ -183,9 +186,10 @@
 # to use more even if the device has idle capacity.
 #
 # Values:
-#   - path: str - path (file or block device)
-#     iops: str - SIZE IOPs bandwidth limit
-#   {OMIT}: no IOPs limit (default)
+#     list of dict - Device block I/O read IOs-Per-Second definitions.
+#   - path: str - Path (file or block device).
+#     iops: str - SIZE IOPs bandwidth limit.
+#   {OMIT}: No IOPs limit (default).
 #
 # io_read_iops_max:
 #   - path: '/dev/sda1'
@@ -204,9 +208,10 @@
 # to use more even if the device has idle capacity.
 #
 # Values:
-#   - path: str - path (file or block device)
-#     iops: str - SIZE IOPs bandwidth limit
-#   {OMIT}: no IOPs limit (default)
+#     list of dict - Device block I/O write IOs-Per-Second definitions.
+#   - path: str - Path (file or block device).
+#     iops: str - SIZE IOPs bandwidth limit.
+#   {OMIT}: No IOPs limit (default).
 #
 # io_write_iops_max:
 #   - path: '/dev/sda1'
@@ -224,9 +229,10 @@
 # Implies io_accounting: true.
 #
 # Values:
-#   - path: str - path (file or block device)
-#     latency: str - TIME specific latency target
-#   {OMIT}: no limit (default)
+#     list of dict - Device average target I/O latency definitions.
+#   - path: str - Path (file or block device).
+#     latency: str - TIME specific latency target.
+#   {OMIT}: No limit (default).
 #
 # io_device_latency_target_sec:
 #   - path: '/dev/sda1'

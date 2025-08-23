@@ -8,7 +8,12 @@
         quiet: true
         that:
           - '_test_systemd_cache_default_stat is defined'
-        fail_msg: '⚠ fact_caching has expired; re-run prepare.'
+        fail_msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │             fact_caching has expired; re-run prepare.             │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
 
     - name: 'Verify | snapsnot systemd directory'
       ansible.builtin.stat:
@@ -20,5 +25,9 @@
         quiet: true
         that:
           - _test_systemd_default_stat.stat == _test_systemd_cache_default_stat.stat  # yamllint disable-line rule:line-length
-        fail_msg: >
-          '✘ /etc/systemd/system directory modified during role execution.'
+        fail_msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │   /etc/systemd/system directory modified during role execution.   │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯

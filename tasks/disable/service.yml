@@ -15,4 +15,4 @@
     name: '{{ systemd.name }}.service'
     enabled: false
     state: 'stopped'
-  failed_when: false  # non-existing services can still be marked absent.
+  failed_when: false  # Non-existing services can still be marked absent.

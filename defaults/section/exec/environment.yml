@@ -25,23 +25,23 @@
 #   * log_namespace
 #
 # Options may be added to the following systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * QUOTING (syntax quoting)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * QUOTING (syntax quoting).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 
 ###############################################################################
 # Environment
@@ -60,27 +60,28 @@
 # securely pass data to service.
 #
 # Special Case:
-#                 *: explicitly quoted as "{VAR}={VALUE}" when rendered
-#                 *: Unquoted using QUOTING rules
-#                 *: quote entire assignment if value contains spaces or equals
+#                 *: Explicitly quoted as "{VAR}={VALUE}" when rendered.
+#                 *: Unquoted using QUOTING rules.
+#                 *: Quote entire assignment if value contains spaces or equals
 #                    sign.
-#                 *: variable expansion is not performed inside strings
-#                 *: $ character has no special meaning
-#                 *: SPECIFIERS expansion is performed
-#   [a-z,A-Z,0-9,_]: acceptable variable name characters; do not start with a
+#                 *: Variable expansion is not performed inside strings.
+#                 *: $ character has no special meaning.
+#                 *: SPECIFIERS expansion is performed.
+#   [a-z,A-Z,0-9,_]: Acceptable variable name characters; do not start with a
 #                    digit or leave empty.
 #
 # Values:
-#   - var: str - environment variable name
-#     value: str - environment variable value
-#   {OMIT}: no environment variables (default)
+#     list of dict - Environment variables to set.
+#   - var: str - Environment variable name.
+#     value: str - Environment variable value.
+#   {OMIT}: No environment variables (default).
 #
 # Variable: environment | list of dict
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 # * https://man7.org/linux/man-pages/man7/environ.7.html
 
 # Set environment variables from text files.
@@ -89,17 +90,17 @@
 # multiple text files.
 #
 # Values:
-#     {PATH}: absolute path or wildcard expression for environment files; read
+#     {PATH}: Absolute path or wildcard expression for environment files; read
 #             after previous processes exits and before new processes start.
-#    -{PATH}: ignore errors when accessing {PATH}
-#     {OMIT}: disabled (default)
+#    -{PATH}: Ignore errors when accessing {PATH}.
+#     {OMIT}: Disabled (default).
 #
 # Variable: environment_file | list of str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#EnvironmentFile
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html#EnvironmentFile
 
 # Pass service manager environment variables to unit.
 #
@@ -109,8 +110,8 @@
 # Variables are overridden by environment, environment_file.
 #
 # Values:
-#     {VAR}: environment variable name to pass to unit
-#    {OMIT}: disabled (default)
+#     {VAR}: Environment variable name to pass to unit.
+#    {OMIT}: Disabled (default).
 #
 # Variable: pass_environment | list of str
 #
@@ -122,16 +123,18 @@
 # Unset service manager environment variables for unit.
 #
 # Undo's any assignments from environment, environment_file, pass_environment,
-# service variables or PAM modules.
+# service variables or PAM modules; applied as final step when the environment
+# list passed to executed processes is compiled.
 #
-# If a variable assignment is specified (that is: a variable name, followed by "=", followed by its value), then any environment variable matching this precise assignment is removed.
-#
-# If a variable name is specified (that is a variable name without any following "=" or value), then any assignment matching the variable name, regardless of its value is removed. Note that the effect of UnsetEnvironment= is applied as final step when the environment list passed to executed processes is compiled.
+# Special Case:
+#   {VAR}={VALUE}: Any environment variable matching assignment is removed.
+#          {VAR}=: Any environment variable matching variable is removed.
 #
 # Values:
-#   {VAR}={VALUE}: matching variable and assignment are removed
-#          {VAR}=: remove matching variable name assignments (regardless of value)
-#          {OMIT}: disabled (default)
+#   {VAR}={VALUE}: Matching variable and assignment are removed.
+#          {VAR}=: Remove matching variable name assignments (regardless of
+#                  value).
+#          {OMIT}: Disabled (default).
 #
 # Variable: unset_environment | list of str
 #

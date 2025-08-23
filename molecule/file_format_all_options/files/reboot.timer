@@ -132,6 +132,7 @@ OnCalendar=1hour
 AccuracySec=1min
 RandomizedDelaySec=300
 FixedRandomDelay=true
+DeferReactivation=false
 OnClockChange=false
 OnTimezoneChange=false
 Unit=reboot.service

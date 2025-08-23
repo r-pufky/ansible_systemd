@@ -18,16 +18,16 @@
 # settings.
 #
 # Special Case:
-#   timer: {} - will create the [Timer] header only.
+#   'timer: {}': Create the [Timer] header only.
 #
 # See reference sections for syntax formats:
 # * TIME (time)
 # * SPECIFIERS (unit specifiers)
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.timer.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 # Enable default dependencies?
 #
@@ -47,7 +47,7 @@
 # Timer relative to the moment the timer unit itself is activated (seconds).
 #
 # Values:
-#   {TIME}: TIME timer relative to unit activation
+#   {TIME}: TIME timer relative to unit activation.
 #
 # Variable: on_active_sec | str
 #
@@ -63,7 +63,7 @@
 # other directives.
 #
 # Values:
-#   {TIME}: TIME timer relative to machine boot
+#   {TIME}: TIME timer relative to machine boot.
 #
 # Variable: on_boot_sec | str
 #
@@ -83,7 +83,7 @@
 # boot.
 #
 # Values:
-#   {TIME}: TIME timer relative to service manager first start
+#   {TIME}: TIME timer relative to service manager first start.
 #
 # Variable: on_startup_sec | str
 #
@@ -92,7 +92,7 @@
 # Timer relative to last unit activation (seconds).
 #
 # Values:
-#   {TIME}: TIME timer relative to last unit activation
+#   {TIME}: TIME timer relative to last unit activation.
 #
 # Variable: on_unit_active_sec | str
 #
@@ -101,7 +101,7 @@
 # Timer relative to last unit deactivation (seconds).
 #
 # Values:
-#   {TIME}: TIME timer relative to last unit deactivation
+#   {TIME}: TIME timer relative to last unit deactivation.
 #
 # Variable: on_unit_inactive_sec | str
 #
@@ -131,14 +131,14 @@
 # avoid being started before the system clock has been correctly set.
 #
 # Values:
-#   {TIME}: TIME timer relative to next calendar event
+#   {TIME}: TIME timer relative to next calendar event.
 #
 # Variable: on_calendar | list of str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.special.html
 
 # Accuracy the timer elapses with.
 #
@@ -154,17 +154,17 @@
 # Subject to timer slack in systemd-system.conf TimerSlackNSec= setting.
 #
 # Values:
-#      1us: recommended for best accuracy
+#      1us: Recommended for best accuracy.
 #   {TIME}: TIME timer relative to next calendar event (make as high as
 #           possible and as low as necessary to reduce power consumption).
-#   {OMIT}: '1min' (default)
+#   {OMIT}: '1min' (default).
 #
 # Variable: accuracy_sec | str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 # * https://man7.org/linux/man-pages/man2/prctl.2.html
 
 # Delay timer by random amount from 0 up to value (seconds).
@@ -188,8 +188,8 @@
 # randomized_delay_sec to some higher value.
 #
 # Values:
-#   {TIME}: TIME random delay time ceiling
-#   {OMIT}: 0 - no randomized delay (default)
+#   {TIME}: TIME random delay time ceiling.
+#   {OMIT}: 0 - no randomized delay (default).
 #
 # Variable: randomized_delay_sec | str
 #
@@ -210,16 +210,32 @@
 # No effect if randomized_delay_sec: 0.
 #
 # Values:
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: fixed_random_delay | bool
+#
+# Default: omit (system default).
+
+# Schedule next elapse based on trigger unit entering inactivity?
+#
+# Timer schedules next elapse based on when service finishes running, so it
+# will wait until next realtime elapse time to trigger. Otherwise, default
+# behavior is for timer unit to immediately trigger again once service finishes
+# running.
+#
+# Effect only if a realtime timer has been specified with on_calendar.
+#
+# Values:
+#   {OMIT}: False (default).
+#
+# Variable: defer_reactivation | bool
 #
 # Default: omit (system default).
 
 # Trigger when Realtime clock jumps relative to monotonic clock?
 #
 # Values:
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: on_clock_change | bool
 #
@@ -228,7 +244,7 @@
 # Trigger when local system timezone is modified?
 #
 # Values:
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: on_timezone_change | bool
 #
@@ -240,8 +256,8 @@
 # the timer unit are named identically, except for the suffix.
 #
 # Values
-#   {VAL}.!timer: .timer unit suffixes are not allowed
-#         {OMIT}: use service with same name as timer (default)
+#   {VAL}.!timer: .timer unit suffixes are not allowed.
+#         {OMIT}: Use service with same name as timer (default).
 #
 # Variable: unit | str
 #
@@ -262,14 +278,14 @@
 # Only works with on_calendar.
 #
 # Values:
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: persistent | bool
 #
 # Default: omit (system default)
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemctl.html
 
 # Resume from suspend if a timer elapses?
 #
@@ -279,11 +295,11 @@
 # Monotonic clock timers behavior are altered depending on this option.
 #
 # Values:
-#     True: enable resume from suspend, using CLOCK_BOOTTIME for timers (tracks
+#     True: Enable resume from suspend, using CLOCK_BOOTTIME for timers (tracks
 #           time during suspend).
-#    False: disable resume from suspect, using CLOCK_MONOTONIC for timers (does
+#    False: Disable resume from suspect, using CLOCK_MONOTONIC for timers (does
 #           not track time during suspend).
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: wake_system | bool
 #
@@ -300,10 +316,10 @@
 # triggered multiple times.
 #
 # Values:
-#     True: timer stays loaded, state queryable even after it elapsed and the
+#     True: Timer stays loaded, state queryable even after it elapsed and the
 #           associated unit deactivated again.
-#    False: timer unloaded, useful for transient timer units
-#   {OMIT}: True (default)
+#    False: Timer unloaded, useful for transient timer units.
+#   {OMIT}: True (default)..
 #
 # Variable: remain_after_elapse | bool
 #

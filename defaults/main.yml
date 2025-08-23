@@ -18,10 +18,10 @@
 # Actively migrate cronjobs to systemd (use timers, see reference).
 #
 # Units are managed in the following order:
-#    load: mount, automount, service, timer
-#  enable: mount, automount, service, timer
-# disable: service, timer, automount, mount
-#  unload: service, timer, automount, mount
+#      load: Mount, automount, service, timer.
+#    enable: Mount, automount, service, timer.
+#   disable: Service, timer, automount, mount.
+#    unload: Service, timer, automount, mount.
 #
 # Reference:
 # * section/*.yml
@@ -35,31 +35,31 @@
 # Managed files are placed in systemd_role_root with root:root 0644.
 #
 # systemd_services:
-#     list of dict - services to manage for systemd
-#   - name: str - service name
+#     list of dict - Services to manage for systemd.
+#   - name: str - Service name.
 #         Special Case:
-#           [a-z,A-Z,:,-,_,.,\]: acceptable characters, max length 255.
+#           [a-z,A-Z,:,-,_,.,\]: Acceptable characters, max length 255.
 #         Values:
-#            {NAME}: service name (name.service)
-#           {NAME}@: template service name (name@.service); may be referenced
+#            {NAME}: Service name (name.service).
+#           {NAME}@: Template service name (name@.service); may be referenced
 #                    using SPECIFIERS (%i, etc) in definitions.
-#     state: str - service install state
+#     state: str - Service install state.
 #         Values:
-#           present: manage configuration
-#            absent: remove configuration
+#           present: Manage configuration.
+#            absent: Remove configuration.
 #         Default: 'present'.
-#     drop_in: bool - manage service using systemd drop-in at
+#     drop_in: bool - Manage service using systemd drop-in at
 #           systemd/{SERVICE}.d/override.conf instead of service unit itself
 #           (systemd/{SERVICE}).
 #         Special Case:
-#           *: add an empty value before settings to clear previous definition
+#           *: Add an empty value before settings to clear previous definition
 #              exec_start: ['', 'new_exec_options'].
-#     unit: dict - section/unit/*.yml unit definition
-#     service: dict - section/service.yml unit definition
-#     exec: dict - section/exec/*.yml unit definition
-#     resource_control: dict - section/resource_control/*.yml unit definition
-#     kill: dict - section/kill.yml unit definition
-#     install: dict - section/install.yml install definition
+#     unit: dict - section/unit/*.yml unit definition.
+#     service: dict - section/service.yml unit definition.
+#     exec: dict - section/exec/*.yml unit definition.
+#     resource_control: dict - section/resource_control/*.yml unit definition.
+#     kill: dict - section/kill.yml unit definition.
+#     install: dict - section/install.yml install definition.
 #
 # systemd_services:
 #   - name: 'reboot'
@@ -89,28 +89,28 @@ systemd_services: []
 # Managed files are placed in systemd_role_root with root:root 0644.
 #
 # systemd_timers:
-#     list of dict - timers to manage for systemd
-#   - name: str - timer name
+#     list of dict - Timers to manage for systemd.
+#   - name: str - Timer name.
 #         Special Case:
-#           [a-z,A-Z,:,-,_,.,\]: acceptable characters, max length 255.
+#           [a-z,A-Z,:,-,_,.,\]: Acceptable characters, max length 255.
 #         Values:
-#            {NAME}: timer name (name.timer)
-#           {NAME}@: template timer name (name@.timer); may be referenced using
+#            {NAME}: Timer name (name.timer).
+#           {NAME}@: Template timer name (name@.timer); may be referenced using
 #                    SPECIFIERS (%i, etc) in definitions.
-#     state: str - timer install state
+#     state: str - Timer install state.
 #         Values:
-#           present: manage configuration
-#            absent: remove configuration
+#           present: Manage configuration.
+#            absent: Remove configuration.
 #         Default: 'present'.
-#     drop_in: bool - manage timer using systemd drop-in at
+#     drop_in: bool - Manage timer using systemd drop-in at
 #           systemd/{TIMER}.d/override.conf instead of service unit itself
 #           (systemd/{TIMER}).
 #         Special Case:
-#           *: add an empty value before settings to clear previous definition
+#           *: Add an empty value before settings to clear previous definition
 #              on_calendar: ['', 'weekly'].
-#     unit: dict - section/unit/*.yml unit definition
-#     timer: dict - section/timer.yml timer definition
-#     install: dict - section/install.yml install definition
+#     unit: dict - section/unit/*.yml unit definition.
+#     timer: dict - section/timer.yml timer definition.
+#     install: dict - section/install.yml install definition.
 #
 # systemd_timers:
 #   - name: 'reboot'
@@ -133,10 +133,10 @@ systemd_timers: []
 # Managed files are placed in systemd_role_root with root:root 0644.
 #
 # systemd_mounts:
-#     list of dict - mounts to manage for systemd
-#   - name: str - mount name
+#     list of dict - Mounts to manage for systemd.
+#   - name: str - Mount name.
 #         Special Case:
-#           [a-z,A-Z,:,-,_,.,\]: acceptable characters, max length 255.
+#           [a-z,A-Z,:,-,_,.,\]: Acceptable characters, max length 255.
 #                             *: MUST BE NAMED AFTER mount.where; all mount
 #                                names must reflect the mount point translated
 #                                to acceptable systemd mount names (e.g.
@@ -144,24 +144,24 @@ systemd_timers: []
 #                                systemd-escape -p /mount/path to generate an
 #                                appropriate name.
 #         Values:
-#            {NAME}: mount name (name.mount)
-#     state: str - timer install state
+#            {NAME}: Mount name (name.mount).
+#     state: str - Timer install state.
 #         Values:
-#           present: manage configuration
-#            absent: remove configuration
+#           present: Manage configuration.
+#            absent: Remove configuration.
 #         Default: 'present'.
-#     drop_in: bool - manage mount using systemd drop-in at
+#     drop_in: bool - Manage mount using systemd drop-in at
 #           systemd/{MOUNT}.d/override.conf instead of service unit itself
 #           (systemd/{MOUNT}).
 #         Special Case:
-#           *: add an empty value before settings to clear previous definition
+#           *: Add an empty value before settings to clear previous definition
 #              options: ['', 'noauto'].
-#     unit: dict - section/unit/*.yml unit definition
-#     mount: dict - section/mount.yml unit definition
-#     exec: dict - section/exec/*.yml unit definition
-#     resource_control: dict - section/resource_control/*.yml unit definition
-#     kill: dict - section/kill.yml unit definition
-#     install: dict - section/install.yml install definition
+#     unit: dict - section/unit/*.yml unit definition.
+#     mount: dict - section/mount.yml unit definition.
+#     exec: dict - section/exec/*.yml unit definition.
+#     resource_control: dict - section/resource_control/*.yml unit definition.
+#     kill: dict - section/kill.yml unit definition.
+#     install: dict - section/install.yml install definition.
 #
 # systemd_mounts:
 #   - name: 'data-pictures'
@@ -216,10 +216,10 @@ systemd_mounts: []
 # will automatically stop the associate mount so it can be enabled.
 #
 # systemd_automounts:
-#     list of dict - automounts to manage for systemd
-#   - name: str - mount name
+#     list of dict - Automounts to manage for systemd.
+#   - name: str - Mount name.
 #         Special Case:
-#           [a-z,A-Z,:,-,_,.,\]: acceptable characters, max length 255.
+#           [a-z,A-Z,:,-,_,.,\]: Acceptable characters, max length 255.
 #                             *: MUST BE NAMED AFTER mount.where; all mount
 #                                names must reflect the mount point translated
 #                                to acceptable systemd mount names (e.g.
@@ -227,13 +227,13 @@ systemd_mounts: []
 #                                systemd-escape -p /mount/path to generate an
 #                                appropriate name.
 #         Values:
-#            {NAME}: mount name (name.mount)
-#     state: str - timer install state
+#            {NAME}: Mount name (name.mount).
+#     state: str - Timer install state.
 #         Values:
-#           present: manage configuration
-#            absent: remove configuration
+#           present: Manage configuration.
+#            absent: Remove configuration.
 #         Default: 'present'.
-#     drop_in: bool - manage mount using systemd drop-in at
+#     drop_in: bool - Manage mount using systemd drop-in at
 #           systemd/{MOUNT}.d/override.conf instead of service unit itself
 #           (systemd/{MOUNT}).
 #         Special Case:

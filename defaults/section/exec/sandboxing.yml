@@ -25,23 +25,23 @@
 #   * log_namespace
 #
 # Options may be added to the following systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * QUOTING (syntax quoting)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * QUOTING (syntax quoting).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 
 ###############################################################################
 # Sandboxing
@@ -78,7 +78,7 @@
 #   strict: entire file system mounted read-only, except API file system /dev/,
 #           /proc/, /sys/.
 #     True: mount /usr/, /boot, /efi read-only
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: protect_system | bool or str
 #
@@ -559,7 +559,7 @@
 # Default: omit (system default).
 #
 # Reference:
-# * https://manpages.debian.org/bookworm/mount/mount.8.en.html
+# * https://manpages.debian.org/trixie/mount/mount.8.en.html
 
 # Mount /tmp and /var/tmp/ in private namespace?
 #
@@ -579,7 +579,7 @@
 # Values:
 #     True: enable private tmp; all files created are removed on service stop
 #    False: disable private tmp
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: private_tmp | bool
 #
@@ -603,14 +603,14 @@
 #           /dev/zero, /dev/random, pseudo TTYs); no physical devices, system
 #           memory, system ports, and others. Disables physical device access.
 #    False: disable private devices
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: private_devices | bool
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
 
 # Enable private network?
 #
@@ -635,7 +635,7 @@
 #     True: create new network namespace with only loopback 'lo'. No other
 #           network devices available. Disables network access.
 #    False: disable private network
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: private_network | bool
 #
@@ -686,7 +686,7 @@
 # Values:
 #     True: create new IPC namespace
 #    False: use default IPC namespace
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: private_ipc | bool
 #
@@ -726,14 +726,34 @@
 # Values:
 #     True: enable KSM
 #    False: disable KSM
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
-# Variable: MemoryKSM | bool
+# Variable: memory_ksm | bool
 #
 # Default: omit (system default).
 #
 # Reference:
 # * https://docs.kernel.org/admin-guide/mm/ksm.html
+
+# Set new PID namespace for executed processes?
+#
+# This setting will be ignored if the kernel does not support PID namespaces.
+# Only supported for service units, Not supported for type=forking as kernel
+# will kill all processes in PID namespace if init process terminates.
+#
+# Unprivileged user services will fail with private_pids=true if /proc/ is
+# masked (i.e. /proc/kmsg is over-mounted with tmpfs like systemd-nspawn does).
+# This is due to a kernel restriction not allowing unprivileged user namespaces
+# to mount a less restrictive instance of /proc/.
+#
+# Values:
+#     True: enable private PID's. Implies mount_api_vfs=true.
+#    False: disable private PID's.
+#   {OMIT}: False (default).
+#
+# Variable: private_pids | bool
+#
+# Default: omit (system default).
 
 # Enable private users?
 #
@@ -757,9 +777,9 @@
 # Useful with root_directory, root_image.
 #
 # Values:
-#     True: enable private users
-#    False: disable private users
-#   {OMIT}: False (default)
+#     True: Enable private users.
+#    False: Disable private users.
+#   {OMIT}: False (default).
 #
 # Variable: private_users | bool
 #
@@ -776,10 +796,10 @@
 # sysctl kernel.unprivileged_userns_clone=1).
 #
 # Values:
-#     True: enable protect hostname (new UTS namespace, no hostname, domain
+#     True: Enable protect hostname (new UTS namespace, no hostname, domain
 #           name changes).
-#    False: disable protect hostname
-#   {OMIT}: False (default)
+#    False: Disable protect hostname.
+#   {OMIT}: False (default).
 #
 # Variable: protect_hostname | bool
 #
@@ -799,16 +819,16 @@
 # sysctl kernel.unprivileged_userns_clone=1).
 #
 # Values:
-#     True: disable changes to hardware and system clock
-#    False: enable changes to hardware and system clock
-#   {OMIT}: False (default)
+#     True: Disable changes to hardware and system clock.
+#    False: Enable changes to hardware and system clock.
+#   {OMIT}: False (default).
 #
 # Variable: protect_clock | bool
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
 
 # Enable kernel tunables protection?
 #
@@ -828,16 +848,16 @@
 # sysctl kernel.unprivileged_userns_clone=1).
 #
 # Values:
-#     True: enable kernel tunables protection
-#    False: disable kernel tunables protection
-#   {OMIT}: False (default)
+#     True: Enable kernel tunables protection.
+#    False: Disable kernel tunables protection.
+#   {OMIT}: False (default).
 #
 # Variable: protect_kernel_tunables | bool
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/sysctl.d.html
+# * https://www.freedesktop.org/software/systemd/man/257/sysctl.d.html
 
 # Enable kernel module protection?
 #
@@ -853,9 +873,9 @@
 # sysctl kernel.unprivileged_userns_clone=1).
 #
 # Values:
-#     True: enable kernel tunables protection
-#    False: disable kernel tunables protection
-#   {OMIT}: False (default)
+#     True: Enable kernel tunables protection.
+#    False: Disable kernel tunables protection.
+#   {OMIT}: False (default).
 #
 # Variable: protect_kernel_modules | bool
 #
@@ -875,9 +895,9 @@
 # sysctl kernel.unprivileged_userns_clone=1).
 #
 # Values:
-#     True: enable kernel logs protection
-#    False: disable kernel logs protection
-#   {OMIT}: False (default)
+#     True: Enable kernel logs protection.
+#    False: Disable kernel logs protection.
+#   {OMIT}: False (default).
 #
 # Variable: protect_kernel_logs | bool
 #
@@ -894,9 +914,9 @@
 # Only available for system services.
 #
 # Values:
-#     True: enable control group protection
-#    False: disable control group protection
-#   {OMIT}: False (default)
+#     True: Enable control group protection.
+#    False: Disable control group protection.
+#   {OMIT}: False (default).
 #
 # Variable: protect_control_groups | bool
 #
@@ -918,10 +938,10 @@
 #
 #
 # Values:
-#   {SOCKET}: socket name (AF_UNIX, AF_INET, AF_INET6, etc)
-#       none: deny all address families
-#         '': allow all address families (default)
-#     {OMIT}: '' (default)
+#   {SOCKET}: Socket name (AF_UNIX, AF_INET, AF_INET6, etc).
+#       none: Deny all address families.
+#         '': Allow all address families (default).
+#     {OMIT}: '' (default).
 #
 # Variable: restrict_address_families_allow | list of str
 #
@@ -946,10 +966,10 @@
 #
 #
 # Values:
-#   {SOCKET}: socket name (AF_UNIX, AF_INET, AF_INET6, etc)
-#       none: allow all address families
-#         '': allow all address families (default)
-#     {OMIT}: '' (default)
+#   {SOCKET}: Socket name (AF_UNIX, AF_INET, AF_INET6, etc).
+#       none: Allow all address families.
+#         '': Allow all address families (default).
+#     {OMIT}: '' (default).
 #
 # Variable: restrict_address_families_deny | list of str
 #
@@ -965,20 +985,20 @@
 # Use systemd-analyze filesystems to get list of file systems.
 #
 # Special Case:
-#          @basic-api: basic filesystem API
-#      @auxiliary-api: auxiliary filesystem API
-#       @common-block: common block device filesystems
-#   @historical-block: historical block device filesystems
-#            @network: well-known network filesystems
-#     @privileged-api: privileged filesystem API
-#          @temporary: temporary filesystems: tmpfs, ramfs
-#              @known: all known filesystems defined by kernel based on systemd
+#          @basic-api: Basic filesystem API.
+#      @auxiliary-api: Auxiliary filesystem API.
+#       @common-block: Common block device filesystems.
+#   @historical-block: Historical block device filesystems.
+#            @network: Well-known network filesystems.
+#     @privileged-api: Privileged filesystem API.
+#          @temporary: Temporary filesystems: tmpfs, ramfs.
+#              @known: All known filesystems defined by kernel based on systemd
 #                      version.
 #
 # Values:
-#   {FILESYSTEM}: filesystem name (ext4, tmpfs, etc)
-#             '': no restrictions (default)
-#         {OMIT}: '' (default)
+#   {FILESYSTEM}: Filesystem name (ext4, tmpfs, etc).
+#             '': No restrictions (default).
+#         {OMIT}: '' (default).
 #
 # restrict_file_systems_allow: ['@temporary', 'ext4']
 #
@@ -993,20 +1013,20 @@
 # Use systemd-analyze filesystems to get list of file systems.
 #
 # Special Case:
-#          @basic-api: basic filesystem API
-#      @auxiliary-api: auxiliary filesystem API
-#       @common-block: common block device filesystems
-#   @historical-block: historical block device filesystems
-#            @network: well-known network filesystems
-#     @privileged-api: privileged filesystem API
-#          @temporary: temporary filesystems: tmpfs, ramfs
-#              @known: all known filesystems defined by kernel based on systemd
+#          @basic-api: Basic filesystem API.
+#      @auxiliary-api: Auxiliary filesystem API.
+#       @common-block: Common block device filesystems.
+#   @historical-block: Historical block device filesystems.
+#            @network: Well-known network filesystems.
+#     @privileged-api: Privileged filesystem API.
+#          @temporary: Temporary filesystems: tmpfs, ramfs.
+#              @known: All known filesystems defined by kernel based on systemd
 #                      version.
 #
 # Values:
-#   {FILESYSTEM}: filesystem name (ext4, tmpfs, etc)
-#             '': no restrictions (default)
-#         {OMIT}: '' (default)
+#   {FILESYSTEM}: Filesystem name (ext4, tmpfs, etc).
+#             '': No restrictions (default).
+#         {OMIT}: '' (default).
 #
 # restrict_file_systems_deny: ['@temporary', 'ext4']
 #
@@ -1022,18 +1042,18 @@
 # mips64-le-n32, ppc64, ppc64-le, s390, s390x; disabled otherwise.
 #
 # Values:
-#           True: prohibit any kind of namespace access
-#    {NAMESPACE}: namespace type identifier
+#           True: Prohibit any kind of namespace access.
+#    {NAMESPACE}: Namespace type identifier
 #                     Values:
-#                       cgroup: cgroup root directory
-#                          ipc: sysv IPC, POSIX message queues
-#                          net: network devices, stacks, ports
-#                          mnt: mount points
-#                          pid: process IDs
-#                         user: user and group IDs
-#                          uts: hostname, NIS domain name
-#          False: no restrictions on namespace creation and switching (default)
-#         {OMIT}: False (default)
+#                       cgroup: cgroup root directory.
+#                          ipc: sysv IPC, POSIX message queues.
+#                          net: Network devices, stacks, ports.
+#                          mnt: Mount points.
+#                          pid: Process IDs.
+#                         user: User and group IDs.
+#                          uts: Hostname, NIS domain name.
+#          False: No restrictions on namespace creation/switching (default).
+#         {OMIT}: False (default).
 #
 # Variable: restrict_namespaces_allow | bool or list of str
 #
@@ -1050,16 +1070,16 @@
 # mips64-le-n32, ppc64, ppc64-le, s390, s390x; disabled otherwise.
 #
 # Values:
-#    {NAMESPACE}: namespace type identifier
+#    {NAMESPACE}: Namespace type identifier.
 #                     Values:
-#                       cgroup: cgroup root directory
-#                          ipc: sysv IPC, POSIX message queues
-#                          net: network devices, stacks, ports
-#                          mnt: mount points
-#                          pid: process IDs
-#                         user: user and group IDs
-#                          uts: hostname, NIS domain name
-#         {OMIT}: allow all (default)
+#                       cgroup: cgroup root directory.
+#                          ipc: sysv IPC, POSIX message queues.
+#                          net: Network devices, stacks, ports.
+#                          mnt: Mount points.
+#                          pid: Process IDs.
+#                         user: User and group IDs.
+#                          uts: Hostname, NIS domain name.
+#         {OMIT}: Allow all (default).
 #
 # Variable: restrict_namespaces_deny | list of str
 #
@@ -1074,10 +1094,10 @@
 # tested and source of vulnerabilities.
 #
 # Values:
-#     True: lock down personality system call; kernel execution domain may not
+#     True: Lock down personality system call; kernel execution domain may not
 #           change from default or personality: specified.
-#    False: do not lock down (default)
-#   {OMIT}: False (default)
+#    False: Do not lock down (default).
+#   {OMIT}: False (default).
 #
 # Variable: lock_personality | bool
 #
@@ -1101,11 +1121,11 @@
 # native or similar.
 #
 # Values:
-#     True: prohibit attempts to create memory mappings that are writable and
+#     True: Prohibit attempts to create memory mappings that are writable and
 #           executable at same time, or change existing memory mappings to
 #           become executable, or mapping shared memory segments as executable.
-#    False: do not prohibit (default)
-#   {OMIT}: False (default)
+#    False: Do not prohibit (default).
+#   {OMIT}: False (default).
 #
 # Variable: memory_deny_write_execute | bool
 #
@@ -1123,9 +1143,9 @@
 # Recommend disabling realtime scheduling to services requiring it.
 #
 # Values:
-#     True: disable realtime scheduling
-#    False: enable realtime scheduling (default)
-#   {OMIT}: False (default)
+#     True: Disable realtime scheduling.
+#    False: Enable realtime scheduling (default).
+#   {OMIT}: False (default).
 #
 # Variable: restrict_realtime | bool
 #
@@ -1146,9 +1166,9 @@
 # Implied if dynamic_user set.
 #
 # Values:
-#     True: disable SUID, SGID
-#    False: enable SUID, SGID (default)
-#   {OMIT}: False (default)
+#     True: Disable SUID, SGID.
+#    False: Enable SUID, SGID (default).
+#   {OMIT}: False (default).
 #
 # Variable: restrict_suid_sgid | bool
 #
@@ -1172,9 +1192,9 @@
 # Only available for system services.
 #
 # Values:
-#     True: remove IPC objects
-#    False: keep IPC objects (default)
-#   {OMIT}: False (default)
+#     True: Remove IPC objects.
+#    False: Keep IPC objects (default).
+#   {OMIT}: False (default).
 #
 # Variable: remove_ipc | bool
 #
@@ -1202,13 +1222,13 @@
 # sysctl kernel.unprivileged_userns_clone=1).
 #
 # Values:
-#     True: run unit processes in private file system (mount) namespace with
+#     True: Run unit processes in private file system (mount) namespace with
 #           all mount propagation towards host main file system namespace
 #           disabled (any file system mount points established or removed will
 #           be private to process and not visible to host). Mount points
 #           established or removed on host will propagate to unit processes.
-#    False: do not use private mounts (default)
-#   {OMIT}: False (default)
+#    False: Do not use private mounts (default).
+#   {OMIT}: False (default).
 #
 # Variable: private_mounts | bool
 #
@@ -1229,7 +1249,7 @@
 # sysctl kernel.unprivileged_userns_clone=1).
 #
 # Values:
-#    shared: make mount shared, mount/unmount events immediately under this
+#    shared: Make mount shared, mount/unmount events immediately under this
 #            mount will propagate to other mounts that are members of this
 #            mount's peer group. Propagation here means the same mount/unmount
 #            will automatically occur under all other mounts in peer group.
@@ -1241,8 +1261,7 @@
 #            host by changing propagation setting of all mount points in the
 #            unit's file system namespace to slave first. Setting this option
 #            to shared does not reestablish propagation in that case.
-#
-#     slave: convert shared mount that is a member of a peer group containing
+#     slave: Convert shared mount that is a member of a peer group containing
 #            other members to a slave mount. If shared mount is a member of a
 #            peer group that contains no other members, convert it to a private
 #            mount. Otherwise, the propagation type of the mount is left
@@ -1255,7 +1274,7 @@
 #            A mount can be the slave of another peer group while at the same
 #            time sharing mount and unmount events with a peer group of which
 #            it is a member.
-#   private: make mount private, mount/unmount events do not propagate into or
+#   private: Make mount private, mount/unmount events do not propagate into or
 #            out of this mount. It is not recommended as temporary mounts of
 #            host will stay mounted and indefinitely busy in forked off
 #            processes.

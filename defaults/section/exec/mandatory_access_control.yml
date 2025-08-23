@@ -25,23 +25,23 @@
 #   * log_namespace
 #
 # Options may be added to the following systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * QUOTING (syntax quoting)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * QUOTING (syntax quoting).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 
 ###############################################################################
 # Mandatory Access Control
@@ -53,11 +53,11 @@
 # Only available for system services.
 #
 # Values:
-#    {CONTEXT}: security context, overrides automated domain transition; policy
+#    {CONTEXT}: Security context, overrides automated domain transition; policy
 #               still needs to authorize transition.
-#   -{CONTEXT}: security context, overrides automated domain transition; policy
+#   -{CONTEXT}: Security context, overrides automated domain transition; policy
 #               still needs to authorize transition. Ignore errors.
-#       {OMIT}: no security context set (default)
+#       {OMIT}: No security context set (default).
 #
 # Variable: se_linux_context | str
 #
@@ -73,9 +73,9 @@
 # Only available for system services.
 #
 # Values:
-#    {NAME}: app armor profile name to use
-#   -{NAME}: app armor profile name to use, ignore errors
-#       {OMIT}: no security context set (default)
+#    {NAME}: App armor profile name to use.
+#   -{NAME}: App armor profile name to use, ignore errors.
+#       {OMIT}: No security context set (default).
 #
 # Variable: app_armor_profile | str
 #
@@ -88,11 +88,11 @@
 # Only available for system services.
 #
 # Values:
-#    {LABEL}: use SMACK64 security label, transition to SMACK64EXEC label if
+#    {LABEL}: Use SMACK64 security label, transition to SMACK64EXEC label if
 #             executable has one.
-#   -{LABEL}: use SMACK64 security label, transition to SMACK64EXEC label if
+#   -{LABEL}: Use SMACK64 security label, transition to SMACK64EXEC label if
 #             executable has one. Ignore errors.
-#    {OMIT}: use systemd SMACK label (default)
+#    {OMIT}: Use systemd SMACK label (default).
 #
 # Variable: smack_process_label | str
 #

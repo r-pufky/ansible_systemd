@@ -8,7 +8,7 @@
         name: 'r_pufky.deb.systemd'
 
 - name: 'Converge | drop-in'
-  hosts: 'systemd-debian-12-file_format_all_options-drop-in'
+  hosts: 'systemd-debian-13-file_format_all_options-drop-in'
   gather_facts: false
   tasks:
     - name: >

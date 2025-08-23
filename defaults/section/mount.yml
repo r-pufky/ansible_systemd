@@ -39,16 +39,16 @@
 #     individual units.
 #
 # Special Case:
-#   mount: {} - will create the [Mount] header only.
+#   'mount: {}': Create the [Mount] header only.
 #
 # See reference sections for syntax formats:
 # * TIME (time)
 # * SPECIFIERS (unit specifiers)
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.mount.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.mount.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 # What resource to mount (absolute path or fstab identifier).
 #
@@ -56,7 +56,7 @@
 # does not exist.
 #
 # Special Case:
-#   %%: literal percent (%) character
+#   %%: Literal percent (%) character.
 #
 # Variable: what | str
 #
@@ -78,9 +78,9 @@
 # Type of filesystem to mount.
 #
 # Special Case:
-#    overlay: directory automatically created if it does not exist
-#   upperdir: directory automatically created if it does not exist
-#    workdir: directory automatically created if it does not exist
+#    overlay: Directory automatically created if it does not exist.
+#   upperdir: Directory automatically created if it does not exist.
+#    workdir: Directory automatically created if it does not exist.
 #
 # Variable: type | str
 #
@@ -94,7 +94,7 @@
 # Specifiers may be used.
 #
 # Special Case:
-#   %%: literal percent (%) character
+#   %%: Literal percent (%) character.
 #
 # Variable: options | list of str
 #
@@ -130,8 +130,8 @@
 # Corresponds to mount -w
 #
 # Values:
-#    True: fail immediately if mounting read/write fails
-#   False: automatically attempt to remount read-only (default)
+#    True: Fail immediately if mounting read/write fails.
+#   False: Automatically attempt to remount read-only (default).
 #
 # Variable: read_write_only | bool
 #
@@ -167,10 +167,10 @@
 # commands terminated via SIGTERM and SIGKILL after timeout_sec elapses again.
 #
 # Values:
-#        0: disables
-#        #: time in seconds
-#   {TIME}: TIME time
-#   {OMIT}: default_timeout_start_sec (default)
+#        0: Disables.
+#        #: Time in seconds.
+#   {TIME}: TIME time.
+#   {OMIT}: default_timeout_start_sec (default).
 #
 # Variable: timeout_sec | str
 #

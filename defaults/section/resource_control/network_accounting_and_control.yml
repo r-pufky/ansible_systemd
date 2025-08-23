@@ -26,23 +26,23 @@
 # configuration.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Slice units automatically gain a Requires=, After= dependency.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * SPECIFIERS (unit specifiers)
+# * SIZE (syntax).
+# * SPECIFIERS (unit specifiers).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 ###############################################################################
 # Network Accounting and Control
@@ -64,16 +64,16 @@
 # Only available for system services.
 #
 # Values:
-#    False: disable ip accounting
-#     True: enable ip accounting
-#   {OMIT}: False (default)
+#    False: Disable ip accounting.
+#     True: Enable ip accounting.
+#   {OMIT}: False (default).
 #
 # Variable: ip_accounting | bool
 #
 # Default: omit (system default).
 #
 # Reference
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Allow IPv4/IPv6 addresses.
 #
@@ -92,13 +92,13 @@
 # lower level units.
 #
 # Values:
-#          any: any host - 0.0.0.0/0, ::/0
-#    localhost: all local loopback addresses - 127.0.0.0/8, ::1/128
-#   link-local:	all link-local IP addresses - 169.254.0.0/16, fe80::/64
-#    multicast: All IP multi-casting addresses - 224.0.0.0/4, ff00::/8
-#         {IP}: IPv4 or IPv6, assumes IPv4/32 and IPv6/128
-#       {CIDR}: IPv4 or IPv6
-#       {OMIT}: disable filtering (default)
+#          any: Any host - 0.0.0.0/0, ::/0.
+#    localhost: All local loopback addresses - 127.0.0.0/8, ::1/128.
+#   link-local:	All link-local IP addresses - 169.254.0.0/16, fe80::/64.
+#    multicast: All IP multi-casting addresses - 224.0.0.0/4, ff00::/8.
+#         {IP}: IPv4 or IPv6, assumes IPv4/32 and IPv6/128.
+#       {CIDR}: IPv4 or IPv6.
+#       {OMIT}: Disable filtering (default).
 #
 # ip_address_allow:
 #   - '127.0.0.0/8'
@@ -109,7 +109,7 @@
 # Default: omit (system default).
 #
 # Reference
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.special.html
 
 # Deny IPv4/IPv6 addresses.
 #
@@ -128,13 +128,13 @@
 # lower level units.
 #
 # Values:
-#          any: any host - 0.0.0.0/0, ::/0
-#    localhost: all local loopback addresses - 127.0.0.0/8, ::1/128
-#   link-local:	all link-local IP addresses - 169.254.0.0/16, fe80::/64
-#    multicast: All IP multi-casting addresses - 224.0.0.0/4, ff00::/8
-#         {IP}: IPv4 or IPv6, assumes IPv4/32 and IPv6/128
-#       {CIDR}: IPv4 or IPv6
-#       {OMIT}: disable filtering (default)
+#          any: Any host - 0.0.0.0/0, ::/0.
+#    localhost: All local loopback addresses - 127.0.0.0/8, ::1/128.
+#   link-local:	All link-local IP addresses - 169.254.0.0/16, fe80::/64.
+#    multicast: All IP multi-casting addresses - 224.0.0.0/4, ff00::/8.
+#         {IP}: IPv4 or IPv6, assumes IPv4/32 and IPv6/128.
+#       {CIDR}: IPv4 or IPv6.
+#       {OMIT}: Disable filtering (default).
 #
 # ip_address_deny:
 #   - '127.0.0.0/8'
@@ -145,7 +145,7 @@
 # Default: omit (system default).
 #
 # Reference
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.special.html
 
 # Allow socket binding.
 #
@@ -159,22 +159,22 @@
 # Values:
 #   - address: str - IP address family
 #         Special Case:
-#           ipv4: IPv4
-#           ipv6: IPv6
-#            any: IPv4/6
-#             '': IPv4/6
+#           ipv4: IPv4.
+#           ipv6: IPv6.
+#            any: IPv4/6.
+#             '': IPv4/6.
 #     protocol: str - transport protocols
 #         Special Case:
-#           tcp: TCP
-#           udp: UDP
-#           any: TCP/UDP
-#            '': TCP/UDP
+#           tcp: TCP.
+#           udp: UDP.
+#           any: TCP/UDP.
+#            '': TCP/UDP.
 #     ports: str - ports
 #         Special Case:
-#             #: a single port within 1-65535
-#           #-#: define a port range within 1-65535
-#           any: any port
-#            '': any port
+#             #: A single port within 1-65535.
+#           #-#: Define a port range within 1-65535.
+#           any: Any port.
+#            '': Any port.
 #   {OMIT}: disable binding (default)
 #
 # socket_bind_allow:
@@ -194,7 +194,7 @@
 # Default: omit (system default).
 #
 # Reference
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.special.html
 
 # Deny socket binding.
 #
@@ -208,22 +208,22 @@
 # Values:
 #   - address: str - IP address family
 #         Special Case:
-#           ipv4: IPv4
-#           ipv6: IPv6
-#            any: IPv4/6
-#             '': IPv4/6
+#           ipv4: IPv4.
+#           ipv6: IPv6.
+#            any: IPv4/6.
+#             '': IPv4/6.
 #     protocol: str - transport protocols
 #         Special Case:
-#           tcp: TCP
-#           udp: UDP
-#           any: TCP/UDP
-#            '': TCP/UDP
+#           tcp: TCP.
+#           udp: UDP.
+#           any: TCP/UDP.
+#            '': TCP/UDP.
 #     ports: str - ports
 #         Special Case:
-#             #: a single port within 1-65535
-#           #-#: define a port range within 1-65535
-#           any: any port
-#            '': any port
+#             #: A single port within 1-65535.
+#           #-#: Define a port range within 1-65535.
+#           any: Any port.
+#            '': Any port.
 #   {OMIT}: disable binding (default)
 #
 # socket_bind_deny:
@@ -243,7 +243,7 @@
 # Default: omit (system default).
 #
 # Reference
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.special.html
 
 # Allow network interfaces.
 #
@@ -254,8 +254,8 @@
 # Applied before restrict_network_interfaces_deny.
 #
 # Values:
-#   {INTERFACE}: network interface name (e.g. eth1)
-#        {OMIT}: do not allow network interface use (default)
+#   {INTERFACE}: Network interface name (e.g. eth1).
+#        {OMIT}: Do not allow network interface use (default).
 #
 # Variable: restrict_network_interfaces_allow | list of str
 #
@@ -269,8 +269,8 @@
 # Applied after restrict_network_interfaces_allow.
 #
 # Values:
-#   {INTERFACE}: network interface name (e.g. eth1)
-#        {OMIT}: do not allow network interface use (default)
+#   {INTERFACE}: Network interface name (e.g. eth1).
+#        {OMIT}: Do not allow network interface use (default).
 #
 # Variable: restrict_network_interfaces_deny | list of str
 #
@@ -288,21 +288,22 @@
 # Only available for system services.
 #
 # Values:
-#   - type: str - source type
+#     list of dict - NFT set definition.
+#   - type: str - Source type.
 #         Values:
-#           cgroup: control group (cgroupsv2)
-#             user: user (meta skuid)
-#            group: group (meta skgid)
+#           cgroup: Control group (cgroupsv2).
+#             user: User (meta skuid).
+#            group: Group (meta skgid).
 #     family: str - NFT address family
 #         Values:
-#              arp: layer 2 (ARP)
-#           bridge: layer 3 (Bridging)
-#             inet: IPv4/6
-#               ip: IPv4
-#              ip6: IPv6
-#           netdev: network device (interface)
-#     table: str - table name
-#     set: str - set name
+#              arp: Layer 2 (ARP).
+#           bridge: Layer 3 (Bridging).
+#             inet: IPv4/6.
+#               ip: IPv4.
+#              ip6: IPv6.
+#           netdev: Network device (interface).
+#     table: str - Table name.
+#     set: str - Set name.
 #
 # Variable: nft_set | list of dict
 #

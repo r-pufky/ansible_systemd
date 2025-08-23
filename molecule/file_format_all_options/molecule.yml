@@ -297,7 +297,8 @@ provisioner:
               network_namespace_path: '/proc/100/ns/net'
               private_ipc: false
               ipc_namespace_path: '/proc/100/ns/net'
-              MemoryKSM: false
+              Memory_ksm: false
+              private_pids: false
               private_users: false
               protect_hostname: false
               protect_clock: false
@@ -342,6 +343,7 @@ provisioner:
               extension_image_policy: >-
                 root=verity+signed+encrypted+unprotected+absent
               mount_api_vfs: false
+              bind_log_sockets: false
               protect_proc: 'noaccess'
               proc_subset: 'all'
               bind_paths:
@@ -441,6 +443,7 @@ provisioner:
               managed_oom_swap: 'auto'
               managed_oom_memory_pressure: 'auto'
               managed_oom_memory_pressure_limit: 100
+              managed_oom_memory_pressure_duration_sec: '1s'
               managed_oom_preference: 'none'
               memory_pressure_watch: 'auto'
               memory_pressure_threshold_sec: '1s'
@@ -597,6 +600,7 @@ provisioner:
               accuracy_sec: '1min'
               randomized_delay_sec: 300
               fixed_random_delay: true
+              defer_reactivation: false
               on_clock_change: false
               on_timezone_change: false
               unit: 'reboot.service'
@@ -604,15 +608,15 @@ provisioner:
               wake_system: false
               remain_after_elapse: true
 platforms:
-  - name: 'systemd-debian-12-file_format_all_options'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'systemd-debian-13-file_format_all_options'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
-  - name: 'systemd-debian-12-file_format_all_options-drop-in'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'systemd-debian-13-file_format_all_options-drop-in'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

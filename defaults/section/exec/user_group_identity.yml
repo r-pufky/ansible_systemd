@@ -25,23 +25,23 @@
 #   * log_namespace
 #
 # Options may be added to the following systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * QUOTING (syntax quoting)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * QUOTING (syntax quoting).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 
 ###############################################################################
 # User/Group Identity
@@ -55,15 +55,15 @@
 # Warnings are generated when constraints are violated to maintain portability.
 #
 # Constraints:
-# * at least 1 character
-# * 31 characters max
-# * first character: [a-z,A-Z,_]
-# * other characters: [a-z,A-Z,0-9,_,-]
+# * At least 1 character.
+# * 31 characters max.
+# * First character: [a-z,A-Z,_].
+# * Other characters: [a-z,A-Z,0-9,_,-].
 #
 # Values:
-#    {UID}: user ID
-#   {USER}: user name
-#   {OMIT}: root if system service, user if user service (default)
+#    {UID}: User ID.
+#   {USER}: User name.
+#   {OMIT}: Root if system service, user if user service (default).
 #
 # Variable: user | str
 #
@@ -77,15 +77,15 @@
 # Warnings are generated when constraints are violated to maintain portability.
 #
 # Constraints:
-# * at least 1 character
-# * 31 characters max
-# * first character: [a-z,A-Z,_]
-# * other characters: [a-z,A-Z,0-9,_,-]
+# * At least 1 character.
+# * 31 characters max.
+# * First character: [a-z,A-Z,_].
+# * Other characters: [a-z,A-Z,0-9,_,-].
 #
 # Values:
-#     {GID}: group ID
-#   {GROUP}: group name
-#    {OMIT}: user's default group (default)
+#     {GID}: Group ID.
+#   {GROUP}: Group name.
+#    {OMIT}: User's default group (default).
 #
 # Variable: group | str
 #
@@ -102,12 +102,12 @@
 # the UID/GID range 61184-65519.
 #
 # Automatically enables:
-# * remove_ipc
-# * private_tmp
-# * no_new_privileges
-# * restrict_suid_sgid
-# * protect_system: strict
-# * protect_home: read-only
+# * remove_ipc.
+# * private_tmp.
+# * no_new_privileges.
+# * restrict_suid_sgid.
+# * protect_system: strict.
+# * protect_home: read-only.
 #
 # If user and group options are omitted, dynamic user/group is implicitly
 # derived from the unit name. If the unit name without the type suffix
@@ -129,26 +129,26 @@
 # Incompatible with D-Bus policies.
 #
 # Values:
-#     True: allocate UNIX user and group dynamically when the unit is started,
+#     True: Allocate UNIX user and group dynamically when the unit is started,
 #           and released as soon as it is stopped.
-#    False: do not dynamically allocate user and group
-#   {OMIT}: False (default)
+#    False: Do not dynamically allocate user and group.
+#   {OMIT}: False (default).
 #
 # Variable: dynamic_user | bool
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/nss-systemd.html
+# * https://www.freedesktop.org/software/systemd/man/257/nss-systemd.html
 
 # Sets supplementary UNIX groups for service.
 #
 # Extended groups in system group database for user.
 #
 # Values:
-#     {GID}: group ID
-#   {GROUP}: group name
-#    {OMIT}: no supplementary groups (default)
+#     {GID}: Group ID.
+#   {GROUP}: Group name.
+#    {OMIT}: No supplementary groups (default).
 #
 # Variable: supplementary_groups | list of str
 #
@@ -157,9 +157,10 @@
 # Set login environment?
 #
 # Values:
-#     True: set $HOME, $LOGNAME, and $SHELL environment variables
-#    False: do not set login environment
-#   {OMIT}: True if user, dynamic_user, pam_name set; False otherwise (default)
+#     True: Set $HOME, $LOGNAME, and $SHELL environment variables.
+#    False: Do not set login environment.
+#   {OMIT}: True if user, dynamic_user, pam_name set; False otherwise
+#           (default).
 #
 # Variable: set_login_environment | bool
 #
@@ -173,9 +174,9 @@
 # Not recommended with notify_access: all.
 #
 # Values:
-#   {NAME}: PAM service name to use
-#       '': no PAM session will be opened
-#   {OMIT}: '' (default)
+#   {NAME}: PAM service name to use.
+#       '': No PAM session will be opened.
+#   {OMIT}: '' (default).
 #
 # Variable: pam_name | str
 #

@@ -26,23 +26,23 @@
 # configuration.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Slice units automatically gain a Requires=, After= dependency.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * SPECIFIERS (unit specifiers)
+# * SIZE (syntax).
+# * SPECIFIERS (unit specifiers).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 ###############################################################################
 # Memory Accounting and Control
@@ -53,9 +53,9 @@
 # all units contained in the same slice, all parent slices, and units within.
 #
 # Values:
-#     True: enable process accounting
-#    False: disable process accounting
-#   {OMIT}: True (default) default changed with DefaultMemoryAccounting= in
+#     True: Enable process accounting.
+#    False: Disable process accounting.
+#   {OMIT}: True (default). default changed with DefaultMemoryAccounting= in
 #           systemd-system.conf.
 #
 # Variable: memory_accounting | bool
@@ -63,7 +63,7 @@
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Running minimum memory use protection.
 #
@@ -79,11 +79,11 @@
 # unset.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: memory_min | str
 #
@@ -97,11 +97,11 @@
 # Set default memory_min for children.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: default_memory_min | str
 #
@@ -121,11 +121,11 @@
 # shared protection, the children will freely compete for the memory.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: memory_low | str
 #
@@ -139,11 +139,11 @@
 # Set default memory_low for children.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: default_memory_low | str
 #
@@ -164,11 +164,11 @@
 # shared protection, the children will freely compete for the memory.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: startup_memory_low | str
 #
@@ -182,11 +182,11 @@
 # Set default startup_memory_low for children.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: default_startup_memory_low | str
 #
@@ -205,11 +205,11 @@
 # unset.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: memory_high | str
 #
@@ -228,11 +228,11 @@
 # The effective configuration is reported as EffectiveMemoryHigh.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: startup_memory_high | str
 #
@@ -254,11 +254,11 @@
 # unset.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: memory_max | str
 #
@@ -277,11 +277,11 @@
 # The effective configuration is reported as EffectiveMemoryMax.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: startup_memory_max | str
 #
@@ -298,11 +298,11 @@
 # is unset.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: memory_swap_max | str
 #
@@ -316,11 +316,11 @@
 # Absolute limit on swap memory usage during startup and shutdown.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: startup_memory_swap_max | str
 #
@@ -341,11 +341,11 @@
 # is unset.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: memory_z_swap_max | str
 #
@@ -365,11 +365,11 @@
 # back or written out to disk.
 #
 # Values:
-#      {SIZE}: SIZE memory size
-#      {INT}%: memory size as a percent of physical memory
-#    infinity: all available memory protected (inherit all protection from
+#      {SIZE}: SIZE Memory size.
+#      {INT}%: Memory size as a percent of physical memory.
+#    infinity: All available memory protected (inherit all protection from
 #              ancestors).
-#      {OMIT}: infinity (default)
+#      {OMIT}: Infinity (default).
 #
 # Variable: startup_memory_z_swap_max | str
 #
@@ -385,9 +385,9 @@
 # Zswap documentation for more details.
 #
 # Values:
-#     True: enable writes to backing storage
-#    False: disable writes to backing storage
-#   {OMIT}: True (default)
+#     True: Enable writes to backing storage.
+#    False: Disable writes to backing storage.
+#   {OMIT}: True (default).
 #
 # Variable: memory_z_swap_writeback | bool
 #
@@ -406,9 +406,9 @@
 # startup_allowed_memory_nodes is unset.
 #
 # Values:
-#        #: use specific NUMA node
-#      #-#: use range of NUMA nodes
-#   {OMIT}: no restrictions (default)
+#        #: Use specific NUMA node.
+#      #-#: Use range of NUMA nodes.
+#   {OMIT}: No restrictions (default).
 #
 # allowed_memory_nodes: ['1-8', 10, 11]
 #
@@ -423,9 +423,9 @@
 # is reported as EffectiveMemoryNodes.
 #
 # Values:
-#        #: use specific NUMA node
-#      #-#: use range of NUMA nodes
-#   {OMIT}: no restrictions (default)
+#        #: Use specific NUMA node.
+#      #-#: Use range of NUMA nodes.
+#   {OMIT}: No restrictions (default).
 #
 # startup_allowed_memory_nodes: ['1-8', 10, 11]
 #

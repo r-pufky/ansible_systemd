@@ -31,20 +31,20 @@
 #   * After= on local-fs-pre.target
 #   * Before= on local-fs.target
 #
-# Decision: fstab section not implmented - used for importing existing fstab
+# Decision: fstab section not implemented - used for importing existing fstab
 #     into system units (systemd-fstab-generator); not used for creating
 #     individual units.
 #
 # Special Case:
-#   automount: {} - will create the [Automount] header only.
+#   'automount: {}': Create the [Automount] header only.
 #
 # See reference sections for syntax formats:
-# * TIME (time)
+# * TIME (time).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.automount.html#
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.automount.html#
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 # Where to auto mount resource (absolute path).
 #
@@ -64,7 +64,7 @@
 # Specifiers may be used.
 #
 # Special Case:
-#   %%: literal percent (%) character
+#   %%: Literal percent (%) character.
 #
 # Variable: extra_options | list of str
 #
@@ -84,10 +84,10 @@
 # commands terminated via SIGTERM and SIGKILL after timeout_sec elapses again.
 #
 # Values:
-#        0: disables
-#        #: time in seconds
-#   {TIME}: TIME time
-#   {OMIT}: 0 (default)
+#        0: Disables.
+#        #: Time in seconds.
+#   {TIME}: TIME time.
+#   {OMIT}: 0 (default).
 #
 # Variable: timeout_idle_sec | str
 #

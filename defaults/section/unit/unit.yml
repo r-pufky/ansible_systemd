@@ -8,21 +8,21 @@
 # Encodes information about a process controlled and supervised by systemd.
 #
 # Special Case:
-#   unit: {} - will create the [Unit] header only.
+#   'unit: {}': Create the [Unit] header only.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * COMMAND LINES (service command lines)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * COMMAND LINES (service command lines).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#Command%20lines
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.service.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.service.html#Command%20lines
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 ###############################################################################
 # Systemd Unit Heading
@@ -41,8 +41,8 @@
 # or a phrase with a continuous verb.
 #
 # Values:
-#   {UNIT}: string identifying unit
-#   {OMIT}: disabled (default)
+#   {UNIT}: String identifying unit.
+#   {OMIT}: Disabled (default).
 #
 # Variable: description | str
 #
@@ -53,8 +53,8 @@
 # URIs should be listed in order of relevance (highest to lowest).
 #
 # Values:
-#    {URI}: documentation URI: http://, https://, file:, info:, man:
-#   {OMIT}: disabled (default)
+#    {URI}: Documentation URI: http://, https://, file:, info:, man:.
+#   {OMIT}: Disabled (default).
 #
 # Variable: documentation | list of str
 #
@@ -75,8 +75,8 @@
 # both units will be started simultaneously and without any delay between them.
 #
 # Values:
-#   {UNIT}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: wants | list of str
 #
@@ -100,8 +100,8 @@
 # active state.
 #
 # Values:
-#   {UNIT}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: requires | list of str
 #
@@ -118,8 +118,8 @@
 # dependency cannot be specified directly.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: requisite | list of str
 #
@@ -140,8 +140,8 @@
 # cannot be specified directly.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: binds_to | list of str
 #
@@ -158,8 +158,8 @@
 # cannot be specified directly.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: part_of | list of str
 #
@@ -176,8 +176,8 @@
 # UpheldBy=a.service in the property listing of b.service.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: upholds | list of str
 #
@@ -191,8 +191,8 @@
 # time.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: conflicts | list of str
 #
@@ -209,8 +209,8 @@
 # No effect on device units.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: before | list of str
 #
@@ -227,8 +227,8 @@
 # No effect on device units.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: after | list of str
 #
@@ -237,8 +237,8 @@
 # Units to activate when this unit enters failed state.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: on_failure | list of str
 #
@@ -247,8 +247,8 @@
 # Units to activate when this unit enters inactive state.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: on_success | list of str
 #
@@ -260,8 +260,8 @@
 # requests on all units that are linked to it.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: propagates_reload_to | list of str
 #
@@ -273,8 +273,8 @@
 # requests on all units that are linked to it.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: propagates_reload_from | list of str
 #
@@ -286,8 +286,8 @@
 # requests on all units that are linked to it.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: propagates_stop_to | list of str
 #
@@ -299,8 +299,8 @@
 # requests on all units that are linked to it.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: stop_propagated_from | list of str
 #
@@ -318,8 +318,8 @@
 # ipc_namespace_path, private_tmp.
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: joins_namespace_of | list of str
 #
@@ -333,8 +333,8 @@
 # local-fs.target but are still honored for this option (pulled in by unit).
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: requires_mounts_for | list of str
 #
@@ -348,8 +348,8 @@
 # local-fs.target but are still honored for this option (pulled in by unit).
 #
 # Values:
-#   {NAME}: unit name
-#   {OMIT}: disabled (default)
+#   {NAME}: Unit name.
+#   {OMIT}: Disabled (default).
 #
 # Variable: wants_mounts_for | list of str
 #
@@ -360,23 +360,23 @@
 # systemctl --job-mode= for more details.
 #
 # Values:
-#                   fail: requested operation conflicts with a pending job the
+#                   fail: Requested operation conflicts with a pending job the
 #                         operation will fail.
-#                replace: any conflicting pending job will be replaced as
+#                replace: Any conflicting pending job will be replaced as
 #                         necessary (default).
-#   replace-irreversibly: like replace, but also mark the new jobs as
+#   replace-irreversibly: Like replace, but also mark the new jobs as
 #                         irreversible. This job mode should be used on any
 #                         transaction which pulls in shutdown.target.
-#                isolate: only valid for start operations and causes all other
+#                isolate: Only valid for start operations and causes all other
 #                         units to be stopped when specified unit is started.
 #                         Only a single unit may be listed in on_success.
-#                  flush: all queued jobs cancelled when new job queued
-#    ignore-dependencies: all unit dependencies are ignored for new job and the
+#                  flush: All queued jobs cancelled when new job queued.
+#    ignore-dependencies: All unit dependencies are ignored for new job and the
 #                         operation is executed immediately.
-#    ignore-requirements: like ignore-dependencies, but only ignores
+#    ignore-requirements: Like ignore-dependencies, but only ignores
 #                         requirement dependencies, ordering dependencies will
 #                         still be honored.
-#   {OMIT}: replace (default)
+#                 {OMIT}: Replace (default).
 #
 # Variable: on_success_job_mode | str
 #
@@ -387,23 +387,23 @@
 # systemctl --job-mode= for more details.
 #
 # Values:
-#                   fail: requested operation conflicts with a pending job the
+#                   fail: Requested operation conflicts with a pending job the
 #                         operation will fail.
-#                replace: any conflicting pending job will be replaced as
+#                replace: Any conflicting pending job will be replaced as
 #                         necessary (default).
-#   replace-irreversibly: like replace, but also mark the new jobs as
+#   replace-irreversibly: Like replace, but also mark the new jobs as
 #                         irreversible. This job mode should be used on any
 #                         transaction which pulls in shutdown.target.
-#                isolate: only valid for start operations and causes all other
+#                isolate: Only valid for start operations and causes all other
 #                         units to be stopped when specified unit is started.
 #                         Only a single unit may be listed in on_failure.
-#                  flush: all queued jobs cancelled when new job queued
-#    ignore-dependencies: all unit dependencies are ignored for new job and the
+#                  flush: All queued jobs cancelled when new job queued.
+#    ignore-dependencies: All unit dependencies are ignored for new job and the
 #                         operation is executed immediately.
-#    ignore-requirements: like ignore-dependencies, but only ignores
+#    ignore-requirements: Like ignore-dependencies, but only ignores
 #                         requirement dependencies, ordering dependencies will
 #                         still be honored.
-#   {OMIT}: replace (default)
+#                 {OMIT}: Replace (default).
 #
 # Variable: on_failure_job_mode | str
 #
@@ -412,9 +412,9 @@
 # Ignore on isolate?
 #
 # Values:
-#     True: unit not stopped when isolating another unit
-#    False: unit stopped when isolating another unit
-#   {OMIT}: False (service, target, socket, timer, path) else True (default)
+#     True: Unit not stopped when isolating another unit.
+#    False: Unit stopped when isolating another unit.
+#   {OMIT}: False (service, target, socket, timer, path) else True (default).
 #
 # Variable: ignore_on_isolate | bool
 #
@@ -427,9 +427,9 @@
 # down.
 #
 # Values:
-#     True: unit stopped when no longer used (automatically cleaned up)
-#    False: unit not stopped
-#   {OMIT}: False (default)
+#     True: Unit stopped when no longer used (automatically cleaned up).
+#    False: Unit not stopped.
+#   {OMIT}: False (default).
 #
 # Variable: stop_when_unneeded | bool
 #
@@ -442,9 +442,9 @@
 # that are not intended to be activated explicitly deactivated.
 #
 # Values:
-#     True: only activate indirectly
-#    False: no activate restrictions
-#   {OMIT}: False (default)
+#     True: Only activate indirectly.
+#    False: No activate restrictions.
+#   {OMIT}: False (default).
 #
 # Variable: refuse_manual_start | bool
 #
@@ -457,9 +457,9 @@
 # units that are not intended to be deactivated.
 #
 # Values:
-#     True: only terminate indirectly
-#    False: no terminate restrictions
-#   {OMIT}: False (default)
+#     True: Only terminate indirectly.
+#    False: No terminate restrictions.
+#   {OMIT}: False (default).
 #
 # Variable: refuse_manual_stop | bool
 #
@@ -471,9 +471,9 @@
 # units that are used similar to runlevels in SysV init systems.
 #
 # Values:
-#     True: allow isolate command
-#    False: deny isolate command
-#   {OMIT}: False (default)
+#     True: Allow isolate command.
+#    False: Deny isolate command.
+#   {OMIT}: False (default).
 #
 # Variable: allow_isolate | bool
 #
@@ -486,9 +486,9 @@
 # majority of common units.
 #
 # Values:
-#     True: default dependencies based on type will implicitly be created
-#    False: default non-essential dependencies will not be created
-#   {OMIT}: True (default)
+#     True: Default dependencies based on type will implicitly be created.
+#    False: Default non-essential dependencies will not be created.
+#   {OMIT}: True (default).
 #
 # Variable: default_dependencies | bool
 #
@@ -500,11 +500,11 @@
 # described at systemd and Storage Daemons for Root File System.
 #
 # Values:
-#     True: processes belonging to this unit will not
+#     True: Processes belonging to this unit will not
 #           be sent the final SIGTERM/SIGKILL signals during final phase of
 #           system shutdown process.
-#    False: send final SIGTERM/SIGKILL signals
-#   {OMIT}: False (default)
+#    False: Send final SIGTERM/SIGKILL signals.
+#   {OMIT}: False (default).
 #
 # Variable: survive_final_kill_signal | bool
 #
@@ -513,13 +513,13 @@
 # Garbage collection behavior.
 #
 # Values:
-#             inactive: unit will be unloaded if inactive state and not
+#             inactive: Unit will be unloaded if inactive state and not
 #                       referenced by clients, jobs or other units; it is
 #                       not unloaded in failed state until systemctl
 #                       reset-failed or equivalent is used to reset
 #                       failed state (default).
-#   inactive-or-failed: unit is unloaded even in failed state
-#               {OMIT}: inactive (default)
+#   inactive-or-failed: Unit is unloaded even in failed state.
+#               {OMIT}: Inactive (default).
 #
 # Variable: collect_mode | str
 #
@@ -528,31 +528,31 @@
 # Action when unit stops and enters failed state.
 #
 # Values:
-#                 none: (system/user) no action triggered (default)
+#                 none: (system/user) no action triggered (default).
 #               reboot: (system) reboot following the normal shutdown
 #                       procedure.
 #         reboot-force: (system) forced reboot which will terminate all
 #                       processes forcibly but should cause no dirty file
 #                       systems on reboot.
-#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS
-#             poweroff: (system) poweroff system
-#       poweroff-force: (system) force poweroff system
-#   poweroff-immediate: (system) immediately poweroff system
+#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS.
+#             poweroff: (system) poweroff system.
+#       poweroff-force: (system) force poweroff system.
+#   poweroff-immediate: (system) immediately poweroff system.
 #                 exit: (system/user) exit following the normal shutdown
 #                       procedure. Exit status may be overridden
 #                       failure_action_exit_status.
 #           exit-force: (system/user) terminate without shutting down services.
 #                       Exit status may be overridden with
 #                       failure_action_exit_status.
-#          soft-reboot: (system) userspace reboot operation
+#          soft-reboot: (system) userspace reboot operation.
 #    soft-reboot-force: (system) userspace reboot operation (without shutdown
 #                       transaction).
-#                kexec: (system) kernel execute
-#          kexec-force: (system) force kernel execute
-#                 halt: (system) halt system
-#           halt-force: (system) force halt system
-#       halt-immediate: (system) immediately halt system
-#               {OMIT}: none (default)
+#                kexec: (system) kernel execute.
+#          kexec-force: (system) force kernel execute.
+#                 halt: (system) halt system.
+#           halt-force: (system) force halt system.
+#       halt-immediate: (system) immediately halt system.
+#               {OMIT}: None (default).
 #
 # Variable: failure_action | str
 #
@@ -561,31 +561,31 @@
 # Action when unit stops and enters inactive state.
 #
 # Values:
-#                 none: (system/user) no action triggered (default)
+#                 none: (system/user) no action triggered (default).
 #               reboot: (system) reboot following the normal shutdown
 #                       procedure.
 #         reboot-force: (system) forced reboot which will terminate all
 #                       processes forcibly but should cause no dirty file
 #                       systems on reboot.
-#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS
-#             poweroff: (system) poweroff system
-#       poweroff-force: (system) force poweroff system
-#   poweroff-immediate: (system) immediately poweroff system
+#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS.
+#             poweroff: (system) poweroff system.
+#       poweroff-force: (system) force poweroff system.
+#   poweroff-immediate: (system) immediately poweroff system.
 #                 exit: (system/user) exit following the normal shutdown
 #                       procedure. Exit status may be overridden
 #                       success_action_exit_status.
 #           exit-force: (system/user) terminate without shutting down services.
 #                       Exit status may be overridden with
 #                       success_action_exit_status.
-#          soft-reboot: (system) userspace reboot operation
+#          soft-reboot: (system) userspace reboot operation.
 #    soft-reboot-force: (system) userspace reboot operation (without shutdown
 #                       transaction).
-#                kexec: (system) kernel execute
-#          kexec-force: (system) force kernel execute
-#                 halt: (system) halt system
-#           halt-force: (system) force halt system
-#       halt-immediate: (system) immediately halt system
-#               {OMIT}: none (default)
+#                kexec: (system) kernel execute.
+#          kexec-force: (system) force kernel execute.
+#                 halt: (system) halt system.
+#           halt-force: (system) force halt system.
+#       halt-immediate: (system) immediately halt system.
+#               {OMIT}: None (default).
 #
 # Variable: success_action | str
 #
@@ -597,9 +597,9 @@
 # specified status.
 #
 # Values:
-#       '': propagate exit status of main process (default)
-#    0-255: specified exit status
-#   {OMIT}: '' (default)
+#       '': Propagate exit status of main process (default).
+#    0-255: Specified exit status.
+#   {OMIT}: '' (default).
 #
 # Variable: failure_action_exit_status | int
 #
@@ -611,9 +611,9 @@
 # specified status.
 #
 # Values:
-#       '': propagate exit status of main process (default)
-#    0-255: specified exit status
-#   {OMIT}: '' (default)
+#       '': Propagate exit status of main process (default).
+#    0-255: Specified exit status.
+#   {OMIT}: '' (default).
 #
 # Variable: success_action_exit_status | int
 #
@@ -625,9 +625,9 @@
 # will be cancelled.
 #
 # Values:
-#   infinity: job timeouts disabled (default)
-#     {TIME}: TIME job start timeout
-#     {OMIT}: infinity (default)
+#   infinity: Job timeouts disabled (default).
+#     {TIME}: TIME job start timeout.
+#     {OMIT}: Infinity (default).
 #
 # Variable: job_timeout_sec | str
 #
@@ -639,9 +639,9 @@
 # be cancelled.
 #
 # Values:
-#   infinity: job timeouts disabled (default)
-#     {TIME}: TIME actual job start timeout
-#     {OMIT}: infinity (default)
+#   infinity: Job timeouts disabled (default).
+#     {TIME}: TIME actual job start timeout.
+#     {OMIT}: Infinity (default).
 #
 # Variable: job_running_timeout_sec | str
 #
@@ -650,28 +650,28 @@
 # Additional action to take when job_timeout_sec or job_running_* elapses.
 #
 # Values:
-#                 none: (system/user) no action triggered (default)
+#                 none: (system/user) no action triggered (default).
 #               reboot: (system) reboot following the normal shutdown
 #                       procedure.
 #         reboot-force: (system) forced reboot which will terminate all
 #                       processes forcibly but should cause no dirty file
 #                       systems on reboot.
-#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS
-#             poweroff: (system) poweroff system
-#       poweroff-force: (system) force poweroff system
-#   poweroff-immediate: (system) immediately poweroff system
+#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS.
+#             poweroff: (system) poweroff system.
+#       poweroff-force: (system) force poweroff system.
+#   poweroff-immediate: (system) immediately poweroff system.
 #                 exit: (system/user) exit following the normal shutdown
 #                       procedure.
-#           exit-force: (system/user) terminate without shutting down services
-#          soft-reboot: (system) userspace reboot operation
+#           exit-force: (system/user) terminate without shutting down services.
+#          soft-reboot: (system) userspace reboot operation.
 #    soft-reboot-force: (system) userspace reboot operation (without shutdown
 #                       transaction).
-#                kexec: (system) kernel execute
-#          kexec-force: (system) force kernel execute
-#                 halt: (system) halt system
-#           halt-force: (system) force halt system
-#       halt-immediate: (system) immediately halt system
-#               {OMIT}: none (default)
+#                kexec: (system) kernel execute.
+#          kexec-force: (system) force kernel execute.
+#                 halt: (system) halt system.
+#           halt-force: (system) force halt system.
+#       halt-immediate: (system) immediately halt system.
+#               {OMIT}: None (default).
 #
 # Variable: job_timeout_action | str
 #
@@ -680,9 +680,9 @@
 # Optional reboot string to use when job_timeout_sec or job_running_* elapses.
 #
 # Values:
-#     none: no reboot string (default)
-#       '': no reboot string (default)
-#   {OMIT}: none (default)
+#     none: No reboot string (default).
+#       '': No reboot string (default).
+#   {OMIT}: None (default).
 #
 # Variable: job_running_reboot_argument | str
 #
@@ -694,10 +694,10 @@
 # start_limit_interval_sec time are not permitted to start any more.
 #
 # Values:
-#   infinity: no time limit between interval checking
-#          0: disable rate limiting
-#     {TIME}: TIME interval between checking
-#     {OMIT}: none (default)
+#   infinity: No time limit between interval checking.
+#          0: Disable rate limiting.
+#     {TIME}: TIME interval between checking.
+#     {OMIT}: None (default).
 #
 # Variable: start_limit_interval_sec | str
 #
@@ -709,8 +709,8 @@
 # start_limit_interval_sec time are not permitted to start any more.
 #
 # Values:
-#        0: disable burst limits
-#   {OMIT}: 0 (default)
+#        0: Disable burst limits.
+#   {OMIT}: 0 (default).
 #
 # Variable: start_limit_burst | int
 #
@@ -719,27 +719,28 @@
 # Additional action if start rate limiting (start_limit_*) triggered.
 #
 # Values:
-#                 none: (system/user) no action, start not permitted (default)
-#               reboot: (system) reboot following the normal shutdown procedure
+#                 none: (system/user) no action, start not permitted (default).
+#               reboot: (system) reboot following the normal shutdown
+#                       procedure.
 #         reboot-force: (system) forced reboot which will terminate all
 #                       processes forcibly but should cause no dirty file
 #                       systems on reboot.
-#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS
-#             poweroff: (system) poweroff system
-#       poweroff-force: (system) force poweroff system
-#   poweroff-immediate: (system) immediately poweroff system
+#     reboot-immediate: (system) immediate reboot; may cause DATA LOSS.
+#             poweroff: (system) poweroff system.
+#       poweroff-force: (system) force poweroff system.
+#   poweroff-immediate: (system) immediately poweroff system.
 #                 exit: (system/user) exit following the normal shutdown
 #                       procedure.
-#           exit-force: (system/user) terminate without shutting down services
-#          soft-reboot: (system) userspace reboot operation
+#           exit-force: (system/user) terminate without shutting down services.
+#          soft-reboot: (system) userspace reboot operation.
 #    soft-reboot-force: (system) userspace reboot operation (without shutdown
 #                       transaction).
-#                kexec: (system) kernel execute
-#          kexec-force: (system) force kernel execute
-#                 halt: (system) halt system
-#           halt-force: (system) force halt system
-#       halt-immediate: (system) immediately halt system
-#               {OMIT}: none (default)
+#                kexec: (system) kernel execute.
+#          kexec-force: (system) force kernel execute.
+#                 halt: (system) halt system.
+#           halt-force: (system) force halt system.
+#       halt-immediate: (system) immediately halt system.
+#               {OMIT}: None (default).
 #
 # Variable: start_limit_action | str
 #
@@ -748,9 +749,9 @@
 # Optional reboot string for systemctl reboot.
 #
 # Values:
-#     none: no reboot string (default)
-#       '': no reboot string (default)
-#   {OMIT}: none (default)
+#     none: No reboot string (default).
+#       '': No reboot string (default).
+#   {OMIT}: None (default).
 #
 # Variable: reboot_argument | str
 #
@@ -763,9 +764,9 @@
 # functionality should not be used in normal units.
 #
 # Values:
-#       '': no config file specified (default)
-#   {PATH}: generated config file location
-#   {OMIT}: none (default)
+#       '': No config file specified (default).
+#   {PATH}: Generated config file location.
+#   {OMIT}: None (default).
 #
 # Variable: source_path | str
 #

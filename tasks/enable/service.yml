@@ -12,7 +12,7 @@
     (systemd_daemon_reload_enable | default(true))
   notify: 'Handlers | reload systemd'
   block:
-    # reload or restart is not supported; check results and start manually.
+    # Reload or restart is not supported; check results and start manually.
     - name: 'Systemd | enable | reload {{ systemd.name }}'
       ansible.builtin.service:
         name: '{{ systemd.name }}.service'

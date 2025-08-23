@@ -25,23 +25,23 @@
 #   * log_namespace
 #
 # Options may be added to the following systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * QUOTING (syntax quoting)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * QUOTING (syntax quoting).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 
 ###############################################################################
 # Scheduling
@@ -52,8 +52,8 @@
 # less resources made available.
 #
 # Values:
-#   -20-19: set nice level
-#        0: system default
+#   -20-19: Set nice level.
+#        0: System default.
 #   {OMIT}: 0 (default)
 #
 # Variable: nice | int
@@ -66,12 +66,12 @@
 # Set CPU scheduling policy for executed processes.
 #
 # Values:
-#    other: standard round-robin time-sharing policy (priority: 0)
-#    batch: for batch style execution of processes (priority: 0)
-#     idle: for running very low priority background jobs (priority: 0)
-#     fifo: first-in first-out policy (priority: 1-99)
-#       rr: round-robin policy (priority: 1-99)
-#   {OMIT}: 0 (default)
+#    other: Standard round-robin time-sharing policy (priority: 0).
+#    batch: For batch style execution of processes (priority: 0).
+#     idle: For running very low priority background jobs (priority: 0).
+#     fifo: First-in first-out policy (priority: 1-99).
+#       rr: Round-robin policy (priority: 1-99).
+#   {OMIT}: 0 (default).
 #
 # Variable: cpu_scheduling_policy | str
 #
@@ -87,9 +87,9 @@
 # mean less CPU time available, larger values mean more.
 #
 # Values:
-#        0: for other, batch, idle policies
-#     1-99: for fifo, rr policies
-#   {OMIT}: policy default (default)
+#        0: For other, batch, idle policies.
+#     1-99: For fifo, rr policies.
+#   {OMIT}: Policy default (default).
 #
 # Variable: cpu_scheduling_priority | int
 #
@@ -101,10 +101,10 @@
 # Reset CPU priorities and policies on process fork.
 #
 # Values:
-#     True: reset priorities and policies on process fork, preventing leak into
+#     True: Reset priorities and policies on process fork, preventing leak into
 #          child processes.
-#    False: do not reset priorities
-#   {OMIT}: False (default)
+#    False: Do not reset priorities.
+#   {OMIT}: False (default).
 #
 # Variable: cpu_scheduling_reset_on_fork | bool
 #
@@ -116,10 +116,10 @@
 # CPU affinity of executed processes.
 #
 # Values:
-#      #-#: prefer range of CPUs
-#        #: prefer single CPU
-#     numa: automatically set allowed CPU range based on numa_mask
-#   {OMIT}: no affinity (default)
+#      #-#: Prefer range of CPUs.
+#        #: Prefer single CPU.
+#     numa: Automatically set allowed CPU range based on numa_mask.
+#   {OMIT}: No affinity (default).
 #
 # cpu_affinity: [1-3, 7]
 # cpu_affinity: ['numa']
@@ -136,20 +136,20 @@
 # List of NUMA nodes to associate with policy specified in numa_mask.
 #
 # Values:
-#      default: local allocation of memory on the node of the CPU that
+#      default: Local allocation of memory on the node of the CPU that
 #               triggered allocation (system default policy).
-#    preferred: allocate pages from node first and fall back to near by nodes
+#    preferred: Allocate pages from node first and fall back to near by nodes
 #               if the preferred node is low on free memory. If node_mask
 #               specifies more than one node ID, the first node is preferred.
 #               If node_mask and max_node are empty use local.
-#         bind: restricts memory allocation to nodes specified in node_mask,
+#         bind: Restricts memory allocation to nodes specified in node_mask,
 #               if more than one, start lowest numeric node ID moving to next
 #               node when node contains no free memory.
-#   interleave: interleaves page allocations across the nodes specified in
+#   interleave: Interleaves page allocations across the nodes specified in
 #               node_mask in numeric node ID order.
-#        local: local allocation of memory on the node of the CPU that
+#        local: Local allocation of memory on the node of the CPU that
 #               triggered allocation. node_mask and max_node must be empty.
-#       {OMIT}: default (default)
+#       {OMIT}: Default (default).
 #
 # Variable: numa_policy | str
 #
@@ -162,10 +162,10 @@
 # NUMA node list applied with selected NUMA policy.
 #
 # Values:
-#      #-#: prefer range of NUMA nodes
-#        #: prefer single NUMA node
-#      all: include all available NUMA nodes
-#   {OMIT}: all (default)
+#      #-#: Prefer range of NUMA nodes.
+#        #: Prefer single NUMA node.
+#      all: Include all available NUMA nodes.
+#   {OMIT}: All (default).
 #
 # numa_mask: ['1-3', 7]
 # numa_mask: ['all']
@@ -177,12 +177,12 @@
 # Set I/O scheduling class for executed processes.
 #
 # Values:
-#      realtime: given higher priority than any other class; first access to
+#      realtime: Given higher priority than any other class; first access to
 #                disk every time.
 #   best-effort: io_scheduling_priority determines process I/O bandwidth.
 #                Default for any process without io_scheduling_priority.
-#          idle: I/O time only when no one else needs the disk
-#        {OMIT}: best-effort (default).
+#          idle: I/O time only when no one else needs the disk.
+#        {OMIT}: Best-effort (default).
 #
 # Variable: io_scheduling_class | str
 #
@@ -197,9 +197,9 @@
 # available to the unit's processes, larger values mean less bandwidth.
 #
 # Values:
-#      0-7: 0 highest, 7 lowest
-#        4: default (use for io_scheduling_class: idle)
-#   {OMIT}: 4 (default)
+#      0-7: 0 highest, 7 lowest.
+#        4: Default (use for io_scheduling_class: idle).
+#   {OMIT}: 4 (default).
 #
 # Variable: io_scheduling_priority | int
 #

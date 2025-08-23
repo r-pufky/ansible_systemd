@@ -180,6 +180,7 @@ RootImagePolicy=root=verity+signed+encrypted+unprotected+absent
 MountImagePolicy=root=verity+signed+encrypted+unprotected+absent
 ExtensionImagePolicy=root=verity+signed+encrypted+unprotected+absent
 MountAPIVFS=false
+BindLogSockets=false
 ProtectProc=noaccess
 ProcSubset=all
 BindPaths=/:/other:rbind
@@ -265,6 +266,7 @@ PrivateNetwork=false
 NetworkNamespacePath=/proc/100/ns/net
 PrivateIPC=false
 IPCNamespacePath=/proc/100/ns/net
+PrivatePIDs=false
 PrivateUsers=false
 ProtectHostname=false
 ProtectClock=false
@@ -385,6 +387,7 @@ DisableControllers=memory
 ManagedOOMSwap=auto
 ManagedOOMMemoryPressure=auto
 ManagedOOMMemoryPressureLimit=100%
+ManagedOOMMemoryPressureDurationSec=1s
 ManagedOOMPreference=none
 MemoryPressureWatch=auto
 MemoryPressureThresholdSec=1s

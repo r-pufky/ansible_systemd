@@ -26,23 +26,23 @@
 # configuration.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Slice units automatically gain a Requires=, After= dependency.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * SPECIFIERS (unit specifiers)
+# * SIZE (syntax).
+# * SPECIFIERS (unit specifiers).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 ###############################################################################
 # Control Group Management
@@ -53,21 +53,21 @@
 # default_dependencies: False should be handled with care (see setting).
 #
 # Special Case:
-#   slice: only accepted values for slice units is the parent slice. The name
+#   slice: Only accepted values for slice units is the parent slice. The name
 #          of a slice unit implies the parent slice - it is redundant to ever
 #          set this parameter directly for slice units.
 #
 # Values:
-#   {SLICE}: name of slice unit
+#   {SLICE}: Name of slice unit.
 #    {OMIT}: system.slice; instance units placed in sub slice of system.slice
-#            named after template name. (default)
+#            named after template name (default).
 #
 # Variable: slice | str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.service.html
 
 # Delegate resource control partitioning to unit.
 #
@@ -88,22 +88,22 @@
 # to unprivileged services on the legacy hierarchy even when requested.
 #
 # Values:
-#             True: all supported controllers enabled for unit
-#               []: enable delegation and reset controller list
-#   [{CONTROLLER}]: enable delegation and specify controllers to use
-#                       Values:
-#                                  cpu: cpu controller
-#                              cpuacct: cpuacct controller
-#                               cpuset: cpuset controller
-#                                   io: io controller
-#                                blkio: blkio controller
-#                               memory: memory controller
-#                              devices: devices controller
-#                                 pids: pids controller
-#                         bpf-firewall: bpf-firewall controller
-#                          bpf-devices: bpf-devices controller
-#            False: disable delegation (default)
-#    {OMIT}: False (default)
+#             True: All supported controllers enabled for unit
+#               []: Enable delegation and reset controller list
+#   [{CONTROLLER}]: Enable delegation and specify controllers to use.
+#                      Values:
+#                                 cpu: cpu controller.
+#                             cpuacct: cpuacct controller.
+#                              cpuset: cpuset controller.
+#                                  io: io controller.
+#                               blkio: blkio controller.
+#                              memory: memory controller.
+#                             devices: devices controller.
+#                                pids: pids controller.
+#                        bpf-firewall: bpf-firewall controller.
+#                         bpf-devices: bpf-devices controller.
+#            False: Disable delegation (default).
+#           {OMIT}: False (default).
 #
 # Variable: delegate | list of str or bool
 #
@@ -126,10 +126,10 @@
 # (supervising) process of a unit that has delegation turned on in a subgroup.
 #
 # Values:
-#   {NAME}: valid control group name (not a path), must be usable as filename
+#   {NAME}: Valid control group name (not a path), must be usable as filename
 #           and avoid kernel control group attribute file conflicts.
-#       '': disabled
-#   {OMIT}: disabled (default)
+#       '': Disabled.
+#   {OMIT}: Disabled (default).
 #
 # Variable: delegate_subgroup | str
 #
@@ -147,18 +147,18 @@
 # systemd.
 #
 # Values:
-#            cpu: cpu controller
-#        cpuacct: cpuacct controller
-#         cpuset: cpuset controller
-#             io: io controller
-#          blkio: blkio controller
-#         memory: memory controller
-#        devices: devices controller
-#           pids: pids controller
-#   bpf-firewall: bpf-firewall controller
-#    bpf-devices: bpf-devices controller
-#             '': no delegation
-#         {OMIT}: no delegation (default)
+#            cpu: cpu controller.
+#        cpuacct: cpuacct controller.
+#         cpuset: cpuset controller.
+#             io: io controller.
+#          blkio: blkio controller.
+#         memory: memory controller.
+#        devices: devices controller.
+#           pids: pids controller.
+#   bpf-firewall: bpf-firewall controller.
+#    bpf-devices: bpf-devices controller.
+#             '': No delegation.
+#         {OMIT}: No delegation (default).
 #
 # disable_controllers:
 #   - 'cpu'

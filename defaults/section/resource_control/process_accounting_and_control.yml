@@ -26,23 +26,23 @@
 # configuration.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Slice units automatically gain a Requires=, After= dependency.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * SPECIFIERS (unit specifiers)
+# * SIZE (syntax).
+# * SPECIFIERS (unit specifiers).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 ###############################################################################
 # Process Accounting and Control
@@ -56,18 +56,18 @@
 # DefaultTasksAccounting.
 #
 # Values:
-#    False: kernel will not track
-#     True: kernel will keep track of the total number of tasks in the unit and
+#    False: Kernel will not track.
+#     True: Kernel will keep track of the total number of tasks in the unit and
 #           its children. This number includes both kernel threads and
 #           userspace processes, with each thread counted individually.
-#   {OMIT}: True (default)
+#   {OMIT}: True (default).
 #
 # Variable: tasks_accounting | bool
 #
 # Default: omit (system default).
 #
 # Reference
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Max number of tasks that may be created.
 #
@@ -79,15 +79,15 @@
 # The system default for this setting may be controlled with DefaultTasksMax.
 #
 # Values:
-#       {INT}: number of max tasks
-#      {INT}%: percent of tasks relative to max tasks on system (default 4915)
-#    infinity: no task limit
-#      {OMIT}: infinity (default)
+#       {INT}: Number of max tasks.
+#      {INT}%: Percent of tasks relative to max tasks on system (default 4915).
+#    infinity: No task limit.
+#      {OMIT}: Infinity (default).
 #
 # Variable: tasks_max | str
 #
 # Default: omit (system default).
 #
 # Reference
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 # * https://docs.kernel.org/admin-guide/cgroup-v2.html#pid

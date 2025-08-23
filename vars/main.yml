@@ -2,13 +2,17 @@
 ###############################################################################
 # Default Systemd Dependencies
 ###############################################################################
+# Updates:
+# * Search for systemd major version and update links as needed.
+# * Options listed wil be clearly delineated on what version added.
+#
 # Reference:
-# * https://github.com/systemd/systemd/releases/tag/v252
+# * https://github.com/systemd/systemd/releases/tag/v257
 
 # Last time systemd options were validated against a default configuration.
-systemd_role_validate_date: '2024-07-14'
-systemd_role_validate_version: '252.26'
-systemd_role_validate_release: 'bookworm'
+systemd_role_validate_date: '2025-08-23'
+systemd_role_validate_version: '257.7'
+systemd_role_validate_release: 'trixie'
 
 # Default systemd system location.
 systemd_role_root: '/etc/systemd/system'

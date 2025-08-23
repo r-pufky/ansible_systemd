@@ -25,23 +25,23 @@
 #   * log_namespace
 #
 # Options may be added to the following systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * QUOTING (syntax quoting)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * QUOTING (syntax quoting).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 
 ###############################################################################
 # Process Properties
@@ -55,13 +55,13 @@
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - TIME CPU time limit
+#   soft: str - TIME CPU time limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - TIME CPU time limit
+#         infinity: No limits.
+#   hard: str - TIME CPU time limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_cpu | dict
 #
@@ -69,20 +69,20 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for maximum created file size (bytes).
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - SIZE limit
+#   soft: str - SIZE limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - SIZE limit
+#         infinity: No limits.
+#   hard: str - SIZE limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_fsize | dict
 #
@@ -90,7 +90,7 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for maximum data segment (bytes).
 #
@@ -100,13 +100,13 @@
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - SIZE limit
+#   soft: str - SIZE limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - SIZE limit
+#         infinity: No limits.
+#   hard: str - SIZE limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_data | dict
 #
@@ -114,21 +114,21 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
 
 # Set soft and hard limits for maximum process stack (bytes).
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - SIZE limit
+#   soft: str - SIZE limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - SIZE limit
+#         infinity: No limits.
+#   hard: str - SIZE limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_stack | dict
 #
@@ -136,20 +136,20 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for maximum core file size (bytes).
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - SIZE limit
+#   soft: str - SIZE limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - SIZE limit
+#         infinity: No limits.
+#   hard: str - SIZE limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_core | dict
 #
@@ -157,7 +157,7 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for process's resident set virtual pages (bytes).
 #
@@ -166,13 +166,13 @@
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - SIZE limit
+#   soft: str - SIZE limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - SIZE limit
+#         infinity: No limits.
+#   hard: str - SIZE limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_rss | dict
 #
@@ -180,7 +180,7 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for process's max file descriptor number.
 #
@@ -197,13 +197,13 @@
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: int - number of file descriptors
+#   soft: int - Number of file descriptors.
 #       Special Case:
-#         infinity: no limits
-#   hard: int - number of file descriptors
+#         infinity: No limits.
+#   hard: int - Number of file descriptors.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_nofile | dict
 #
@@ -211,8 +211,8 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
 
 # Set soft and hard limits for process's max virtual memory (bytes).
 #
@@ -222,13 +222,13 @@
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - SIZE limit
+#   soft: str - SIZE limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - SIZE limit
+#         infinity: No limits.
+#   hard: str - SIZE limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_as | dict
 #
@@ -236,8 +236,8 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
 
 # Set soft and hard limits for process's max threads.
 #
@@ -247,13 +247,13 @@
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: int - number of threads
+#   soft: int - Number of threads.
 #       Special Case:
-#         infinity: no limits
-#   hard: int - number of threads
+#         infinity: No limits.
+#   hard: int - Number of threads.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_nproc | dict
 #
@@ -261,21 +261,21 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
 
 # Set soft and hard limits for process's max memory locked in RAM (bytes).
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - SIZE limit
+#   soft: str - SIZE limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - SIZE limit
+#         infinity: No limits.
+#   hard: str - SIZE limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default)
 #
 # Variable: limit_memlock | dict
 #
@@ -283,20 +283,20 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for process's combine flock and fcntl leases.
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: int - number of locks
+#   soft: int - Number of locks.
 #       Special Case:
-#         infinity: no limits
-#   hard: int - number of locks
+#         infinity: No limits.
+#   hard: int - Number of locks.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_locks | dict
 #
@@ -304,20 +304,20 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for process's number of signals queued.
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: int - number of signals
+#   soft: int - Number of signals.
 #       Special Case:
-#         infinity: no limits
-#   hard: int - number of signals
+#         infinity: No limits.
+#   hard: int - Number of signals.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_sigpending | dict
 #
@@ -325,20 +325,20 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for process's max POSIX message queues (bytes).
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - SIZE limit
+#   soft: str - SIZE limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - SIZE limit
+#         infinity: No limits.
+#   hard: str - SIZE limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_msgqueue | dict
 #
@@ -346,26 +346,26 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for process's nice ceiling.
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - nice ceiling, may use - or + for regular nice value, or raw
-#         resource limit (0 - 40)
+#   soft: str - Nice ceiling, may use - or + for regular nice value, or raw
+#         resource limit (0 - 40).
 #       Values:
-#            [+-]#: standard nice value with - or + prefix (-20-19)
-#                #: raw resource limt (0-40), 0 and 1 are equivalent
-#         infinity: no limits
-#   hard: int - nice ceiling
+#            [+-]#: Standard nice value with - or + prefix (-20-19).
+#                #: Raw resource limit (0-40), 0 and 1 are equivalent.
+#         infinity: No limits.
+#   hard: int - Nice ceiling.
 #       Values:
-#            [+-]#: standard nice value with - or + prefix (-20-19)
-#                #: raw resource limt (0-40), 0 and 1 are equivalent
-#         infinity: no limits
-#               '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#            [+-]#: Standard nice value with - or + prefix (-20-19).
+#                #: Raw resource limit (0-40), 0 and 1 are equivalent.
+#         infinity: No limits.
+#               '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_nice | dict
 #
@@ -373,20 +373,20 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for process's real-time priority ceiling.
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: int - real-time priority ceiling
+#   soft: int - Real-time priority ceiling.
 #       Special Case:
-#         infinity: no limits
-#   hard: int - real-time priority ceiling
+#         infinity: No limits.
+#   hard: int - Real-time priority ceiling.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_rtprio | dict
 #
@@ -394,20 +394,20 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set soft and hard limits for real-time CPU (microseconds).
 #
 # Limits cannot be raised above per-user instance set when first invoked.
 #
 # Values:
-#   soft: str - TIME CPU time limit
+#   soft: str - TIME CPU time limit.
 #       Special Case:
-#         infinity: no limits
-#   hard: str - TIME CPU time limit
+#         infinity: No limits.
+#   hard: str - TIME CPU time limit.
 #       Special Case:
-#         '': use soft limit for hard limit
-#   {OMIT}: use system defaults (default)
+#         '': Use soft limit for hard limit.
+#   {OMIT}: Use system defaults (default).
 #
 # Variable: limit_rttime | dict
 #
@@ -415,7 +415,7 @@
 #
 # Reference:
 # * https://man7.org/linux/man-pages/man2/setrlimit.2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # UMask (file mode creation mask) for service.
 #
@@ -427,8 +427,8 @@
 # systemd-homed.service; homectl --umask=) or PAM module.
 #
 # Values:
-#   {OCTAL}: umask octal
-#    {OMIT}: '0022' (default)
+#   {OCTAL}: umask octal.
+#    {OMIT}: '0022' (default).
 #
 # Variable: u_mask | str
 #
@@ -442,19 +442,19 @@
 # Uses /proc/pid/coredump_filter.
 #
 # Values:
-#     private-anonymous: bit 0 dump anonymous private mappings
-#      shared-anonymous: bit 1 dump anonymous shared mappings
-#   private-file-backed: bit 2 dump file-backed private mappings
-#    shared-file-backed: bit 3 dump file-backed shared mappings
-#           elf-headers: bit 4 dump ELF headers
-#          private-huge: bit 5 dump private huge pages
-#           shared-huge: bit 6 dump shared huge pages
-#           private-dax: bit 7 dump private DAX pages
-#            shared-dax: bit 8 dump shared DAX pages
-#                   all: all types
+#     private-anonymous: Bit 0 dump anonymous private mappings.
+#      shared-anonymous: Bit 1 dump anonymous shared mappings.
+#   private-file-backed: Bit 2 dump file-backed private mappings.
+#    shared-file-backed: Bit 3 dump file-backed shared mappings.
+#           elf-headers: Bit 4 dump ELF headers.
+#          private-huge: Bit 5 dump private huge pages.
+#           shared-huge: Bit 6 dump shared huge pages.
+#           private-dax: Bit 7 dump private DAX pages.
+#            shared-dax: Bit 8 dump shared DAX pages.
+#                   all: All types.
 #               default: private-anonymous, shared-anonymous, elf-headers,
-#                        private-huge
-#                {OMIT}: default (default)
+#                        private-huge.
+#                {OMIT}: Default (default).
 #
 # Variable: coredump_filter | list of str
 #
@@ -469,14 +469,14 @@
 # to created session keyring (unless inherit).
 #
 # Values:
-#   inherit: no setup, use kernel default behavior
-#   private: new session keyring and not linked to any user keyring,
+#   inherit: No setup, use kernel default behavior.
+#   private: New session keyring and not linked to any user keyring,
 #            recommended setting for system services. Ensures multiple services
 #            running under same system user do not share key material.
-#    shared: new session keyring and linked to specified user, keys assigned to
+#    shared: New session keyring and linked to specified user, keys assigned to
 #            user may be requested by unit. Multiple units running processes
 #            under the same user may share keys.
-#    {OMIT}: private for system services, inherit for user,non-service units
+#    {OMIT}: Private for system services, inherit for user,non-service units
 #            (default).
 #
 # Variable: keyring_mode | str
@@ -492,10 +492,10 @@
 # terminating a process of the service. See /proc Filesystem for details.
 #
 # Values:
-#   -1000: disable OOM killing (minimum)
-#    1000: highest chance to kill process under memory pressure (maximum)
-#       0: service manager default
-#  {OMIT}: 0 (default)
+#   -1000: Disable OOM killing (minimum).
+#    1000: Highest chance to kill process under memory pressure (maximum).
+#       0: Service manager default.
+#  {OMIT}: 0 (default).
 #
 # Variable: oom_score_adjust | int
 #
@@ -503,15 +503,15 @@
 #
 # Reference:
 # * https://docs.kernel.org/filesystems/proc.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.service.html
 
 # Set timer slack for executed processes (nanoseconds).
 #
 # Timer slack controls accuracy of wake-ups triggered by timers.
 #
 # Values:
-#   {TIME}: TIME slack timespan
-#   {OMIT}: 50000ns (default)
+#   {TIME}: TIME slack timespan.
+#   {OMIT}: 50000ns (default).
 #
 # Variable: timer_slack_n_sec | str
 #
@@ -527,19 +527,19 @@
 # available.
 #
 # Values:
-#      arm64: arm 64
-#   arm64-be: arm 64 big endian
-#        arm: arm 32
-#     arm-be: arm 32 big endian
-#        x86: x86 32
-#     x86-64: x86 64
-#        ppc: power pc 32
-#     ppc-le: power pc 32 little endian
-#      ppc64: power pc 64
-#   ppc64-le: power pc 64 little endian
-#       s390: system 390 31
-#      s390x: system 390 64
-#     {OMIT}: host system kernel (default)
+#      arm64: arm 64.
+#   arm64-be: arm 64 big endian.
+#        arm: arm 32.
+#     arm-be: arm 32 big endian.
+#        x86: x86 32.
+#     x86-64: x86 64.
+#        ppc: power pc 32.
+#     ppc-le: power pc 32 little endian.
+#      ppc64: power pc 64.
+#   ppc64-le: power pc 64 little endian.
+#       s390: system 390 31.
+#      s390x: system 390 64.
+#     {OMIT}: host system kernel (default).
 #
 # Variable: personality | str
 #
@@ -550,9 +550,9 @@
 # Only useful in shell pipelines.
 #
 # Values:
-#     True: ignore SIGPIPE
-#    False: honor SIGPIPE
-#   {OMIT}: True (default)
+#     True: Ignore SIGPIPE.
+#    False: Honor SIGPIPE.
+#   {OMIT}: True (default).
 #
 # Variable: ignore_sigpipe | str
 #

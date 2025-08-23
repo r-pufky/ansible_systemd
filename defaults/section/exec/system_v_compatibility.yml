@@ -25,23 +25,23 @@
 #   * log_namespace
 #
 # Options may be added to the following systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * QUOTING (syntax quoting)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * QUOTING (syntax quoting).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html#Quoting
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html#Quoting
 
 ###############################################################################
 # System V Compatibility
@@ -53,9 +53,9 @@
 # run by a getty process.
 #
 # Values:
-#   {IDENTIFIER}: identifier, uses %I style replacements, truncated if longer
+#   {IDENTIFIER}: Identifier, uses %I style replacements, truncated if longer
 #                 than four characters.
-#         {OMIT}: no identifier set (default)
+#         {OMIT}: No identifier set (default).
 #
 # Variable: utmp_identifier | str
 #
@@ -70,15 +70,15 @@
 # Controls type of utmp/wtmp entries for service if utmp_identifier set.
 #
 # Values:
-#     init: only INIT_PROCESS entry generated, process must implement a
+#     init: Only INIT_PROCESS entry generated, process must implement a
 #           getty-compatible utmp/wtmp logic.
-#    login: INIT_PROCESS, LOGIN_PROCESS entry generated
-#     user: INIT_PROCESS, LOGIN_PROCESS, USER_PROCESS entry generated
-#   {OMIT}: init (default)
+#    login: INIT_PROCESS, LOGIN_PROCESS entry generated.
+#     user: INIT_PROCESS, LOGIN_PROCESS, USER_PROCESS entry generated.
+#   {OMIT}: Init (default).
 #
 # Variable: utmp_mode | str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#EnvironmentFile
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html#EnvironmentFile

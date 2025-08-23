@@ -26,23 +26,23 @@
 # configuration.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Slice units automatically gain a Requires=, After= dependency.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * SPECIFIERS (unit specifiers)
+# * SIZE (syntax).
+# * SPECIFIERS (unit specifiers).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 ###############################################################################
 # CPU Accounting and Control
@@ -55,9 +55,9 @@
 # CPU accounting has no effect for unified cgroup hierarchy.
 #
 # Values:
-#     True: enable usage accounting
-#    False: disable usage accounting
-#   {OMIT}: True (default); default changed with DefaultCPUAccounting= in
+#     True: Enable usage accounting.
+#    False: Disable usage accounting.
+#   {OMIT}: True (default).; default changed with DefaultCPUAccounting= in
 #           systemd.system.conf.
 #
 # Variable: cpu_accounting | bool
@@ -65,7 +65,7 @@
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Running CPU weight (prioritization).
 #
@@ -79,11 +79,11 @@
 # unset.
 #
 # Values:
-#         1-10000: assign the specific CPU time weight to process executed
+#         1-10000: Assign the specific CPU time weight to process executed
 #                  higher means more CPU time.
-#            idle: mark idle scheduling - CPU resources only when non-idle
+#            idle: Mark idle scheduling - CPU resources only when non-idle
 #                  processes do not require resources.
-#          {OMIT}: 100 (default)
+#          {OMIT}: 100 (default).
 #
 # Variable: cpu_weight | int or str
 #
@@ -102,11 +102,11 @@
 # Only effects cgroup-v2. cgroup-v1 equivalent is minimum weight.
 #
 # Values:
-#         1-10000: assign the specific CPU time weight to process executed
+#         1-10000: Assign the specific CPU time weight to process executed
 #                  higher means more CPU time.
-#            idle: mark idle scheduling - CPU resources only when non-idle
+#            idle: Mark idle scheduling - CPU resources only when non-idle
 #                  processes do not require resources.
-#          {OMIT}: 100 (default)
+#          {OMIT}: 100 (default).
 #
 # Variable: startup_cpu_weight | int or str
 #
@@ -119,9 +119,9 @@
 # CPU time quota.
 #
 # Values:
-#   1-100+: percent value (without %), values greater than 100 will use time
+#   1-100+: Percent value (without %), values greater than 100 will use time
 #           on more than one CPU.
-#   {OMIT}: no quota (default)
+#   {OMIT}: No quota (default).
 #
 # Variable: cpu_quota | int
 #
@@ -136,8 +136,8 @@
 # Duration that cpu_quota is measured over.
 #
 # Values:
-#   1-1000: time in milliseconds
-#   {OMIT}: 100 (default)
+#   1-1000: Time in milliseconds.
+#   {OMIT}: 100 (default).
 #
 # Variable: cpu_quota_period_sec | int
 #
@@ -156,9 +156,9 @@
 # unset.
 #
 # Values:
-#        #: use specific core
-#      #-#: use range of cores
-#   {OMIT}: no restrictions (default)
+#        #: Use specific core.
+#      #-#: Use range of cores.
+#   {OMIT}: No restrictions (default).
 #
 # allowed_cpus: ['1-8', 10, 11]
 #
@@ -172,9 +172,9 @@
 # by parent units. The effective configuration is reported as effective_cpus.
 #
 # Values:
-#        #: use specific core
-#      #-#: use range of cores
-#   {OMIT}: no restrictions (default)
+#        #: Use specific core.
+#      #-#: Use range of cores.
+#   {OMIT}: No restrictions (default).
 #
 # startup_allowed_cpus: ['1-8', 10, 11]
 #

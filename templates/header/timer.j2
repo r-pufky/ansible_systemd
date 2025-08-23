@@ -33,6 +33,9 @@ RandomizedDelaySec={{ systemd.timer.randomized_delay_sec }}
 {% if 'fixed_random_delay' in systemd.timer %}
 FixedRandomDelay={{ systemd.timer.fixed_random_delay | string | lower }}
 {% endif %}
+{% if 'defer_reactivation' in systemd.timer %}
+DeferReactivation={{ systemd.timer.defer_reactivation | string | lower }}
+{% endif %}
 {% if 'on_clock_change' in systemd.timer %}
 OnClockChange={{ systemd.timer.on_clock_change | string | lower }}
 {% endif %}

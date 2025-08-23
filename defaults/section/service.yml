@@ -26,18 +26,18 @@
 #   service: {} - will create the [Service] header only.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * TIME (time)
-# * SPECIFIERS (unit specifiers)
-# * COMMAND LINES (service command lines)
+# * SIZE (syntax).
+# * TIME (time).
+# * SPECIFIERS (unit specifiers).
+# * COMMAND LINES (service command lines).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#Command%20lines
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.service.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.time.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.service.html#Command%20lines
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Service type (notify mechanism for service startup finish).
 #
@@ -88,7 +88,7 @@
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # When to consider service finished.
 #
@@ -112,7 +112,7 @@
 # Values:
 #    False: do not keep service active
 #     True: keep service active
-#   {OMIT}: False (default)
+#   {OMIT}: False (default).
 #
 # Variable: remain_after_exit | bool
 #
@@ -123,9 +123,9 @@
 # Requires type: forking and pid_file unset.
 #
 # Values:
-#    False: do not guess
-#     True: guess
-#   {OMIT}: True (default)
+#    False: Do not guess.
+#     True: Guess.
+#   {OMIT}: True (default).
 #
 # Variable: guess_main_pid | bool
 #
@@ -139,9 +139,9 @@
 # notify-reload, simple where possible.
 #
 # Values:
-#   {PATH}: path to file below /run/ (relative paths automatically prefixed
+#   {PATH}: Path to file below /run/ (relative paths automatically prefixed.
 #           with /run/).
-#   {OMIT}: use no PID file (default)
+#   {OMIT}: Use no PID file (default).
 #
 # Variable: pid_file | str
 #
@@ -152,8 +152,8 @@
 # Required for type: dbus. Always define if known.
 #
 # Values:
-#   {DBUS}: dbus destination name
-#   {OMIT}: unset (default)
+#   {DBUS}: Dbus destination name.
+#   {OMIT}: Unset (default).
 #
 # Variable: bus_name | str
 #
@@ -168,9 +168,9 @@
 # Only run after all exec_start_pre commands exit successfully.
 #
 # Values:
-#    {COMMAND}: COMMAND LINES command
-#   -{COMMAND}: COMMAND LINES command, ignoring errors
-#       {OMIT}: must have remain_after_exit: true and exec_stop; services
+#    {COMMAND}: COMMAND LINES command.
+#   -{COMMAND}: COMMAND LINES command, ignoring errors.
+#       {OMIT}: Must have remain_after_exit: true and exec_stop; services
 #               lacking both exec_start and exec_stop are not valid (default).
 #
 # Variable: exec_start | list of str
@@ -184,9 +184,9 @@
 # is run.
 #
 # Values:
-#    {COMMAND}: COMMAND LINES command
-#   -{COMMAND}: COMMAND LINES command, ignoring errors
-#       {OMIT}: no pre commands run (default)
+#    {COMMAND}: COMMAND LINES command.
+#   -{COMMAND}: COMMAND LINES command, ignoring errors.
+#       {OMIT}: No pre commands run (default).
 #
 # Variable: exec_start_pre | list of str
 #
@@ -197,18 +197,18 @@
 # Used in for Before=, After= ordering constraints.
 #
 # Commands are only run after exec_start invoked successfully, by type:
-#          simple: started
-#            idle: started
-#         oneshot: last command exited successfully
-#         forking: initial process exited successfully
-#          notify: READY=1 notification
-#   notify-reload: READY=1 notification
-#            dbus: bus_name taken
+#          simple: Started.
+#            idle: Started.
+#         oneshot: Last command exited successfully.
+#         forking: Initial process exited successfully.
+#          notify: READY=1 notification.
+#   notify-reload: READY=1 notification.
+#            dbus: bus_name taken.
 #
 # Values:
-#    {COMMAND}: COMMAND LINES command
-#   -{COMMAND}: COMMAND LINES command, ignoring errors
-#       {OMIT}: no post commands run (default)
+#    {COMMAND}: COMMAND LINES command.
+#   -{COMMAND}: COMMAND LINES command, ignoring errors.
+#       {OMIT}: No post commands run (default).
 #
 # Variable: exec_start_post | list of str
 #
@@ -221,17 +221,17 @@
 # is run.
 #
 # Special Case:
-#       0: exit code of 0 or matching success_exit_status will continue
+#       0: Exit code of 0 or matching success_exit_status will continue
 #          execution to the next commands.
-#   1-254: exit codes 1-254 inclusive skips remaining commands on error and
+#   1-254: Exit codes 1-254 inclusive skips remaining commands on error and
 #          does does not mark unit as failure.
-#     255: exit code 255 (or abnormal exit) will be considered failure
+#     255: Exit code 255 (or abnormal exit) will be considered failure
 #          (remaining commands skipped).
 #
 # Values:
-#    {COMMAND}: COMMAND LINES command
-#   -{COMMAND}: COMMAND LINES command, ignoring errors
-#       {OMIT}: no exec condition commands run (default)
+#    {COMMAND}: COMMAND LINES command.
+#   -{COMMAND}: COMMAND LINES command, ignoring errors.
+#       {OMIT}: No exec condition commands run (default).
 #
 # Variable: exec_condition | list of str
 #
@@ -246,9 +246,9 @@
 # to complete.
 #
 # Values:
-#    {COMMAND}: COMMAND LINES command
-#   -{COMMAND}: COMMAND LINES command, ignoring errors
-#       {OMIT}: no exec condition commands run (default)
+#    {COMMAND}: COMMAND LINES command.
+#   -{COMMAND}: COMMAND LINES command, ignoring errors.
+#       {OMIT}: No exec condition commands run (default).
 #
 # Variable: exec_reload | list of str
 #
@@ -271,16 +271,16 @@
 # clean-up steps use exec_stop_post instead.
 #
 # Values:
-#    {COMMAND}: COMMAND LINES command
-#   -{COMMAND}: COMMAND LINES command, ignoring errors
-#       {OMIT}: no exec condition commands run (default)
+#    {COMMAND}: COMMAND LINES command.
+#   -{COMMAND}: COMMAND LINES command, ignoring errors.
+#       {OMIT}: No exec condition commands run (default).
 #
 # Variable: exec_stop | list of str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.kill.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.kill.html
 
 # Commands after the service is stopped.
 #
@@ -290,32 +290,32 @@
 # correctly and is shut down again.
 #
 # All commands invoked with:
-#   $SERVICE_RESULT: service result code
-#        $EXIT_CODE: main process exit code
-#      $EXIT_STATUS: main process exit status
+#   $SERVICE_RESULT: Service result code.
+#        $EXIT_CODE: Main process exit code.
+#      $EXIT_STATUS: Main process exit status.
 #
 # $MAINPID set to main process daemon if known; and used in COMMAND LINES.
 #
 # Used in for Before=, After= ordering constraints.
 #
 # Values:
-#    {COMMAND}: COMMAND LINES command
-#   -{COMMAND}: COMMAND LINES command, ignoring errors
-#       {OMIT}: no exec condition commands run (default)
+#    {COMMAND}: COMMAND LINES command.
+#   -{COMMAND}: COMMAND LINES command, ignoring errors.
+#       {OMIT}: No exec condition commands run (default).
 #
 # Variable: exec_stop_post | list of str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
 
 # Time to sleep before restarting service (seconds).
 #
 # Values:
-#        #: time in seconds to sleep before restarting
-#   {TIME}: TIME time to sleep before restarting
-#   {OMIT}: 100ms (default)
+#        #: Time in seconds to sleep before restarting.
+#   {TIME}: TIME time to sleep before restarting.
+#   {OMIT}: 100ms (default).
 #
 # Variable: restart_sec | str
 #
@@ -326,9 +326,9 @@
 # Requires restart_max_delay_sec set.
 #
 # Values:
-#         #: step interval between restart_sec and restart_max_delay_sec
-#         0: disabled
-#    {OMIT}: disabled (default)
+#         #: Step interval between restart_sec and restart_max_delay_sec.
+#         0: Disabled.
+#    {OMIT}: Disabled (default).
 #
 # Variable: restart_steps | int
 #
@@ -339,9 +339,9 @@
 # Requires restart_steps set.
 #
 # Values:
-#     {TIME}: TIME longest sleep time before restarting service
-#   infinity: disabled
-#     {OMIT}: disabled (default)
+#     {TIME}: TIME longest sleep time before restarting service.
+#   infinity: Disabled.
+#     {OMIT}: Disabled (default).
 #
 # Variable: restart_max_delay_sec | str
 #
@@ -353,17 +353,17 @@
 # completion within the configured time.
 #
 # Values:
-#          #: time in seconds
-#     {TIME}: TIME time to wait for start-up
-#   infinity: disabled
-#     {OMIT}: 90s, disabled if type: oneshot (default)
+#          #: Time in seconds.
+#     {TIME}: TIME time to wait for start-up.
+#   infinity: Disabled.
+#     {OMIT}: 90s, disabled if type: oneshot (default).
 #
 # Variable: timeout_start_sec | str or int
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Time to wait for each exec_stop command.
 #
@@ -375,18 +375,18 @@
 #   immediately. Behavior changed with timeout_stop_failure_mode.
 #
 # Values:
-#          #: time in seconds
-#     {TIME}: TIME time to wait for start-up
-#   infinity: disabled
-#     {OMIT}: 90s, disabled if type: oneshot (default)
+#          #: Time in seconds.
+#     {TIME}: TIME time to wait for start-up.
+#   infinity: Disabled.
+#     {OMIT}: 90s, disabled if type: oneshot (default).
 #
 # Variable: timeout_stop_sec | str or int
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.kill.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.kill.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Time to wait for service to terminate when aborted due to watchdog timeout.
 #
@@ -399,26 +399,26 @@
 # truncated in this case.
 #
 # Values:
-#          #: time in seconds
-#     {TIME}: TIME time to wait for start-up
-#   infinity: disable timeout logic
-#     {OMIT}: skip dedicated watchdog abort; use timeout_stop_sec (default)
+#          #: Time in seconds.
+#     {TIME}: TIME time to wait for start-up.
+#   infinity: Disable timeout logic.
+#     {OMIT}: Skip dedicated watchdog abort; use timeout_stop_sec (default).
 #
 # Variable: timeout_abort_sec | str or int
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.kill.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.kill.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 
 # Set both timeout_stop_sec and timeout_abort_sec.
 #
 # Values:
-#          #: time in seconds
-#     {TIME}: TIME time to wait for start-up
-#   infinity: disable timeout logic
-#     {OMIT}: use timeout_stop_sec and timeout_abort_sec (default)
+#          #: Time in seconds.
+#     {TIME}: TIME time to wait for start-up.
+#   infinity: Disable timeout logic.
+#     {OMIT}: Use timeout_stop_sec and timeout_abort_sec (default).
 #
 # Variable: timeout_sec | str or int
 #
@@ -427,12 +427,12 @@
 # Action to take if timeout_start_sec elapses.
 #
 # Values:
-#   terminate: terminate gracefully with kill_signal wait for timeout_stop_sec
+#   terminate: Terminate gracefully with kill_signal wait for timeout_stop_sec
 #              and send final_kill_signal.
-#        kill: immediately terminate with final_kill_signal
-#       abort: send watchdog_signal and wait for timeout_abort_sec before
+#        kill: Immediately terminate with final_kill_signal.
+#       abort: Send watchdog_signal and wait for timeout_abort_sec before
 #              sending final_kill_signal.
-#      {OMIT}: terminate (default)
+#      {OMIT}: Terminate (default).
 #
 # Variable: timeout_start_failure_mode | str
 #
@@ -441,12 +441,12 @@
 # Action to take if timeout_stop_sec elapses.
 #
 # Values:
-#   terminate: terminate gracefully with kill_signal wait for timeout_stop_sec
+#   terminate: Terminate gracefully with kill_signal wait for timeout_stop_sec
 #              and send final_kill_signal.
-#        kill: immediately terminate with final_kill_signal
-#       abort: send watchdog_signal and wait for timeout_abort_sec before
+#        kill: Immediately terminate with final_kill_signal.
+#       abort: Send watchdog_signal and wait for timeout_abort_sec before
 #              sending final_kill_signal.
-#      {OMIT}: terminate (default)
+#      {OMIT}: Terminate (default).
 #
 # Variable: timeout_stop_failure_mode | str
 #
@@ -458,9 +458,9 @@
 # type: oneshot services.
 #
 # Values:
-#     {TIME}: TIME maximum time for service to run
-#   infinity: no time limit
-#     {OMIT}: infinity (default)
+#     {TIME}: TIME maximum time for service to run.
+#   infinity: No time limit.
+#     {OMIT}: Infinity (default).
 #
 # Variable: runtime_max_sec | str
 #
@@ -471,8 +471,8 @@
 # Increases max runtime by even distribution up to specified value.
 #
 # Values:
-#      0-#: maximum runtime in seconds
-#   {OMIT}: disabled (default)
+#      0-#: Maximum runtime in seconds.
+#   {OMIT}: Disabled (default).
 #
 # Variable: runtime_randomized_extra_sec | str
 #
@@ -490,8 +490,8 @@
 # main.
 #
 # Values:
-#        0: disabled
-#   {OMIT}: disabled (default)
+#        0: Disabled.
+#   {OMIT}: Disabled (default).
 #
 # Variable: watchdog_sec | str
 #
@@ -519,27 +519,27 @@
 # Service always restarted if exit or signal is in restart_force_exit_status.
 #
 # Values:
-#            no: service will not be restarted (default)
-#    on-success: restarted only when the service process exits cleanly via:
+#            no: Service will not be restarted (default).
+#    on-success: Restarted only when the service process exits cleanly via:
 #                * exit code 0
 #                * type != oneshot and signal: SIGHUP, SIGINT, SIGTERM, SIGPIPE
 #                * values in success_exit_status
-#    on-failure: restarted when the process exits with a non-zero exit
+#    on-failure: Restarted when the process exits with a non-zero exit
 #                code, terminated by a signal, when an operation times
 #                out, and when watchdog timeout triggered. Recommended for long
 #                running services.
-#   on-abnormal: restarted when the process is terminated by a signal,
+#   on-abnormal: Restarted when the process is terminated by a signal,
 #                when an operation times out, or when watchdog timeout
 #                triggered. Recommended for services that terminate on their
 #                own choice (and avoid immediate restarting).
-#   on-watchdog: restarted only if watchdog timeout for service expires
-#      on-abort: restarted only if service process exits due to uncaught
+#   on-watchdog: Restarted only if watchdog timeout for service expires.
+#      on-abort: Restarted only if service process exits due to uncaught
 #                signal not specified as a clean exit status.
-#        always: restarted regardless of clean/dirty exit, terminated
+#        always: Restarted regardless of clean/dirty exit, terminated
 #                abnormally by a signal, or hit timeout. type: oneshot services
 #                will never be restarted on a clean exit status, always and
 #                on-success are rejected for them.
-#        {OMIT}: no (default)
+#        {OMIT}: No (default).
 #
 # Variable: restart | str
 #
@@ -551,12 +551,12 @@
 # units fail.
 #
 # Values:
-#   normal: restarts through a failed/inactive state (default)
-#   direct: transition to activating state directly during auto-restart,
+#   normal: Restarts through a failed/inactive state (default).
+#   direct: Transition to activating state directly during auto-restart,
 #           skipping failed/inactive state. exec_stop_post is invoked.
 #           on_success and on_failure are skipped. Dependent units are
 #           not notified of temporary failures.
-#   {OMIT}: normal (default)
+#   {OMIT}: Normal (default).
 #
 # Variable: restart_mode | str
 #
@@ -571,17 +571,17 @@
 # are specified without  "EXIT_" or "EX_" prefix should be used). See signal(7) for a list of signal names.
 #
 # Values:
-#    {VAL}: numeric status, name, or signal name, process exit codes are
+#    {VAL}: Numeric status, name, or signal name, process exit codes are
 #           specified without EXIT_ or EX_.
-#       '': no additional exit statuses
-#   {OMIT}: '' (default)
+#       '': No additional exit statuses.
+#   {OMIT}: '' (default).
 #
 # Variable: success_exit_status | list of str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
 # * https://man7.org/linux/man-pages/man7/signal.7.html
 
 # Additional exit statuses to prevent automatic service restarts.
@@ -591,17 +591,17 @@
 # only on the main service or configured main service.
 #
 # Values:
-#    {VAL}: numeric status, name, or signal name, process exit codes are
+#    {VAL}: Numeric status, name, or signal name, process exit codes are
 #           specified without EXIT_ or EX_.
-#       '': no additional exit statuses
-#   {OMIT}: '' (default)
+#       '': No additional exit statuses.
+#   {OMIT}: '' (default).
 #
 # Variable: restart_prevent_exit_status | list of str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
 # * https://man7.org/linux/man-pages/man7/signal.7.html
 
 # Additional exit statuses to force automatic restarts.
@@ -610,10 +610,10 @@
 # prevent auto-restarting (regardless of this setting).
 #
 # Values:
-#    {VAL}: numeric status, name, or signal name, process exit codes are
+#    {VAL}: Numeric status, name, or signal name, process exit codes are
 #           specified without EXIT_ or EX_.
-#       '': no additional exit statuses
-#   {OMIT}: '' (default)
+#       '': No additional exit statuses.
+#   {OMIT}: '' (default).
 #
 # Variable: restart_force_exit_status | list of str
 #
@@ -622,9 +622,9 @@
 # Apply root_directory only to exec_start?
 #
 # Values:
-#     True: only apply to exec_start
-#    False: apply to all configured commands
-#   {OMIT}: False (default)
+#     True: Only apply to exec_start.
+#    False: Apply to all configured commands.
+#   {OMIT}: False (default).
 #
 # Variable: root_directory_start_only | bool
 #
@@ -641,12 +641,12 @@
 # non_blocking setting and do not change the flag in service code either.
 #
 # Values:
-#     True: all file descriptors >= 3 (all except stdin, stdout, stderr)
+#     True: All file descriptors >= 3 (all except stdin, stdout, stderr)
 #           excluding those passed in via file_descriptor_store_max will have
 #           the O_NONBLOCK flag set (non-blocking mode). Only useful with a
 #           socket unit.
-#    False: Do not set O_NONBLOCK
-#   {OMIT}: False (default)
+#    False: Do not set O_NONBLOCK.
+#   {OMIT}: False (default).
 #
 # Variable: non_blocking | bool
 #
@@ -655,17 +655,17 @@
 # Access to service status notification socket.
 #
 # Values:
-#   none: no daemon status updates are accepted from the service
-#         processes, all status update messages are ignored (default).
-#   main: only service updates from main service process are accepted
-#   exec: only service updates sent from any of the main or control
-#         processes originating from exec_ commands are accepted.
-#    all: all services updates from all members of the service's control
-#         group are accepted. This option should be set to open access to
-#         the notification socket when using type: notify/notify-reload
-#         or watchdog_sec. If options are used but notify_access is not
-#         configured, it will be implicitly set to main.
-#   {OMIT}: none (default)
+#     none: No daemon status updates are accepted from the service
+#           processes, all status update messages are ignored (default).
+#     main: Only service updates from main service process are accepted.
+#     exec: Only service updates sent from any of the main or control
+#           processes originating from exec_ commands are accepted.
+#      all: All services updates from all members of the service's control
+#           group are accepted. This option should be set to open access to
+#           the notification socket when using type: notify/notify-reload
+#           or watchdog_sec. If options are used but notify_access is not
+#           configured, it will be implicitly set to main.
+#   {OMIT}: None (default).
 #
 # Variable: notify_access | str
 #
@@ -682,9 +682,9 @@
 # sockets setting of the service it refers to.
 #
 # Values:
-#   {NAME}: name of socket unit
-#       '': use unit name
-#   {OMIT}: '' (default)
+#   {NAME}: Name of socket unit.
+#       '': Use unit name.
+#   {OMIT}: '' (default).
 #
 # Variable: sockets | list of str
 #
@@ -701,27 +701,27 @@
 # notify_access is not set it will be implicitly set to main.
 #
 # Values:
-#      1-#: set number of file descriptors stored, set $FDSTORE environment
+#      1-#: Set number of file descriptors stored, set $FDSTORE environment
 #           variable.
-#        0: no file descriptors stored (default)
-#   {OMIT}: 0 (default)
+#        0: No file descriptors stored (default).
+#   {OMIT}: 0 (default).
 #
 # Variable: file_descriptor_store_max | int
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
 # * https://systemd.io/FILE_DESCRIPTOR_STORE
 
 # When to release service file descriptor store.
 #
 # Values:
-#     False: automatically release when service stopped
-#   restart: kept if unit is neither inactive or failed, job is queued
+#     False: Automatically release when service stopped.
+#   restart: Kept if unit is neither inactive or failed, job is queued
 #            for service, or service expected to be restarted (default).
-#      True: kept until unit is removed from memory
-#    {OMIT}: restart (default)
+#      True: Kept until unit is removed from memory.
+#    {OMIT}: Restart (default).
 #
 # Variable: file_descriptor_store_preserve | bool or str
 #
@@ -734,9 +734,9 @@
 # after it is opened.
 #
 # Values:
-#    {FILE}: path to file containing USB FunctionFS descriptors
-#       '' : not configured
-#    {OMIT}: '' (default)
+#    {FILE}: Path to file containing USB FunctionFS descriptors.
+#       '' : not configured.
+#    {OMIT}: '' (default).
 #
 # Variable: usb_function_descriptors | str
 #
@@ -749,9 +749,9 @@
 # after it is opened.
 #
 # Values:
-#    {FILE}: path to file containing USB FunctionFS strings
-#       '' : not configured
-#    {OMIT}: '' (default)
+#    {FILE}: Path to file containing USB FunctionFS strings.
+#       '' : Not configured.
+#    {OMIT}: '' (default).
 #
 # Variable: usb_function_strings | str
 #
@@ -762,21 +762,21 @@
 # Use oom_score_adjust set preferred candidates for process termination.
 #
 # Values:
-#   continue: if unit process OOM killed, log but continue to run
-#       stop: log event and cleanly terminate unit
-#       kill: if unit process OOM killed, kill all remaining unit
+#   continue: If unit process OOM killed, log but continue to run.
+#       stop: Log event and cleanly terminate unit.
+#       kill: If unit process OOM killed, kill all remaining unit
 #             processes.
-#     {OMIT}: default_oom_policy or continue if delegate set (default)
+#     {OMIT}: default_oom_policy or continue if delegate set (default).
 #
 # Variable: oom_policy | str
 #
 # Default: omit (system default).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-oomd.service.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd-system.conf.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-oomd.service.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd-system.conf.html
 # * https://docs.kernel.org/admin-guide/cgroup-v2.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.exec.html
 
 # File descriptors to open and pass to unit.
 #
@@ -785,18 +785,18 @@
 # connect() on socket.
 #
 # Values:
-#   - path: str - path to file or AF_UNIX socket
-#     fd_name: str - name associated with file descriptor
+#   - path: str - Path to file or AF_UNIX socket.
+#     fd_name: str - Name associated with file descriptor.
 #         Values:
-#           {NAME}: name (ASCII, no control characters, :), max 255 characters
-#               '': use file name (default)
-#     options: list of str - access options
+#           {NAME}: Name (ASCII, no control characters, :), max 255 characters.
+#               '': Use file name (default).
+#     options: list of str - Access options.
 #         Values:
-#           read-only: open read-only
-#              append: open append only
-#            truncate: truncate
-#            graceful: ignore errors during open
-#                  '': open read-write
+#           read-only: Open read-only.
+#              append: Open append only.
+#            truncate: Truncate.
+#            graceful: Ignore errors during open.
+#                  '': Open read-write.
 #   {OMIT}: no file descriptors are opened (default)
 #
 # Variable: open_file | list of dict
@@ -808,8 +808,8 @@
 # Requires type: notify-reload.
 #
 # Values:
-#       '': SIGHUP
-#   {OMIT}: SIGHUP (default)
+#       '': SIGHUP.
+#   {OMIT}: SIGHUP (default).
 #
 # Variable: reload_signal | str
 #

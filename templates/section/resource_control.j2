@@ -214,6 +214,9 @@ ManagedOOMMemoryPressure={{ systemd.resource_control.managed_oom_memory_pressure
 {% if 'managed_oom_memory_pressure_limit' in systemd.resource_control %}
 ManagedOOMMemoryPressureLimit={{ systemd.resource_control.managed_oom_memory_pressure_limit }}%
 {% endif %}
+{% if 'managed_oom_memory_pressure_duration_sec' in systemd.resource_control %}
+ManagedOOMMemoryPressureDurationSec={{ systemd.resource_control.managed_oom_memory_pressure_duration_sec }}
+{% endif %}
 {% if 'managed_oom_preference' in systemd.resource_control %}
 ManagedOOMPreference={{ systemd.resource_control.managed_oom_preference | lower }}
 {% endif %}

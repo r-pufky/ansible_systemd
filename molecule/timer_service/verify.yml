@@ -1,6 +1,6 @@
 ---
 - name: 'Verify'
-  hosts: 'systemd-debian-12-timer_service'
+  hosts: 'systemd-debian-13-timer_service'
   gather_facts: false
   tasks:
     - name: 'Verify | unit'
@@ -27,7 +27,12 @@
         quiet: true
         that:
           - '"test.service" in ansible_facts.services'
-        fail_msg: '✘ test.service should be enabled.'
+        fail_msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                  test.service should be enabled.                  │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
 
     - name: 'Verify | gather timer status'
       ansible.builtin.command: 'systemctl status test.timer'
@@ -40,10 +45,15 @@
         that:
           - _test_systemd_timer_status.rc == 0
           - '"Active: active" in _test_systemd_timer_status.stdout'
-        fail_msg: '✘ test.timer should be enabled.'
+        fail_msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                   test.timer should be enabled.                   │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
 
 - name: 'Verify | remove'
-  hosts: 'systemd-debian-12-timer_service-remove'
+  hosts: 'systemd-debian-13-timer_service-remove'
   gather_facts: false
   tasks:
     - name: 'Verify | remove | absent'
@@ -70,7 +80,12 @@
         quiet: true
         that:
           - '"test.service" not in ansible_facts.services'
-        fail_msg: 'test.service should not be enabled.'
+        fail_msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                test.service should not be enabled.                │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
 
     - name: 'Verify | remove | gather timer status'
       ansible.builtin.command: 'systemctl status test.timer'
@@ -83,4 +98,9 @@
         quiet: true
         that:
           - _test_systemd_timer_status.rc == 4
-        fail_msg: '✘ test.timer should not be enabled.'
+        fail_msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                 test.timer should not be enabled.                 │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯

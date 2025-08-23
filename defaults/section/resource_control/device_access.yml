@@ -26,23 +26,23 @@
 # configuration.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Slice units automatically gain a Requires=, After= dependency.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * SPECIFIERS (unit specifiers)
+# * SIZE (syntax).
+# * SPECIFIERS (unit specifiers).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 ###############################################################################
 # Device Access
@@ -60,17 +60,18 @@
 # implementing the device group if missing.
 #
 # Values:
+#     list of dict - Device node definitions.
 #   - device: str - device node specifier
 #         Values:
-#            /dev/{PATH}: path to device node starting with '/dev/'
-#            char-{NAME}: character device group name from /proc/devices
+#            /dev/{PATH}: Path to device node starting with '/dev/'.
+#            char-{NAME}: Character device group name from /proc/devices
 #                         wildcard globbing allowed.
-#           block-{NAME}: block device group name from /proc/devices
+#           block-{NAME}: Block device group name from /proc/devices
 #                         wildcard globbing allowed.
-#     read: bool - enable reading
-#     write: bool - enable writing
-#     create: bool - enable creation
-#   {OMIT}: all devices allowed access, see device_policy (default)
+#     read: bool - Enable reading.
+#     write: bool - Enable writing.
+#     create: bool - Enable creation.
+#   {OMIT}: All devices allowed access, see device_policy (default).
 #
 # device_allow:
 #   - device: 'char-cpu/*'
@@ -85,13 +86,13 @@
 # Policy for allowing device access.
 #
 # Values:
-#     auto: access to all devices if device_allow not specified (default)
-#   closed: access to standard pseudo devices including /dev/null,
+#     auto: Access to all devices if device_allow not specified (default).
+#   closed: Access to standard pseudo devices including /dev/null,
 #           /dev/zero, /dev/full, /dev/random, and /dev/urandom in
 #           addition to device_allow.
-#   strict: only allow types of access that are explicitly specified in
+#   strict: Only allow types of access that are explicitly specified in
 #           device_allow.
-#   {OMIT}: auto (default)
+#   {OMIT}: Auto (default).
 #
 # Variable: device_policy | str
 #

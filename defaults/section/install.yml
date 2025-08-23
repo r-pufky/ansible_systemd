@@ -10,37 +10,38 @@
 # systemctl tool during installation of a unit.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.device - device
-# * systemd.automount - automount
-# * systemd.target - target
-# * systemd.path - path
-# * systemd.timer - timer
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.device - Device.
+# * systemd.automount - Automount.
+# * systemd.target - Target.
+# * systemd.path - Path.
+# * systemd.timer - Timer.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Special Case:
-#   install: {} - will create the [Install] header only.
+#   'install: {}': Create the [Install] header only.
 #
 # See reference sections for syntax formats:
 # * SPECIFIERS (unit specifiers): install only supports the following: %a, %b,
 #   %B, %g, %G, %H, %i, %j, %l, %m, %n, %N, %o, %p, %u, %U, %v, %w, %W, %%.
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#%5BInstall%5D%20Section%20Options
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#%5BInstall%5D%20Section%20Options
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 # Additional names this unit installed under.
 #
 # Special Case:
-#   {NAME}.{TYPE}: name must have the same suffix (type) as the unit filename
-#   {NAME}.mount: not supported
-#   {NAME}.slice: not supported
-#   {NAME}.swap: not supported
-#   {NAME}.automount: not supported
+#      {NAME}.{TYPE}: Name must have the same suffix (type) as the unit
+#                     filename.
+#       {NAME}.mount: Not supported.
+#       {NAME}.slice: Not supported.
+#        {NAME}.swap: Not supported.
+#   {NAME}.automount: Not supported.
 #
 # Variable: alias | list of str
 #

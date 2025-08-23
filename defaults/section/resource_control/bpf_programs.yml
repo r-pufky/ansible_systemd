@@ -26,23 +26,23 @@
 # configuration.
 #
 # Options may be added to any systemd units/variables:
-# * systemd_service - service
-# * systemd_socket - socket
-# * systemd_mount - mount
-# * systemd_swap - swap
-# * systemd.slice - slice
-# * systemd.scope - scope
+# * systemd_service - Service.
+# * systemd_socket - Socket.
+# * systemd_mount - Mount.
+# * systemd_swap - Swap.
+# * systemd.slice - Slice.
+# * systemd.scope - Scope.
 #
 # Slice units automatically gain a Requires=, After= dependency.
 #
 # See reference sections for syntax formats:
-# * SIZE (syntax)
-# * SPECIFIERS (unit specifiers)
+# * SIZE (syntax).
+# * SPECIFIERS (unit specifiers).
 #
 # Reference:
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.syntax.html
-# * https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#Specifiers
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.resource-control.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.syntax.html
+# * https://www.freedesktop.org/software/systemd/man/257/systemd.unit.html#Specifiers
 
 ###############################################################################
 # BPF programs
@@ -59,8 +59,8 @@
 # filters specified.
 #
 # Values:
-#   {PATH}: absolute path to BPF program (/sys/fs/bpf)
-#   {OMIT}: use no filters (default)
+#   {PATH}: Absolute path to BPF program (/sys/fs/bpf).
+#   {OMIT}: Use no filters (default).
 #
 # Variable: ip_ingress_filter_path | list of str
 #
@@ -78,8 +78,8 @@
 # filters specified.
 #
 # Values:
-#   {PATH}: absolute path to BPF program (/sys/fs/bpf)
-#   {OMIT}: use no filters (default)
+#   {PATH}: Absolute path to BPF program (/sys/fs/bpf).
+#   {OMIT}: Use no filters (default).
 #
 # Variable: ip_egress_filter_path | list of str
 #
@@ -93,30 +93,30 @@
 # Values:
 #   - type: str - BPF attach type in bpftool
 #         Values:
-#                egress: egress path of the inet socket
-#               ingress: ingress path of the inet socket
-#           sock_create: opening of an inet socket
-#              sock_ops: various socket operations
-#                device: device access
-#                 bind4: call to bind for an inet4 socket
-#                 bind6: call to bind for an inet6 socket
-#              connect4: call to connect for an inet4 socket
-#              connect6: call to connect for an inet6 socket
-#            post_bind4: return from bind for an inet4 socket
-#            post_bind6: return from bind for an inet6 socket
-#              sendmsg4: call to sendto, sendmsg, sendmmsg for an unconnected
+#                egress: Egress path of the inet socket.
+#               ingress: Ingress path of the inet socket.
+#           sock_create: Opening of an inet socket.
+#              sock_ops: Various socket operations.
+#                device: Device access.
+#                 bind4: Call to bind for an inet4 socket.
+#                 bind6: Call to bind for an inet6 socket.
+#              connect4: Call to connect for an inet4 socket.
+#              connect6: Call to connect for an inet6 socket.
+#            post_bind4: Return from bind for an inet4 socket.
+#            post_bind6: Return from bind for an inet6 socket.
+#              sendmsg4: Call to sendto, sendmsg, sendmmsg for an unconnected
 #                        udp4 socket.
-#              sendmsg6: call to sendto, sendmsg, sendmmsg for an unconnected
+#              sendmsg6: Call to sendto, sendmsg, sendmmsg for an unconnected
 #                        udp6 socket.
-#                sysctl: sysctl access
-#              recvmsg4: call to recvfrom, recvmsg, recvmmsg for an
+#                sysctl: Sysctl access
+#              recvmsg4: Call to recvfrom, recvmsg, recvmmsg for an
 #                        unconnected udp4 socket.
-#              recvmsg6: call to recvfrom, recvmsg, recvmmsg for an
+#              recvmsg6: Call to recvfrom, recvmsg, recvmmsg for an
 #                        unconnected udp6 socket.
-#            getsockopt: call to getsockopt
-#            setsockopt: call to setsockopt
-#     path: str - absolute path to BPF program (/sys/fs/bpf)
-#   {OMIT}: no custom BPF attachments (default)
+#            getsockopt: Call to getsockopt.
+#            setsockopt: Call to setsockopt.
+#                  path: str - Absolute path to BPF program (/sys/fs/bpf).
+#   {OMIT}: No custom BPF attachments (default).
 #
 # bpf_program:
 #   - type: 'egress'

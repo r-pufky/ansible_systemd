@@ -42,6 +42,9 @@ ExtensionImagePolicy={{ systemd.exec.extension_image_policy }}
 {% if 'mount_api_vfs' in systemd.exec %}
 MountAPIVFS={{ systemd.exec.mount_api_vfs | string | lower }}
 {% endif %}
+{% if 'bind_log_sockets' in systemd.exec %}
+BindLogSockets={{ systemd.exec.bind_log_sockets | string | lower }}
+{% endif %}
 {% if 'protect_proc' in systemd.exec %}
 ProtectProc={{ systemd.exec.protect_proc }}
 {% endif %}
@@ -325,6 +328,9 @@ IPCNamespacePath={{ systemd.exec.ipc_namespace_path }}
 {% endif %}
 {% if 'memory_ksm' in systemd.exec %}
 MemoryKSM={{ systemd.exec.memory_ksm | string | lower }}
+{% endif %}
+{% if 'private_pids' in systemd.exec %}
+PrivatePIDs={{ systemd.exec.private_pids | string | lower }}
 {% endif %}
 {% if 'private_users' in systemd.exec %}
 PrivateUsers={{ systemd.exec.private_users | string | lower }}
