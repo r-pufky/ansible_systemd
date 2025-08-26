@@ -272,7 +272,16 @@ systemd_automounts: []
 # required before the service exists as with certain package installations or
 # for systems where it is not supported, such as containers).
 #
+# Edge cases:
+# * Idempotent tasks might report no change if run in a previous execution but
+#   before daemon-reload had a chance to execute. This also occurs when the is
+#   replaced with the same content.
+#
 # Unless explicitly needed, this should always be enabled.
+#
+# Please file a detailed bug if specific edge cases are encountered -- forcing
+# flush handlers in your role after this role completes -- is a sign that
+# you've triggered one of these nuanced ansible edge cases.
 #
 # Default: True.
 systemd_daemon_reload_enable: true
