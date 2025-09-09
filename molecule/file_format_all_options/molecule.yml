@@ -244,7 +244,7 @@ provisioner:
               limit_stack: {soft: 'infinity', hard: ''}
               limit_core: {soft: 'infinity', hard: ''}
               limit_rss: {soft: 'infinity', hard: ''}
-              limit_nofile: {soft: 'infinity', hard: ''}
+              limit_nofile: {soft: 4096, hard: 4096}
               limit_as: {soft: 'infinity', hard: ''}
               limit_nproc: {soft: 'infinity', hard: ''}
               limit_memlock: {soft: 'infinity', hard: ''}

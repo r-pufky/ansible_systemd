@@ -157,22 +157,22 @@ LimitCORE={{ systemd.exec.limit_core.soft }}{% if systemd.exec.limit_core.hard |
 LimitRSS={{ systemd.exec.limit_rss.soft }}{% if systemd.exec.limit_rss.hard | length > 0 %}:{{ systemd.exec.limit_rss.hard }}{% endif +%}
 {% endif %}
 {% if 'limit_nofile' in systemd.exec %}
-LimitNOFILE={{ systemd.exec.limit_nofile.soft }}{% if systemd.exec.limit_nofile.hard | length > 0 %}:{{ systemd.exec.limit_nofile.hard }}{% endif +%}
+LimitNOFILE={{ systemd.exec.limit_nofile.soft }}{% if systemd.exec.limit_nofile.hard | string | length > 0 %}:{{ systemd.exec.limit_nofile.hard }}{% endif +%}
 {% endif %}
 {% if 'limit_as' in systemd.exec %}
 LimitAS={{ systemd.exec.limit_as.soft }}{% if systemd.exec.limit_as.hard | length > 0 %}:{{ systemd.exec.limit_as.hard }}{% endif +%}
 {% endif %}
 {% if 'limit_nproc' in systemd.exec %}
-LimitNPROC={{ systemd.exec.limit_nproc.soft }}{% if systemd.exec.limit_nproc.hard | length > 0 %}:{{ systemd.exec.limit_nproc.hard }}{% endif +%}
+LimitNPROC={{ systemd.exec.limit_nproc.soft }}{% if systemd.exec.limit_nproc.hard | string | length > 0 %}:{{ systemd.exec.limit_nproc.hard }}{% endif +%}
 {% endif %}
 {% if 'limit_memlock' in systemd.exec %}
 LimitMEMLOCK={{ systemd.exec.limit_memlock.soft }}{% if systemd.exec.limit_memlock.hard | length > 0 %}:{{ systemd.exec.limit_memlock.hard }}{% endif +%}
 {% endif %}
 {% if 'limit_locks' in systemd.exec %}
-LimitLOCKS={{ systemd.exec.limit_locks.soft }}{% if systemd.exec.limit_locks.hard | length > 0 %}:{{ systemd.exec.limit_locks.hard }}{% endif +%}
+LimitLOCKS={{ systemd.exec.limit_locks.soft }}{% if systemd.exec.limit_locks.hard | string | length > 0 %}:{{ systemd.exec.limit_locks.hard }}{% endif +%}
 {% endif %}
 {% if 'limit_sigpending' in systemd.exec %}
-LimitSIGPENDING={{ systemd.exec.limit_sigpending.soft }}{% if systemd.exec.limit_sigpending.hard | length > 0 %}:{{ systemd.exec.limit_sigpending.hard }}{% endif +%}
+LimitSIGPENDING={{ systemd.exec.limit_sigpending.soft }}{% if systemd.exec.limit_sigpending.hard | string | length > 0 %}:{{ systemd.exec.limit_sigpending.hard }}{% endif +%}
 {% endif %}
 {% if 'limit_msgqueue' in systemd.exec %}
 LimitMSGQUEUE={{ systemd.exec.limit_msgqueue.soft }}{% if systemd.exec.limit_msgqueue.hard | length > 0 %}:{{ systemd.exec.limit_msgqueue.hard }}{% endif +%}
