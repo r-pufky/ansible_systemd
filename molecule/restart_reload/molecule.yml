@@ -40,9 +40,8 @@ provisioner:
                 - ''
                 - '/usr/sbin/rpc.mountd --no-nfs-version 2 --no-nfs-version 3'
 platforms:
-  - name: 'systemd-debian-13-vm-restart-instead-of-reload'
-    # TODO(role): switch to debian/trixie64 when released.
-    box: 'debian/testing64'
+  - name: 'systemd-restart-reload'
+    box: 'inception-of-things/debian-trixie'
     memory: 4096
     cpus: 2
     interfaces:

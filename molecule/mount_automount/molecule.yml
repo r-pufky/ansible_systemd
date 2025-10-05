@@ -68,9 +68,8 @@ provisioner:
             unit:
               description: 'override automount configuration test'
 platforms:
-  - name: 'systemd-debian-13-vm-mount-automount'
-    # TODO(role): switch to debian/trixie64 when released.
-    box: 'debian/testing64'
+  - name: 'systemd-mount-automount'
+    box: 'inception-of-things/debian-trixie'
     memory: 4096
     cpus: 2
     interfaces:
