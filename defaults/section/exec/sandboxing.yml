@@ -376,7 +376,7 @@
 # Paths containing symlinks are resolved relative root_directory or root_image.
 #
 # Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
-# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+# system_call_filter_deny: ['@mount'] for effective sandbox environment.
 #
 # Only available for system services, or per-user services with private_users
 # implicitly enabled (requires unprivileged user namespaces support
@@ -407,7 +407,7 @@
 # Paths containing symlinks are resolved relative root_directory or root_image.
 #
 # Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
-# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+# system_call_filter_deny: ['@mount'] for effective sandbox environment.
 #
 # Only available for system services, or per-user services with private_users
 # implicitly enabled (requires unprivileged user namespaces support
@@ -439,7 +439,7 @@
 # Paths containing symlinks are resolved relative root_directory or root_image.
 #
 # Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
-# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+# system_call_filter_deny: ['@mount'] for effective sandbox environment.
 #
 # Only available for system services, or per-user services with private_users
 # implicitly enabled (requires unprivileged user namespaces support
@@ -475,7 +475,7 @@
 # Paths containing symlinks are resolved relative root_directory or root_image.
 #
 # Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
-# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+# system_call_filter_deny: ['@mount'] for effective sandbox environment.
 #
 # Only available for system services, or per-user services with private_users
 # implicitly enabled (requires unprivileged user namespaces support
@@ -511,7 +511,7 @@
 # Paths containing symlinks are resolved relative root_directory or root_image.
 #
 # Combine with capability_bounding_set_exclude: ['CAP_SYS_ADMIN'] or
-# system_call_filter_exclude: ['@mount'] for effective sandbox environment.
+# system_call_filter_deny: ['@mount'] for effective sandbox environment.
 #
 # Only available for system services, or per-user services with private_users
 # implicitly enabled (requires unprivileged user namespaces support
@@ -1115,7 +1115,7 @@
 # * shmat with SHM_EXEC set
 #
 # Protection can be bypassed if service can write to filesyystem not mounted
-# with noexec; use inaccessible_paths and system_call_filter_exclude:
+# with noexec; use inaccessible_paths and system_call_filter_deny:
 # ['memfd_create']. shmat protection is not available on x86. Turn off
 # alternative service ABIs, recommended use with system_call_architectures:
 # native or similar.
